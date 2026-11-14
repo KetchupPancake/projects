@@ -1,0 +1,292 @@
+{
+  "qid": "Q137",
+  "title": "Engrim merge / provenance fixture",
+  "status": "done",
+  "started": "2026-11-12T23:27:45.554536-06:00",
+  "method": "Create two diverging SQLite stores with shared ancestry using Engrim add/supersede; merge in both directions using merge_store, repeat for idempotence, compare every native provenance field and retrieve active contradictions plus stale history.",
+  "assumptions": [
+    "Engrim 1.4.11 has status, links, source and origin_agent fields, but no dedicated supersedes edge. Fixture links use stable fixture URIs to express ancestry, not store-local numeric IDs.",
+    "Contradiction success means both incompatible active facts remain and are retrievable with provenance; no automatic semantic contradiction detector is assumed.",
+    "Embeddings are disabled for this deterministic provenance fixture; recall uses Engrim lexical retrieval. Q136 separately requires genuine hybrid retrieval.",
+    "Numeric row IDs are local and excluded from provenance equality. Shared ancestor status must propagate monotonically."
+  ],
+  "headline": {
+    "fixture_records": 4,
+    "provenance_intact_fraction": 1.0,
+    "contradictions_retained": true,
+    "both_versions_retrieved": true,
+    "passed": true
+  },
+  "inner_stderr": "",
+  "reason": "All fixture assertions passed.",
+  "checks": {
+    "provenance_intact": true,
+    "contradictions_retained": true,
+    "contradictions_retrieved_with_provenance": true,
+    "stale_history_retrieved": true,
+    "stale_hidden_by_default": true,
+    "idempotent": true,
+    "bidirectional_convergence": true
+  },
+  "broken_records": [],
+  "expected_records": [
+    {
+      "id": 1,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is us-east.",
+      "detail": "fixture record base",
+      "status": "superseded",
+      "tags": "[\"aster\", \"base\"]",
+      "links": "[]",
+      "source": "fixture://base",
+      "origin_agent": "codex"
+    },
+    {
+      "id": 2,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is eu-west.",
+      "detail": "fixture record lane-a",
+      "status": "active",
+      "tags": "[\"aster\", \"lane-a\"]",
+      "links": "[\"fixture://base\"]",
+      "source": "fixture://lane-a",
+      "origin_agent": "codex"
+    },
+    {
+      "id": 2,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is ap-south.",
+      "detail": "fixture record lane-b-old",
+      "status": "superseded",
+      "tags": "[\"aster\", \"lane-b-old\"]",
+      "links": "[\"fixture://base\"]",
+      "source": "fixture://lane-b-old",
+      "origin_agent": "claude-code"
+    },
+    {
+      "id": 3,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is ap-northeast.",
+      "detail": "fixture record lane-b",
+      "status": "active",
+      "tags": "[\"aster\", \"lane-b\"]",
+      "links": "[\"fixture://lane-b-old\"]",
+      "source": "fixture://lane-b",
+      "origin_agent": "claude-code"
+    }
+  ],
+  "merged_records": [
+    {
+      "id": 1,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is us-east.",
+      "detail": "fixture record base",
+      "status": "superseded",
+      "tags": "[\"aster\", \"base\"]",
+      "links": "[]",
+      "source": "fixture://base",
+      "origin_agent": "codex"
+    },
+    {
+      "id": 2,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is eu-west.",
+      "detail": "fixture record lane-a",
+      "status": "active",
+      "tags": "[\"aster\", \"lane-a\"]",
+      "links": "[\"fixture://base\"]",
+      "source": "fixture://lane-a",
+      "origin_agent": "codex"
+    },
+    {
+      "id": 3,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is ap-south.",
+      "detail": "fixture record lane-b-old",
+      "status": "superseded",
+      "tags": "[\"aster\", \"lane-b-old\"]",
+      "links": "[\"fixture://base\"]",
+      "source": "fixture://lane-b-old",
+      "origin_agent": "claude-code"
+    },
+    {
+      "id": 4,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is ap-northeast.",
+      "detail": "fixture record lane-b",
+      "status": "active",
+      "tags": "[\"aster\", \"lane-b\"]",
+      "links": "[\"fixture://lane-b-old\"]",
+      "source": "fixture://lane-b",
+      "origin_agent": "claude-code"
+    }
+  ],
+  "retrieval_active": [
+    {
+      "id": 2,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is eu-west.",
+      "detail": "fixture record lane-a",
+      "status": "active",
+      "tags": "[\"aster\", \"lane-a\"]",
+      "links": "[\"fixture://base\"]",
+      "source": "fixture://lane-a",
+      "origin_agent": "codex"
+    },
+    {
+      "id": 4,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is ap-northeast.",
+      "detail": "fixture record lane-b",
+      "status": "active",
+      "tags": "[\"aster\", \"lane-b\"]",
+      "links": "[\"fixture://lane-b-old\"]",
+      "source": "fixture://lane-b",
+      "origin_agent": "claude-code"
+    }
+  ],
+  "retrieval_include_stale": [
+    {
+      "id": 1,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is us-east.",
+      "detail": "fixture record base",
+      "status": "superseded",
+      "tags": "[\"aster\", \"base\"]",
+      "links": "[]",
+      "source": "fixture://base",
+      "origin_agent": "codex"
+    },
+    {
+      "id": 2,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is eu-west.",
+      "detail": "fixture record lane-a",
+      "status": "active",
+      "tags": "[\"aster\", \"lane-a\"]",
+      "links": "[\"fixture://base\"]",
+      "source": "fixture://lane-a",
+      "origin_agent": "codex"
+    },
+    {
+      "id": 4,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is ap-northeast.",
+      "detail": "fixture record lane-b",
+      "status": "active",
+      "tags": "[\"aster\", \"lane-b\"]",
+      "links": "[\"fixture://lane-b-old\"]",
+      "source": "fixture://lane-b",
+      "origin_agent": "claude-code"
+    },
+    {
+      "id": 3,
+      "ts": "2026-11-12T23:27:45-06:00",
+      "project": "nightshift-q137",
+      "type": "fact",
+      "summary": "Aster service deployment region is ap-south.",
+      "detail": "fixture record lane-b-old",
+      "status": "superseded",
+      "tags": "[\"aster\", \"lane-b-old\"]",
+      "links": "[\"fixture://base\"]",
+      "source": "fixture://lane-b-old",
+      "origin_agent": "claude-code"
+    }
+  ],
+  "merge_first": [
+    2,
+    0,
+    1,
+    0,
+    [
+      [
+        "skip",
+        "Aster service deployment region is us-east."
+      ],
+      [
+        "add",
+        "Aster service deployment region is ap-south."
+      ],
+      [
+        "add",
+        "Aster service deployment region is ap-northeast."
+      ]
+    ]
+  ],
+  "merge_repeat": [
+    0,
+    0,
+    3,
+    0,
+    [
+      [
+        "skip",
+        "Aster service deployment region is us-east."
+      ],
+      [
+        "skip",
+        "Aster service deployment region is ap-south."
+      ],
+      [
+        "skip",
+        "Aster service deployment region is ap-northeast."
+      ]
+    ]
+  ],
+  "merge_reverse": [
+    1,
+    1,
+    2,
+    0,
+    [
+      [
+        "supe",
+        "Aster service deployment region is us-east."
+      ],
+      [
+        "add",
+        "Aster service deployment region is eu-west."
+      ],
+      [
+        "skip",
+        "Aster service deployment region is ap-south."
+      ],
+      [
+        "skip",
+        "Aster service deployment region is ap-northeast."
+      ]
+    ]
+  ],
+  "finished": "2026-11-12T23:27:45.932954-06:00",
+  "runtime_s": 0.378428,
+  "records_written": [
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q137/result.json",
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q137/notes.md"
+  ]
+}

@@ -1,0 +1,386 @@
+{
+  "qid": "Q281",
+  "title": "Pre-run prediction value on Hydra run records",
+  "status": "done",
+  "started": "2026-11-12T23:27:46.657605-06:00",
+  "finished": "2026-11-12T23:27:47.468809-06:00",
+  "runtime_s": 0.811,
+  "method": "Profiled job-usage-log.jsonl, then on every row with a logged status and model built the pre-call features (cost so far, calls so far) for that (model, task_type), dummy-coded model and task_type, fit a hand-rolled IRLS logistic and a least-squares linear probability model on the earliest 70% of rows, and scored held-out AUC / R2 plus a later-slice routing policy against the mix actually used. Outcome is log status, not quality.",
+  "assumptions": [
+    "Outcome is the logged status field only (1 if status=='ok', else 0). The log has no quality labels: verified_correct and verified_by are null on every row that carries them. CHECKS.md and the assignment both require this limit in the headline and the notes.",
+    "Unit of analysis is a status-bearing per-call / per-job row with a model field. Job-run quota records without status are out of this regression (they are used by Q505).",
+    "cost_so_far and calls_so_far are running totals of prior rows with the same (model, task_type), in timestamp order (file order as tie-break). Missing cost_usd is treated as 0.",
+    "Chronological split: first 70% of status rows by time are train, last 30% are held-out. No shuffle.",
+    "Models with fewer than 30 training rows collapse to OTHER. Dummy reference levels are the most common training model and task_type.",
+    "Logistic regression is IRLS (hand-rolled) with L2=0.01 on non-intercept weights. OLS is numpy.linalg.lstsq on the same standardized design. Continuous features are z-scored on train.",
+    "Routing value is observational. Primary comparison: among models with >=30 training rows and >=50 later-slice rows, pick the one with the highest mean training predicted P(ok) and compare its later-slice ok-rate to the full mix and to the mix of those eligible models. Per-task_type recommendations are shown only when the chosen model also has >=30 later-slice rows of that type; those deltas are weighted by the recommended model's later-slice n, not by the task_type's n (a 26-row ok-rate is not assigned to thousands of other rows).",
+    "Predictor collection cost is the sum of logged cost_usd on the training slice. That is the cost of the records the predictor saw, not a separate labelling budget.",
+    "The spec's dollar net-benefit formula is not fully recoverable: status-bearing rows have essentially $0 cost_usd, so there is no outcome/cost dollar ratio to subtract collection cost from. Closest faithful reading is the sign of the later-slice ok-rate delta at ~$0 collection cost.",
+    "Card C-meta-models-model-learning is not in the staged cards/ directory; the question text is taken from TOP10-TEST-SPECS-DRAFT.md and data/backlog-full.json."
+  ],
+  "headline": {
+    "outcome_definition": "log status only (ok vs not-ok). The logs carry status and cost and NO quality labels \u2014 this is not a quality prediction.",
+    "quality_labels_in_log": false,
+    "verified_correct_nonnull": 0,
+    "n_log_records": 13003,
+    "n_status_rows_used": 11766,
+    "n_train": 8236,
+    "n_test": 3530,
+    "train_frac": 0.7,
+    "ok_rate_train": 0.5413,
+    "ok_rate_test": 0.5929,
+    "heldout_auc_logistic": 0.6899,
+    "heldout_auc_categoricals_only": 0.6739,
+    "heldout_auc_intercept_only": 0.5,
+    "heldout_r2_ols": 0.0117,
+    "heldout_r2_categoricals_only": 0.0083,
+    "heldout_r2_intercept_only": -0.011,
+    "train_auc_logistic": 0.8633,
+    "train_r2_ols": 0.3939,
+    "mcfadden_r2_train": 0.3408,
+    "mcfadden_r2_test": 0.009,
+    "effect_cost_so_far_log_odds_per_sd": -0.1299,
+    "effect_calls_so_far_log_odds_per_sd": 0.0324,
+    "effect_cost_so_far_ols_per_sd": -0.0071,
+    "effect_calls_so_far_ols_per_sd": 0.0018,
+    "cost_so_far_train_sd_usd": 7.305e-05,
+    "calls_so_far_train_sd": 222.4421,
+    "p_ok_at_train_mean_features": 0.54,
+    "p_ok_at_cost_so_far_plus_1sd": 0.5077,
+    "p_ok_at_calls_so_far_plus_1sd": 0.5481,
+    "reference_model": "groq/openai/gpt-oss-120b",
+    "reference_task_type": "unknown",
+    "n_model_levels_kept": 47,
+    "routing_ok_rate_actual_mix": 0.5929,
+    "routing_recommended_model": "nvidia/Qwen3.8-27B-NVFP4",
+    "routing_recommended_n_test": 160,
+    "routing_ok_rate_recommended": 0.75,
+    "routing_ok_rate_eligible_mix": 0.5928,
+    "routing_delta_ok_rate_vs_full_mix": 0.1571,
+    "routing_delta_ok_rate_vs_eligible_mix": 0.1572,
+    "n_eligible_models_train30_test50": 14,
+    "routing_top3_models": [
+      "nvidia/Qwen3.8-27B-NVFP4",
+      "gpt-oss:120b",
+      "gpt-oss-120b"
+    ],
+    "routing_bottom3_models": [
+      "@cf/qwen/qwen3.8-27b",
+      "apertus-70b",
+      "xingchen-agi/xing4.0-29b-a4b:free"
+    ],
+    "routing_top3_ok_rate": 0.7404,
+    "routing_bottom3_ok_rate": 0.6776,
+    "routing_per_task_n_identified": 2,
+    "routing_per_task_delta_weighted_by_recommended_n": 0.1859,
+    "train_task_type_mix": {
+      "unknown": 0.346,
+      "soak": 0.3146,
+      "ceiling": 0.2722,
+      "coding": 0.0124,
+      "code_review": 0.0104,
+      "math": 0.0101,
+      "calibration": 0.0095,
+      "construction_guide": 0.0081,
+      "long_doc": 0.0056,
+      "research": 0.0055,
+      "orchestration": 0.0051,
+      "code_build": 0.0005
+    },
+    "test_task_type_mix": {
+      "soak": 0.8773,
+      "unknown": 0.1215,
+      "private_data": 0.0011
+    },
+    "predictor_collection_cost_usd": 0.013261,
+    "net_benefit_sign": "positive",
+    "net_benefit": "Later-slice log-status ok-rate of the model with the highest training predicted P(ok) among models with >=30 train and >=50 later-slice rows, minus the later-slice mix, with predictor collection cost equal to the sum of logged cost_usd on the training slice. Sign is the sign of that ok-rate delta; collection cost is essentially zero because status-bearing rows are free-lane calls. This is NOT a quality improvement."
+  },
+  "records_written": [
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q281/result.json",
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q281/notes.md"
+  ],
+  "profile": {
+    "n_records": 13003,
+    "n_with_status": 11767,
+    "n_job_runs_with_start": 523,
+    "n_with_task_type": 8673,
+    "n_with_numeric_cost_usd": 9690,
+    "n_with_positive_cost_usd": 762,
+    "n_with_model": 12958,
+    "n_rows_with_verified_correct_field": 9381,
+    "n_verified_correct_nonnull": 0,
+    "n_verified_by_nonnull": 0,
+    "status_counts": {
+      "ratelimit": 2292,
+      "ok": 6552,
+      "refused": 857,
+      "empty": 694,
+      "timeout": 357,
+      "capacity": 35,
+      "error": 583,
+      "truncated": 263,
+      "auth": 103,
+      "fail": 8,
+      "invalid_output": 22,
+      "disabled": 1
+    },
+    "task_type_counts": {
+      "coding": 128,
+      "code_review": 146,
+      "research": 108,
+      "soak": 5688,
+      "calibration": 90,
+      "math": 83,
+      "long_doc": 46,
+      "orchestration": 64,
+      "construction_guide": 67,
+      "review": 2,
+      "ceiling": 2242,
+      "code_build": 4,
+      "research_synthesis": 1,
+      "private_data": 4
+    },
+    "t_min": "2026-10-15T22:06:00-06:00",
+    "t_max": "2026-11-09T17:10:59-06:00",
+    "top_fields": [
+      {
+        "field": "model",
+        "n": 12958,
+        "nullish": 0
+      },
+      {
+        "field": "cost_usd",
+        "n": 12767,
+        "nullish": 3076
+      },
+      {
+        "field": "provider",
+        "n": 12471,
+        "nullish": 0
+      },
+      {
+        "field": "task_type",
+        "n": 11786,
+        "nullish": 3113
+      },
+      {
+        "field": "status",
+        "n": 11767,
+        "nullish": 0
+      },
+      {
+        "field": "job",
+        "n": 10759,
+        "nullish": 0
+      },
+      {
+        "field": "end",
+        "n": 10460,
+        "nullish": 1
+      },
+      {
+        "field": "ts",
+        "n": 10268,
+        "nullish": 0
+      },
+      {
+        "field": "route",
+        "n": 9718,
+        "nullish": 0
+      },
+      {
+        "field": "privacy_label",
+        "n": 9639,
+        "nullish": 24
+      },
+      {
+        "field": "row_kind",
+        "n": 9497,
+        "nullish": 0
+      },
+      {
+        "field": "tags_v",
+        "n": 9381,
+        "nullish": 0
+      },
+      {
+        "field": "verified_correct",
+        "n": 9381,
+        "nullish": 9381
+      },
+      {
+        "field": "verified_by",
+        "n": 9381,
+        "nullish": 9381
+      },
+      {
+        "field": "mica_load",
+        "n": 9381,
+        "nullish": 0
+      },
+      {
+        "field": "failure_type",
+        "n": 9372,
+        "nullish": 5461
+      },
+      {
+        "field": "failure_raw",
+        "n": 9309,
+        "nullish": 5426
+      },
+      {
+        "field": "latency_s",
+        "n": 9305,
+        "nullish": 0
+      },
+      {
+        "field": "finish_reason",
+        "n": 9298,
+        "nullish": 3162
+      },
+      {
+        "field": "context_window",
+        "n": 9209,
+        "nullish": 0
+      },
+      {
+        "field": "context_provisional",
+        "n": 9209,
+        "nullish": 0
+      },
+      {
+        "field": "project",
+        "n": 7734,
+        "nullish": 0
+      },
+      {
+        "field": "calls",
+        "n": 2289,
+        "nullish": 0
+      },
+      {
+        "field": "day_total_usd",
+        "n": 755,
+        "nullish": 0
+      },
+      {
+        "field": "cap_usd",
+        "n": 755,
+        "nullish": 11
+      }
+    ]
+  },
+  "routing_by_task_type": [
+    {
+      "task_type": "soak",
+      "n_test": 3097,
+      "mix_ok_rate": 0.6019,
+      "recommended_model": "nvidia/Qwen3.8-27B-NVFP4",
+      "recommended_n_test": 82,
+      "recommended_ok_rate": 0.6463,
+      "delta": 0.0445
+    },
+    {
+      "task_type": "unknown",
+      "n_test": 429,
+      "mix_ok_rate": 0.5245,
+      "recommended_model": "nvidia/Qwen3.8-27B-NVFP4",
+      "recommended_n_test": 78,
+      "recommended_ok_rate": 0.859,
+      "delta": 0.3345
+    }
+  ],
+  "model_log_odds_vs_reference_lowest": [
+    {
+      "level": "google/gemma-4-31b-it:free",
+      "log_odds": 2.5924
+    },
+    {
+      "level": "nemotron-3.5-super-vl-free",
+      "log_odds": 2.8534
+    },
+    {
+      "level": "z-ai/glm-5.3",
+      "log_odds": 2.9769
+    },
+    {
+      "level": "glm-4.7-flash",
+      "log_odds": 3.2854
+    },
+    {
+      "level": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "log_odds": 4.0536
+    }
+  ],
+  "model_log_odds_vs_reference_highest": [
+    {
+      "level": "gpt-oss:20b",
+      "log_odds": 7.5889
+    },
+    {
+      "level": "aisingapore/Gemma-SEA-LION-v4-27B-IT",
+      "log_odds": 7.7455
+    },
+    {
+      "level": "mercury-2.5",
+      "log_odds": 8.0803
+    },
+    {
+      "level": "nvidia/Qwen3.8-27B-NVFP4",
+      "log_odds": 8.441
+    },
+    {
+      "level": "gemma4:31b",
+      "log_odds": 9.1725
+    }
+  ],
+  "task_type_log_odds_vs_reference": [
+    {
+      "level": "coding",
+      "log_odds": -1.8789
+    },
+    {
+      "level": "code_review",
+      "log_odds": -1.8689
+    },
+    {
+      "level": "long_doc",
+      "log_odds": -1.8201
+    },
+    {
+      "level": "soak",
+      "log_odds": -1.7938
+    },
+    {
+      "level": "math",
+      "log_odds": -1.3704
+    },
+    {
+      "level": "orchestration",
+      "log_odds": -1.3587
+    },
+    {
+      "level": "research",
+      "log_odds": -0.2903
+    },
+    {
+      "level": "construction_guide",
+      "log_odds": -0.1084
+    },
+    {
+      "level": "calibration",
+      "log_odds": 0.0936
+    },
+    {
+      "level": "ceiling",
+      "log_odds": 1.1776
+    },
+    {
+      "level": "code_build",
+      "log_odds": 2.3932
+    }
+  ],
+  "ols_rank": 61,
+  "n_design_cols": 61
+}

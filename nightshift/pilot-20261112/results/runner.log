@@ -1,0 +1,18 @@
+2026-11-12T23:27:45-06:00 RUN START — manifest records 22 inputs
+2026-11-12T23:27:45-06:00 Q401 START (timeout 1200s)
+2026-11-12T23:27:45-06:00 Q401 END status=done exit=0 runtime=0.2s
+2026-11-12T23:27:45-06:00 Q364 START (timeout 1200s)
+2026-11-12T23:27:45-06:00 Q364 END status=done exit=0 runtime=0.2s
+2026-11-12T23:27:45-06:00 Q137 START (timeout 1200s)
+2026-11-12T23:27:45-06:00 Q137 END status=done exit=0 runtime=0.4s
+2026-11-12T23:27:45-06:00 Q136 START (timeout 1200s)
+2026-11-12T23:27:46-06:00 Q136 END status=blocked exit=0 runtime=0.6s
+2026-11-12T23:27:46-06:00 Q281 START (timeout 1200s)
+2026-11-12T23:27:47-06:00 Q281 END status=done exit=0 runtime=0.9s
+2026-11-12T23:27:47-06:00 Q505 START (timeout 1200s)
+2026-11-12T23:27:48-06:00 Q505 END status=done exit=0 runtime=0.7s
+2026-11-12T23:27:48-06:00 Q472 START (timeout 2700s)
+2026-11-12T23:32:19-06:00 Q472 END status=done exit=0 runtime=271.8s
+2026-11-12T23:32:19-06:00 Q471 START (timeout 5400s)
+2026-11-12T23:32:26-06:00 Q471 END status=done exit=0 runtime=7.0s
+2026-11-12T23:32:26-06:00 RUN END — 7/8 tests produced results

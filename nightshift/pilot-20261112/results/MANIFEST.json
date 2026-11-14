@@ -1,0 +1,168 @@
+{
+ "run": "nightshift-pilot-20261112",
+ "started": "2026-11-12T23:27:45-06:00",
+ "host": "p53-wsl",
+ "inputs": [
+  {
+   "path": "cards/C-e-means-outperforming-k-means-muse-20261111.md",
+   "bytes": 6771,
+   "sha256": "b05b3c384d13e4b58b8f3f3f0958074a9256dfd56f42cea7e58108b55c345e6e"
+  },
+  {
+   "path": "cards/C-engrim-muse-20261031.md",
+   "bytes": 5429,
+   "sha256": "d13a78eb6e2f945bd38a00afee4a53a837d696ea128689bcb3ca93135e3d4413"
+  },
+  {
+   "path": "cards/C-routed-continual-learning-muse-20261031.md",
+   "bytes": 7014,
+   "sha256": "af5a98c2ee7c5bd49dbdd4f8df4cbcb2f9660428de21809a0238d772f317cb20"
+  },
+  {
+   "path": "cards/C-sys1-sys2-codesign-muse-20261102.md",
+   "bytes": 8167,
+   "sha256": "d24c68e069b6a1c3f7b26d5dab5f3436193616512227f55d29b548769400a2b7"
+  },
+  {
+   "path": "data/backlog-full.json",
+   "bytes": 168928,
+   "sha256": "4b331bc28c99621ce2e3e29004d0d8b7b84bd89171ec80f41b2631a07eb05df2"
+  },
+  {
+   "path": "data/takeaways-full.json",
+   "bytes": 213176,
+   "sha256": "0de94bfc01fb4a399a01eca8cb56915dca9b7c15e7932e987ef630d52c9c52ec"
+  },
+  {
+   "path": "data/routing/job-usage-log.jsonl",
+   "bytes": 8036309,
+   "sha256": "e854574a45eed3b22288da2e4ce0d73aa8e0eaf0b52350e44c74fc76b45bfc0e"
+  },
+  {
+   "path": "data/routing/usage-log.jsonl",
+   "bytes": 2394,
+   "sha256": "20a8e73ccc146e69fd02aa11428ebc21ae3470fb95660f6b37ce1d8eb2e48514"
+  },
+  {
+   "path": "q136.py",
+   "bytes": 9943,
+   "sha256": "dd512f4f32c5d0b2f220bfa3aae2e3d5793bad944e2092c1577048fe05a68cd6"
+  },
+  {
+   "path": "q137.py",
+   "bytes": 8606,
+   "sha256": "7bd60d9b5f3eba77e05bf2bde4de41129ad7e5370505ce61a66bb45dba84f799"
+  },
+  {
+   "path": "q281.py",
+   "bytes": 33606,
+   "sha256": "41a7d72cc6d69fe961c5f6e62f7ca9b35c4ea9180acb02ab6e3a8bb6bc7ae1c8"
+  },
+  {
+   "path": "q364.py",
+   "bytes": 41482,
+   "sha256": "b31e827815ff487371e9e8f952a92d2ea668caa64006b5e8aa219fc6b0ee9977"
+  },
+  {
+   "path": "q401.py",
+   "bytes": 20122,
+   "sha256": "a456758f851eebceb4ddf30903dc5e2cc2e391e2c1f1789fac038bad4d425857"
+  },
+  {
+   "path": "q471.py",
+   "bytes": 30634,
+   "sha256": "b92e708d9ea3614b9279d440e2a4058a3408f3dc7d95716533c7644afc64d373"
+  },
+  {
+   "path": "q472.py",
+   "bytes": 27283,
+   "sha256": "ffa2d5c26b43ede65b652f420f6350723facfd586d07d404ea59f44bc38cdb40"
+  },
+  {
+   "path": "q505.py",
+   "bytes": 41467,
+   "sha256": "4a0f41ac62949d47bf7adc73178c4474aacfbee4f807311888f50b0ce0798635"
+  },
+  {
+   "path": "runner.py",
+   "bytes": 4661,
+   "sha256": "21ee2486bba331d78ec87b667615d220181688eda21e130c331f969421592b7c"
+  },
+  {
+   "path": "CHECKS.md",
+   "bytes": 5035,
+   "sha256": "0db26661b86d18b441c6d14a8f3b3ac1d8e5bb6a000d5d99f17d2ce931a23a05"
+  },
+  {
+   "path": "FOLLOWUP-LOGGING.md",
+   "bytes": 1834,
+   "sha256": "95d5583167ec9c6adb6ba197119fde0570c5737078790ccdee4c7bc096543423"
+  },
+  {
+   "path": "PILOT-DECISION-BRIEF-20261112.md",
+   "bytes": 3297,
+   "sha256": "40dfcfdb2e7e22f75cececee616da554373321ee299caad4b151a6ad65f52a64"
+  },
+  {
+   "path": "RUN-PLAN.md",
+   "bytes": 1682,
+   "sha256": "54cde375235e48250b824308817342a8744630975c5e02167cca4bb4bddec96a"
+  },
+  {
+   "path": "TOP10-TEST-SPECS-DRAFT.md",
+   "bytes": 8305,
+   "sha256": "eb27765e5bd6b783252cf503cc389b5ae02b98e917815490e6f23d0f417a52c6"
+  }
+ ],
+ "tests": [
+  {
+   "qid": "Q401",
+   "status": "done",
+   "exit": 0,
+   "runtime_s": 0.2
+  },
+  {
+   "qid": "Q364",
+   "status": "done",
+   "exit": 0,
+   "runtime_s": 0.2
+  },
+  {
+   "qid": "Q137",
+   "status": "done",
+   "exit": 0,
+   "runtime_s": 0.4
+  },
+  {
+   "qid": "Q136",
+   "status": "blocked",
+   "exit": 0,
+   "runtime_s": 0.6
+  },
+  {
+   "qid": "Q281",
+   "status": "done",
+   "exit": 0,
+   "runtime_s": 0.9
+  },
+  {
+   "qid": "Q505",
+   "status": "done",
+   "exit": 0,
+   "runtime_s": 0.7
+  },
+  {
+   "qid": "Q472",
+   "status": "done",
+   "exit": 0,
+   "runtime_s": 271.8
+  },
+  {
+   "qid": "Q471",
+   "status": "done",
+   "exit": 0,
+   "runtime_s": 7.0
+  }
+ ],
+ "finished": "2026-11-12T23:32:26-06:00"
+}

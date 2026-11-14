@@ -1,0 +1,265 @@
+{
+  "qid": "Q401",
+  "title": "Proposition 14 arithmetic check",
+  "status": "done",
+  "started": "2026-11-12T23:27:45.322651-06:00",
+  "finished": "2026-11-12T23:27:45.322878-06:00",
+  "runtime_s": 0.0,
+  "method": "Substituted the card's stated parameters (r = 0.01, rho_u = 0.02) into Proposition 14's total cost fraction (rho_u + r) and speedup formula 1 / (rho_u + r); quantified the exact absolute and relative discrepancy against the paper's printed 26x; solved rho_u + r = 1/26 both for rho_u given r = 0.01 and for r given rho_u = 0.02 (plus a one-parameter grid); cross-checked every other Section 6.2 analytic figure reported in the card by computing the implied overhead (1/printed - rho_u); and evaluated the small-r (r -> 0) and large-r (r = 1 - rho_u, r = 1, r -> inf) asymptotic regimes.",
+  "assumptions": [
+    "Proposition 14 formula taken verbatim from card C-sys1-sys2-codesign: under a perfect screen, acquiring the utility-relevant subset costs a fraction rho_u + r of exhaustive execute-then-filter evaluation, giving speedup 1 / (rho_u + r) that approaches 1 / rho_u as r -> 0.",
+    "All checked numbers (26x at r=0.01, rho_u=0.02; 5x at p*=0.2; 1.25x at 10% error; 1.11x at 20% error; 1.54x at rho_u=0.3; 1.24x at rho_u=0.5; 1.13x at rho_u=0.5 with 10% error) are taken verbatim from card C-sys1-sys2-codesign's summary of Section 6.2.",
+    "Where the card reports Section 6.2 figures with predictor error or without stating r (1.54x at rho_u=0.3, 1.24x at rho_u=0.5), we report both the bare formula value and the implied additional cost fraction (1/printed - rho_u) rather than conflating extended-model numbers with bare-formula errors."
+  ],
+  "headline": {
+    "stated_rho_u": 0.02,
+    "stated_r": 0.01,
+    "stated_cost_fraction_rho_plus_r": 0.03,
+    "computed_ratio_at_stated_values": 33.333333,
+    "printed_ratio": 26.0,
+    "discrepancy_difference_x": 7.333333,
+    "discrepancy_relative_to_printed_pct": 28.2051,
+    "discrepancy_relative_to_computed_pct": -22.0,
+    "ratio_computed_over_printed": 1.282051,
+    "required_rho_plus_r_for_26x": 0.038462,
+    "unexplained_extra_cost_fraction_for_26x": 0.008462,
+    "solve_rho_u_given_stated_r_0.01": {
+      "fixed_r": 0.01,
+      "solved_rho_u": 0.028462,
+      "solved_rho_u_exact_fraction": "37/1300",
+      "verified_speedup": 26.0
+    },
+    "solve_r_given_stated_rho_u_0.02": {
+      "fixed_rho_u": 0.02,
+      "solved_r": 0.018462,
+      "solved_r_exact_fraction": "12/650",
+      "verified_speedup": 26.0
+    },
+    "param_family_26x": [
+      {
+        "rho_u": 0.0,
+        "r": 0.038462,
+        "cost_fraction": 0.038462,
+        "speedup": 26.0
+      },
+      {
+        "rho_u": 0.005,
+        "r": 0.033462,
+        "cost_fraction": 0.038462,
+        "speedup": 26.0
+      },
+      {
+        "rho_u": 0.01,
+        "r": 0.028462,
+        "cost_fraction": 0.038462,
+        "speedup": 26.0
+      },
+      {
+        "rho_u": 0.015,
+        "r": 0.023462,
+        "cost_fraction": 0.038462,
+        "speedup": 26.0
+      },
+      {
+        "rho_u": 0.02,
+        "r": 0.018462,
+        "cost_fraction": 0.038462,
+        "speedup": 26.0
+      },
+      {
+        "rho_u": 0.025,
+        "r": 0.013462,
+        "cost_fraction": 0.038462,
+        "speedup": 26.0
+      },
+      {
+        "rho_u": 0.03,
+        "r": 0.008462,
+        "cost_fraction": 0.038462,
+        "speedup": 26.0
+      },
+      {
+        "rho_u": 0.035,
+        "r": 0.003462,
+        "cost_fraction": 0.038462,
+        "speedup": 26.0
+      }
+    ],
+    "near_integer_parameter_candidates": [
+      {
+        "rho_u": 0.028,
+        "r": 0.01,
+        "speedup": 26.316
+      },
+      {
+        "rho_u": 0.02,
+        "r": 0.018,
+        "speedup": 26.316
+      },
+      {
+        "rho_u": 0.02,
+        "r": 0.019,
+        "speedup": 25.641
+      },
+      {
+        "rho_u": 0.03,
+        "r": 0.01,
+        "speedup": 25.0
+      }
+    ],
+    "speedup_limit_r_to_0": 50.0,
+    "r_where_speedup_falls_to_1x": 0.98,
+    "speedup_at_r_equals_1": 0.980392,
+    "large_r_limit_speedup_as_r_to_inf": 0.0,
+    "large_r_behaviour": {
+      "small_r_limit_r_to_0_speedup": 50.0,
+      "small_r_asymptotic_formula": "1 / rho_u",
+      "r_breakeven_for_1x_speedup": 0.98,
+      "speedup_at_r_equals_1": 0.980392,
+      "large_r_asymptotic_cost_fraction": "rho_u + r ~ r -> infinity as r -> infinity",
+      "large_r_asymptotic_speedup": "1 / (rho_u + r) ~ 1 / r -> 0 as r -> infinity (strict net loss for all r > 1 - rho_u = 0.98)",
+      "r_sweep_at_rho_0.02": {
+        "0.0": {
+          "cost_fraction": 0.02,
+          "speedup": 50.0
+        },
+        "0.001": {
+          "cost_fraction": 0.021,
+          "speedup": 47.619048
+        },
+        "0.005": {
+          "cost_fraction": 0.025,
+          "speedup": 40.0
+        },
+        "0.01": {
+          "cost_fraction": 0.03,
+          "speedup": 33.333333
+        },
+        "0.018462": {
+          "cost_fraction": 0.038462,
+          "speedup": 25.999688
+        },
+        "0.05": {
+          "cost_fraction": 0.07,
+          "speedup": 14.285714
+        },
+        "0.1": {
+          "cost_fraction": 0.12,
+          "speedup": 8.333333
+        },
+        "0.25": {
+          "cost_fraction": 0.27,
+          "speedup": 3.703704
+        },
+        "0.5": {
+          "cost_fraction": 0.52,
+          "speedup": 1.923077
+        },
+        "0.98": {
+          "cost_fraction": 1.0,
+          "speedup": 1.0
+        },
+        "1.0": {
+          "cost_fraction": 1.02,
+          "speedup": 0.980392
+        },
+        "2.0": {
+          "cost_fraction": 2.02,
+          "speedup": 0.49505
+        },
+        "10.0": {
+          "cost_fraction": 10.02,
+          "speedup": 0.0998
+        },
+        "100.0": {
+          "cost_fraction": 100.02,
+          "speedup": 0.009998
+        }
+      }
+    },
+    "cross_checks": [
+      {
+        "case": "ideal p*=0.2, r->0",
+        "rho_u": 0.2,
+        "printed": 5.0,
+        "computed_r0": 5.0,
+        "computed_r0_01": 4.7619,
+        "implied_total_cost_fraction": 0.2,
+        "implied_r_or_error_overhead": 0.0,
+        "matches_bare_proposition_14": true,
+        "note": "Exact match to 1/p* = 1/0.2 = 5.0x at r=0."
+      },
+      {
+        "case": "stated r=0.01, rho_u=0.02",
+        "rho_u": 0.02,
+        "printed": 26.0,
+        "computed_r0": 50.0,
+        "computed_r0_01": 33.3333,
+        "implied_total_cost_fraction": 0.038462,
+        "implied_r_or_error_overhead": 0.018462,
+        "matches_bare_proposition_14": false,
+        "note": "1/(0.02+0.01) = 33.333x != 26x; requires an extra 0.008462 cost fraction."
+      },
+      {
+        "case": "rho_u=0.3 (Section 6.2 analytic)",
+        "rho_u": 0.3,
+        "printed": 1.54,
+        "computed_r0": 3.3333,
+        "computed_r0_01": 3.2258,
+        "implied_total_cost_fraction": 0.649351,
+        "implied_r_or_error_overhead": 0.349351,
+        "matches_bare_proposition_14": false,
+        "note": "1/1.54 = 0.649351 (practically 0.65 = 0.30 + 0.35, since 1/0.65 = 1.5385 -> 1.54x); implies an unstated screening + false-positive/exploration overhead of ~0.35."
+      },
+      {
+        "case": "rho_u=0.5 (Section 6.2 analytic)",
+        "rho_u": 0.5,
+        "printed": 1.24,
+        "computed_r0": 2.0,
+        "computed_r0_01": 1.9608,
+        "implied_total_cost_fraction": 0.806452,
+        "implied_r_or_error_overhead": 0.306452,
+        "matches_bare_proposition_14": false,
+        "note": "1/1.24 = 0.806452 (~0.8065 = 0.50 + 0.3065); implies an unstated overhead of ~0.3065."
+      },
+      {
+        "case": "rho_u=0.5 with 10% error",
+        "rho_u": 0.5,
+        "printed": 1.13,
+        "computed_r0": 2.0,
+        "computed_r0_01": 1.9608,
+        "implied_total_cost_fraction": 0.884956,
+        "implied_r_or_error_overhead": 0.384956,
+        "matches_bare_proposition_14": false,
+        "note": "Includes 10% predictor error; implied total cost fraction 1/1.13 = 0.884956."
+      },
+      {
+        "case": "10% predictor error (illustrated saving)",
+        "rho_u": null,
+        "printed": 1.25,
+        "computed_r0": null,
+        "computed_r0_01": null,
+        "implied_total_cost_fraction": 0.8,
+        "implied_r_or_error_overhead": null,
+        "matches_bare_proposition_14": false,
+        "note": "1/1.25 = 0.80 total cost fraction (falls from ideal due to 10% false-positive/error rate)."
+      },
+      {
+        "case": "20% predictor error (illustrated saving)",
+        "rho_u": null,
+        "printed": 1.11,
+        "computed_r0": null,
+        "computed_r0_01": null,
+        "implied_total_cost_fraction": 0.900901,
+        "implied_r_or_error_overhead": null,
+        "matches_bare_proposition_14": false,
+        "note": "1/1.11 = 0.9009 (i.e. 1/0.90 = 1.111x) total cost fraction under 20% predictor error."
+      }
+    ],
+    "verdict": "At the stated parameters (r = 0.01, rho_u = 0.02), Proposition 14 gives a cost fraction of 0.03 and a speedup of 1 / 0.03 = 33.333x, exceeding the paper's printed 26x by +7.333x (+28.21% over printed; printed is 22.0% below the formula). Obtaining exactly 26x requires rho_u + r = 1/26 = 0.038462 (an extra 0.008462 cost fraction): either rho_u = 0.028462 (37/1300) at r = 0.01, or r = 0.018462 (12/650) at rho_u = 0.02. As r increases, speedup declines hyperbolically as 1/(rho_u + r), crossing break-even (1.0x) at r = 1 - rho_u = 0.98, falling to 0.980x when screening equals execution cost (r = 1), and approaching 0 (~ 1/r) as r -> infinity."
+  },
+  "records_written": [
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q401/result.json",
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q401/notes.md"
+  ]
+}

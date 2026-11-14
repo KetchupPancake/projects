@@ -1,0 +1,5800 @@
+{
+  "qid": "Q136",
+  "title": "Engrim hybrid recall as the store grows",
+  "status": "blocked",
+  "started": "2026-11-12T23:27:45.972917-06:00",
+  "method": "Map backlog open questions to all takeaways with exactly the same card key. Keep the fixed cohort whose entire target set is present in the first 100 entries, insert original-order prefixes of 100/300/648, and invoke Engrim reciprocal-rank BM25/vector fusion separately at k=1,5,10. Report macro target recall, any-target hit rate, and OLS slope per 100 entries.",
+  "assumptions": [
+    "CHECKS.md substitutes card-level corpus relevance for decision-log ground truth. Same-card takeaways are proxy relevance labels, not verified answers to open questions.",
+    "All mappable questions and unmappable IDs are reported; the growth curve uses only questions with all targets already in the first prefix, so missing targets do not confound degradation.",
+    "Recall@k is mean retrieved relevant targets / all relevant targets per question; hit rate is a separate any-target metric. Each k is run separately because Engrim changes candidate depth with k.",
+    "Corpus order is unchanged, not randomly shuffled; growth is therefore card-ordered and not representative of arbitrary arrival orders.",
+    "Only a real cached Engrim model2vec embedder and FTS5 are accepted as hybrid; no synthetic vectors or replacement retrieval engine. Offline mode prevents downloads and writes outside the results directory.",
+    "Negative slope indicates degradation, positive slope improvement. No accuracy threshold is specified by the spec."
+  ],
+  "headline": {
+    "backlog_queries": 525,
+    "mappable_queries": 519,
+    "unmappable_queries": 6,
+    "fixed_queries": 76,
+    "hybrid_recall_by_stage": []
+  },
+  "mapping_counts": {
+    "backlog_queries": 525,
+    "mappable_queries": 519,
+    "unmappable_queries": 6,
+    "fixed_queries": 76
+  },
+  "unmappable_query_ids": [
+    "Q018",
+    "Q019",
+    "Q235",
+    "Q236",
+    "Q444",
+    "Q523"
+  ],
+  "query_target_map": [
+    {
+      "qid": "Q001",
+      "card": "C-aaronson-ambainis-proof-psi",
+      "question": "Does PrintedConjecture match Conjecture 1.7 as printed, in normalization and in the (epsilon/d)^7 form? The repo leaves this to the reader; not settled here.",
+      "targets": [
+        "T001",
+        "T002",
+        "T003",
+        "T004",
+        "T005"
+      ]
+    },
+    {
+      "qid": "Q002",
+      "card": "C-aaronson-ambainis-proof-psi",
+      "question": "What does the thread's \"new version\" refer to, given the repo claims the printed 2014 statement?",
+      "targets": [
+        "T001",
+        "T002",
+        "T003",
+        "T004",
+        "T005"
+      ]
+    },
+    {
+      "qid": "Q003",
+      "card": "C-aaronson-ambainis-proof-psi",
+      "question": "When do Blanc, Docter, Strassle, and Tan publish their exposition, and does it confirm the proof as stated?",
+      "targets": [
+        "T001",
+        "T002",
+        "T003",
+        "T004",
+        "T005"
+      ]
+    },
+    {
+      "qid": "Q004",
+      "card": "C-action-head-coadaptation-adaie",
+      "question": "Does the effect hold at larger VLA scale and with the backbone also fine-tuned, rather than a from-scratch head on a frozen-style interface?",
+      "targets": [
+        "T006",
+        "T007",
+        "T008"
+      ]
+    },
+    {
+      "qid": "Q005",
+      "card": "C-action-head-coadaptation-adaie",
+      "question": "How much of AdaIE's gain is the sensitivity signal itself, given variance-based reweighting captures much of it in the world-model tests?",
+      "targets": [
+        "T006",
+        "T007",
+        "T008"
+      ]
+    },
+    {
+      "qid": "Q006",
+      "card": "C-adaptive-qubit-encoding-cv-optimization",
+      "question": "How does the local-surrogate cost scale on genuinely coupled objectives when the fully connected interaction graph is replaced by reduced connectivity, as the authors propose?",
+      "targets": [
+        "T009",
+        "T010",
+        "T011"
+      ]
+    },
+    {
+      "qid": "Q007",
+      "card": "C-adaptive-qubit-encoding-cv-optimization",
+      "question": "No code release is linked from the paper; whether the implementation is available anywhere is open.",
+      "targets": [
+        "T009",
+        "T010",
+        "T011"
+      ]
+    },
+    {
+      "qid": "Q008",
+      "card": "C-agent-board-kanban-coordination",
+      "question": "Do the Keeper's match quality and the flat wait cost survive boards with hundreds of waiters and ambiguous prose conditions? The pilots are small, single-model, and simulated; WaitBench is proposed in the paper but not run.",
+      "targets": [
+        "T012",
+        "T013",
+        "T014",
+        "T015"
+      ]
+    },
+    {
+      "qid": "Q009",
+      "card": "C-agent-board-kanban-coordination",
+      "question": "Cross-vendor boards (the paper's stated ambition) are undesigned here: the studied board lives inside one harness with uniform trust.",
+      "targets": [
+        "T012",
+        "T013",
+        "T014",
+        "T015"
+      ]
+    },
+    {
+      "qid": "Q010",
+      "card": "C-agentic-backdoors-pretraining-poisoning",
+      "question": "Does trigger-conditional behaviour survive at larger model scales and in Hydra's harness, or only in the small CLI agent setting reported?",
+      "targets": [
+        "T016",
+        "T017",
+        "T018",
+        "T019",
+        "T020"
+      ]
+    },
+    {
+      "qid": "Q011",
+      "card": "C-agentic-backdoors-pretraining-poisoning",
+      "question": "Which provenance records and tool-call checks are enough to trust a third-party checkpoint with file and shell access?",
+      "targets": [
+        "T016",
+        "T017",
+        "T018",
+        "T019",
+        "T020"
+      ]
+    },
+    {
+      "qid": "Q012",
+      "card": "C-agentic-backdoors-pretraining-poisoning",
+      "question": "What false-block rate is acceptable for a tool-call checker on ordinary Hydra tasks, and who reviews flagged calls?",
+      "targets": [
+        "T016",
+        "T017",
+        "T018",
+        "T019",
+        "T020"
+      ]
+    },
+    {
+      "qid": "Q013",
+      "card": "C-agentic-backdoors-pretraining-poisoning",
+      "question": "How should Hydra's L6 watchdog record a blocked trigger case, so the block itself becomes checkable evidence?",
+      "targets": [
+        "T016",
+        "T017",
+        "T018",
+        "T019",
+        "T020"
+      ]
+    },
+    {
+      "qid": "Q014",
+      "card": "C-anthropic-agent-memory-dreaming",
+      "question": "No public replication of the CL-Bench memory progression or the wiki scaling curve exists yet, and the Stainless numbers cannot be re-run externally. Do the linked cookbook implementations match the internal setup?",
+      "targets": [
+        "T021",
+        "T022",
+        "T023",
+        "T024",
+        "T025"
+      ]
+    },
+    {
+      "qid": "Q015",
+      "card": "C-anthropic-agent-memory-dreaming",
+      "question": "What dreaming cadence does Anthropic use in production, and what does a pass cost? Not stated.",
+      "targets": [
+        "T021",
+        "T022",
+        "T023",
+        "T024",
+        "T025"
+      ]
+    },
+    {
+      "qid": "Q016",
+      "card": "C-anthropic-dreaming-cookbook-workflow",
+      "question": "How does analyzer verification quality hold up on real, messy transcripts rather than the synthetic set the costs were measured on? The cookbook reports fact retention on its own example corpus only.",
+      "targets": [
+        "T026",
+        "T027",
+        "T028",
+        "T029"
+      ]
+    },
+    {
+      "qid": "Q017",
+      "card": "C-anthropic-dreaming-cookbook-workflow",
+      "question": "The managed Dreams preview writes to a new store while the cookbook updates in place; why is not stated.",
+      "targets": [
+        "T026",
+        "T027",
+        "T028",
+        "T029"
+      ]
+    },
+    {
+      "qid": "Q020",
+      "card": "C-atlas-spectral-locking-drift",
+      "question": "How are the state anchor's descriptions produced in a live system — written by the agents themselves, a summariser, or the harness? The refresh mechanism assumes a current state summary exists; its provenance decides how much of the gain survives contact with a real workflow.",
+      "targets": [
+        "T030",
+        "T031",
+        "T032"
+      ]
+    },
+    {
+      "qid": "Q021",
+      "card": "C-atlas-spectral-locking-drift",
+      "question": "Does steering toward yesterday's anchors ever lock in a wrong task framing after a legitimate mid-run change of plan? The perturbation tests cover task switches, but an operator-initiated reprioritisation is a different kind of change.",
+      "targets": [
+        "T030",
+        "T031",
+        "T032"
+      ]
+    },
+    {
+      "qid": "Q022",
+      "card": "C-auctopus-autonomous-lab",
+      "question": "Does the Auctopus harness transfer to a second domain and instrument, or is the demonstration specific to NV spins and this apparatus?",
+      "targets": [
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T037"
+      ]
+    },
+    {
+      "qid": "Q023",
+      "card": "C-auctopus-autonomous-lab",
+      "question": "What did the full investigation cost, and how much human intervention occurred beyond setup and safety configuration?",
+      "targets": [
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T037"
+      ]
+    },
+    {
+      "qid": "Q024",
+      "card": "C-auctopus-autonomous-lab",
+      "question": "Will the experimental data and analysis code be released openly, or remain on-request?",
+      "targets": [
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T037"
+      ]
+    },
+    {
+      "qid": "Q025",
+      "card": "C-auctopus-autonomous-lab",
+      "question": "How does the system behave when the PI's derivation itself is wrong in a way computational verification cannot catch?",
+      "targets": [
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T037"
+      ]
+    },
+    {
+      "qid": "Q026",
+      "card": "C-awm-world-modeling-tts",
+      "question": "Do the gains hold across seeds and replicates, and can the Table 1 / Table 3 pooled-rate inconsistency be reconciled?",
+      "targets": [
+        "T038",
+        "T039",
+        "T040",
+        "T041"
+      ]
+    },
+    {
+      "qid": "Q027",
+      "card": "C-awm-world-modeling-tts",
+      "question": "Does AWM work with a weak simulator backbone, and in environments whose read interfaces are incomplete?",
+      "targets": [
+        "T038",
+        "T039",
+        "T040",
+        "T041"
+      ]
+    },
+    {
+      "qid": "Q028",
+      "card": "C-awm-world-modeling-tts",
+      "question": "What licence covers the released code, and can a fresh run reproduce the headline tables given the README's own caveats?",
+      "targets": [
+        "T038",
+        "T039",
+        "T040",
+        "T041"
+      ]
+    },
+    {
+      "qid": "Q029",
+      "card": "C-biobasicsbench-wet-lab-agents",
+      "question": "Will the tasks and rubrics be released so other labs and models can be run on identical evidence? Nothing in the announcement says so.",
+      "targets": [
+        "T042",
+        "T043",
+        "T044"
+      ]
+    },
+    {
+      "qid": "Q030",
+      "card": "C-biobasicsbench-wet-lab-agents",
+      "question": "What is the expert-human mean reward on the same rubrics? Without it, 66.7% has no ceiling reference.",
+      "targets": [
+        "T042",
+        "T043",
+        "T044"
+      ]
+    },
+    {
+      "qid": "Q031",
+      "card": "C-bovdi-geche-universality",
+      "question": "Can the constants C_N and the thresholds for Q and l be made explicit, and at what cost to the proof?",
+      "targets": [
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T049"
+      ]
+    },
+    {
+      "qid": "Q032",
+      "card": "C-bovdi-geche-universality",
+      "question": "Does any form of universality hold for infinite sets, noisy activations, or multi-neuron networks built from these activations?",
+      "targets": [
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T049"
+      ]
+    },
+    {
+      "qid": "Q033",
+      "card": "C-bovdi-geche-universality",
+      "question": "Is there an effective procedure to find the realising threshold in the complex case, rather than a measure argument?",
+      "targets": [
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T049"
+      ]
+    },
+    {
+      "qid": "Q034",
+      "card": "C-bovdi-geche-universality",
+      "question": "Would a machine-checked formalisation of either proof be feasible, and which proof assistant and library would it need?",
+      "targets": [
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T049"
+      ]
+    },
+    {
+      "qid": "Q035",
+      "card": "C-bovdi-geche-universality",
+      "question": "Are there other activations or fields where the same character-sum or equidistribution strategy yields a uniform count?",
+      "targets": [
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T049"
+      ]
+    },
+    {
+      "qid": "Q036",
+      "card": "C-cc-mmd-contaminated-samples",
+      "question": "Can epsilon be estimated without breaking design-unbiasedness?",
+      "targets": [
+        "T050",
+        "T051",
+        "T052",
+        "T053",
+        "T054"
+      ]
+    },
+    {
+      "qid": "Q037",
+      "card": "C-cc-mmd-contaminated-samples",
+      "question": "Do adaptive or stratified audit designs beat simple random sampling here?",
+      "targets": [
+        "T050",
+        "T051",
+        "T052",
+        "T053",
+        "T054"
+      ]
+    },
+    {
+      "qid": "Q038",
+      "card": "C-cc-mmd-contaminated-samples",
+      "question": "Do the guarantees extend to other divergences or high-dimensional kernels?",
+      "targets": [
+        "T050",
+        "T051",
+        "T052",
+        "T053",
+        "T054"
+      ]
+    },
+    {
+      "qid": "Q039",
+      "card": "C-cc-mmd-contaminated-samples",
+      "question": "Does CC-MMD work on a naturally contaminated real dataset with real audit labels?",
+      "targets": [
+        "T050",
+        "T051",
+        "T052",
+        "T053",
+        "T054"
+      ]
+    },
+    {
+      "qid": "Q040",
+      "card": "C-cc-mmd-contaminated-samples",
+      "question": "Will code be released, and what is the NeurIPS status (unverified in the arXiv record)?",
+      "targets": [
+        "T050",
+        "T051",
+        "T052",
+        "T053",
+        "T054"
+      ]
+    },
+    {
+      "qid": "Q041",
+      "card": "C-cf-snn-simplicial-uq",
+      "question": "Under what licence is the paper released, and is there code or data anywhere, since neither appears in the full text?",
+      "targets": [
+        "T055",
+        "T056",
+        "T057"
+      ]
+    },
+    {
+      "qid": "Q042",
+      "card": "C-cf-snn-simplicial-uq",
+      "question": "Does the argument survive non-random splits, distribution shift, or a new complex at test time?",
+      "targets": [
+        "T055",
+        "T056",
+        "T057"
+      ]
+    },
+    {
+      "qid": "Q043",
+      "card": "C-cf-snn-simplicial-uq",
+      "question": "How should tied scores be handled in production, given the theorem needs untied scores and citation data violate it?",
+      "targets": [
+        "T055",
+        "T056",
+        "T057"
+      ]
+    },
+    {
+      "qid": "Q044",
+      "card": "C-cf-snn-simplicial-uq",
+      "question": "What does the 100-partition evaluation cost at Hydra scale, and can the envelope be computed without refitting?",
+      "targets": [
+        "T055",
+        "T056",
+        "T057"
+      ]
+    },
+    {
+      "qid": "Q045",
+      "card": "C-circe-task-complexity",
+      "question": "Does the signal hold for open-ended, knowledge-heavy, or implicitly constrained problems outside the schema?",
+      "targets": [
+        "T058",
+        "T059",
+        "T060"
+      ]
+    },
+    {
+      "qid": "Q046",
+      "card": "C-circe-task-complexity",
+      "question": "Does it hold under sampling instead of single greedy decoding, and for models outside the four tested?",
+      "targets": [
+        "T058",
+        "T059",
+        "T060"
+      ]
+    },
+    {
+      "qid": "Q047",
+      "card": "C-circe-task-complexity",
+      "question": "When will code be released, under what licence, so the builder and features can be checked not reimplemented?",
+      "targets": [
+        "T058",
+        "T059",
+        "T060"
+      ]
+    },
+    {
+      "qid": "Q048",
+      "card": "C-circe-task-complexity",
+      "question": "What happens downstream when routing follows predicted difficulty, and how is under-serving monitored?",
+      "targets": [
+        "T058",
+        "T059",
+        "T060"
+      ]
+    },
+    {
+      "qid": "Q049",
+      "card": "C-claimnov-novelty-checks",
+      "question": "Does ClaimNov hold up with open retrieval over a live literature pool instead of fixed 20- to 400-paper pools?",
+      "targets": [
+        "T061",
+        "T062",
+        "T063"
+      ]
+    },
+    {
+      "qid": "Q050",
+      "card": "C-claimnov-novelty-checks",
+      "question": "Do the dimension weights and claim extraction transfer outside AI research and English, and who retunes them?",
+      "targets": [
+        "T061",
+        "T062",
+        "T063"
+      ]
+    },
+    {
+      "qid": "Q051",
+      "card": "C-claimnov-novelty-checks",
+      "question": "Can the profile be produced by a different model family than the one generating the ideas, to remove the same-model judging bias?",
+      "targets": [
+        "T061",
+        "T062",
+        "T063"
+      ]
+    },
+    {
+      "qid": "Q052",
+      "card": "C-claimnov-novelty-checks",
+      "question": "What does a ClaimNov gate cost in a real Hydra loop, in dollars and latency per committed idea, including retrieval over Hydra's own prior-work pool?",
+      "targets": [
+        "T061",
+        "T062",
+        "T063"
+      ]
+    },
+    {
+      "qid": "Q053",
+      "card": "C-cleo-minimal-harness-optimization",
+      "question": "How much of the parity survives a judge the team validates systematically, or human scoring? The headline gap is three questions wide under an unvalidated judge that is also the loop's supervisor.",
+      "targets": [
+        "T064",
+        "T065",
+        "T066"
+      ]
+    },
+    {
+      "qid": "Q054",
+      "card": "C-cleo-minimal-harness-optimization",
+      "question": "Does the fitted harness transfer to a different self-hostable model, or is it fitted to GLM-5.1's particular failure modes? The method re-runs cheaply in principle; the paper reports one model.",
+      "targets": [
+        "T064",
+        "T065",
+        "T066"
+      ]
+    },
+    {
+      "qid": "Q055",
+      "card": "C-collaborative-intelligence-teammates",
+      "question": "The teammate problems are scripted; do the same failure rates hold with live model teammates (the paper's setup mentions live partners in its task diagram, but the scored tests use scripted turns)?",
+      "targets": [
+        "T067",
+        "T068",
+        "T069",
+        "T070",
+        "T071"
+      ]
+    },
+    {
+      "qid": "Q056",
+      "card": "C-collaborative-intelligence-teammates",
+      "question": "Which model tops each individual dimension? The dimension-level table was not read in full; only the overall ranking and the findings above were verified.",
+      "targets": [
+        "T067",
+        "T068",
+        "T069",
+        "T070",
+        "T071"
+      ]
+    },
+    {
+      "qid": "Q057",
+      "card": "C-competing-learning-hybrid",
+      "question": "Does BLD hold at 7B and above, with seeds and variance, and on corpora and tokenizers other than DCLM and Qwen3?",
+      "targets": [
+        "T072",
+        "T073",
+        "T074"
+      ]
+    },
+    {
+      "qid": "Q058",
+      "card": "C-competing-learning-hybrid",
+      "question": "What is the repository licence, and what licences cover the ten checkpoints?",
+      "targets": [
+        "T072",
+        "T073",
+        "T074"
+      ]
+    },
+    {
+      "qid": "Q059",
+      "card": "C-competing-learning-hybrid",
+      "question": "Does the frozen-stage length (about 1/10) transfer across scales and recurrent architectures, or need retuning per model?",
+      "targets": [
+        "T072",
+        "T073",
+        "T074"
+      ]
+    },
+    {
+      "qid": "Q060",
+      "card": "C-competing-learning-hybrid",
+      "question": "Do BLD models keep their retrieval advantage after instruction tuning or RL post-training, where Hydra would actually use them?",
+      "targets": [
+        "T072",
+        "T073",
+        "T074"
+      ]
+    },
+    {
+      "qid": "Q061",
+      "card": "C-conditional-neural-sde",
+      "question": "How does the model compare numerically with the covariance/Gaussian baseline the paper motivates against?",
+      "targets": [
+        "T075",
+        "T076",
+        "T077"
+      ]
+    },
+    {
+      "qid": "Q062",
+      "card": "C-conditional-neural-sde",
+      "question": "What is the empirical coverage of the CIBOR backtest, not just the interval width?",
+      "targets": [
+        "T075",
+        "T076",
+        "T077"
+      ]
+    },
+    {
+      "qid": "Q063",
+      "card": "C-conditional-neural-sde",
+      "question": "Does the anchor hold when the conditioning path must itself be generated rather than supplied?",
+      "targets": [
+        "T075",
+        "T076",
+        "T077"
+      ]
+    },
+    {
+      "qid": "Q064",
+      "card": "C-conditional-neural-sde",
+      "question": "What are the provenance and licences of the CIBOR, STIBOR, EURIBOR, CPI, and oil series used?",
+      "targets": [
+        "T075",
+        "T076",
+        "T077"
+      ]
+    },
+    {
+      "qid": "Q065",
+      "card": "C-context-infrastructure-ragflow",
+      "question": "Do the results replicate on other models, harnesses, and corpora, including non-English ones?",
+      "targets": [
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T082"
+      ]
+    },
+    {
+      "qid": "Q066",
+      "card": "C-context-infrastructure-ragflow",
+      "question": "What do BM25 and grep contribute separately?",
+      "targets": [
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T082"
+      ]
+    },
+    {
+      "qid": "Q067",
+      "card": "C-context-infrastructure-ragflow",
+      "question": "Is the outline's harm measurable at corpus sizes other than FRAMES scale?",
+      "targets": [
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T082"
+      ]
+    },
+    {
+      "qid": "Q068",
+      "card": "C-context-infrastructure-ragflow",
+      "question": "What do the compiled structures cost to build, in money and tokens?",
+      "targets": [
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T082"
+      ]
+    },
+    {
+      "qid": "Q069",
+      "card": "C-context-infrastructure-ragflow",
+      "question": "What would the specified stratified audit show?",
+      "targets": [
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T082"
+      ]
+    },
+    {
+      "qid": "Q070",
+      "card": "C-contextual-embeddings-gold-chunk",
+      "question": "What are the actual scores and margins on Context-bench, Q2D-Chunk, ConTEB, and ViDoRe-V3, and against which baselines?",
+      "targets": [
+        "T083",
+        "T084",
+        "T085",
+        "T086",
+        "T087"
+      ]
+    },
+    {
+      "qid": "Q071",
+      "card": "C-contextual-embeddings-gold-chunk",
+      "question": "Are the models, code, and Q2D-Chunk leaderboard publicly available, and under what licence?",
+      "targets": [
+        "T083",
+        "T084",
+        "T085",
+        "T086",
+        "T087"
+      ]
+    },
+    {
+      "qid": "Q072",
+      "card": "C-contextual-embeddings-gold-chunk",
+      "question": "How well do distilled graded relevance targets transfer to Academy documents and to queries the teacher never saw?",
+      "targets": [
+        "T083",
+        "T084",
+        "T085",
+        "T086",
+        "T087"
+      ]
+    },
+    {
+      "qid": "Q073",
+      "card": "C-contextual-embeddings-gold-chunk",
+      "question": "Does evidence recall hold when answers span many chunks, or only when answer and evidence sit close together?",
+      "targets": [
+        "T083",
+        "T084",
+        "T085",
+        "T086",
+        "T087"
+      ]
+    },
+    {
+      "qid": "Q074",
+      "card": "C-criticality-real-neurons",
+      "question": "Does the contraction hold for richer statistics and heterogeneous or spatially structured models, or is it specific to the two-statistic Curie-Weiss map?",
+      "targets": [
+        "T088",
+        "T089",
+        "T090",
+        "T091",
+        "T092"
+      ]
+    },
+    {
+      "qid": "Q075",
+      "card": "C-criticality-real-neurons",
+      "question": "Does the same geometry explain criticality signatures in fitted models of other systems (flocks, genes, language models), as the authors suggest?",
+      "targets": [
+        "T088",
+        "T089",
+        "T090",
+        "T091",
+        "T092"
+      ]
+    },
+    {
+      "qid": "Q076",
+      "card": "C-criticality-real-neurons",
+      "question": "What code licence covers the repository? No LICENSE file was found at check time.",
+      "targets": [
+        "T088",
+        "T089",
+        "T090",
+        "T091",
+        "T092"
+      ]
+    },
+    {
+      "qid": "Q077",
+      "card": "C-criticality-real-neurons",
+      "question": "How do inferred (h, lambda) uncertainties behave with finite recording length?",
+      "targets": [
+        "T088",
+        "T089",
+        "T090",
+        "T091",
+        "T092"
+      ]
+    },
+    {
+      "qid": "Q078",
+      "card": "C-cseries-pipeline-task-map",
+      "question": "Use the eight decision reconciliations and twelve pipeline tasks in the package to identify what is already covered, still needed, deferred or unresolved. Actual merges, switches, paid runs and publication remain under existing authority rules.",
+      "targets": [
+        "T093",
+        "T094",
+        "T095",
+        "T096",
+        "T097"
+      ]
+    },
+    {
+      "qid": "Q079",
+      "card": "C-data-constrained-scaling-hp-ensembling",
+      "question": "Do the prescriptions hold on other corpora, tokenizers, and optimizers, and at billion-plus parameter scales?",
+      "targets": [
+        "T098",
+        "T099",
+        "T100",
+        "T101",
+        "T102"
+      ]
+    },
+    {
+      "qid": "Q080",
+      "card": "C-data-constrained-scaling-hp-ensembling",
+      "question": "Does the ensemble scaling law hold when hyperparameters are re-tuned per M rather than held at M=1 optima?",
+      "targets": [
+        "T098",
+        "T099",
+        "T100",
+        "T101",
+        "T102"
+      ]
+    },
+    {
+      "qid": "Q081",
+      "card": "C-data-constrained-scaling-hp-ensembling",
+      "question": "What is the code licence, and will the full run data (not just the fitting scripts) be released?",
+      "targets": [
+        "T098",
+        "T099",
+        "T100",
+        "T101",
+        "T102"
+      ]
+    },
+    {
+      "qid": "Q082",
+      "card": "C-data-constrained-scaling-hp-ensembling",
+      "question": "Which further axes (synthetic pre-pretraining, model growth) extend the law, as the discussion suggests?",
+      "targets": [
+        "T098",
+        "T099",
+        "T100",
+        "T101",
+        "T102"
+      ]
+    },
+    {
+      "qid": "Q083",
+      "card": "C-data-enablement-patterns",
+      "question": "Which of the six patterns has measured evidence behind it in an independent deployment, and at what cost?",
+      "targets": [
+        "T103",
+        "T104",
+        "T105"
+      ]
+    },
+    {
+      "qid": "Q084",
+      "card": "C-data-enablement-patterns",
+      "question": "How do entitlement filtering and lineage preservation apply to Academy's paper index and Hydra's shared Dropbox, where the corpus is papers, not enterprise rows?",
+      "targets": [
+        "T103",
+        "T104",
+        "T105"
+      ]
+    },
+    {
+      "qid": "Q085",
+      "card": "C-data-enablement-patterns",
+      "question": "Does synthetic-question indexing help or harm retrieval when the question generator shares the model's biases?",
+      "targets": [
+        "T103",
+        "T104",
+        "T105"
+      ]
+    },
+    {
+      "qid": "Q086",
+      "card": "C-data-enablement-patterns",
+      "question": "What is the smallest version of the dual-speed pipeline that keeps Hydra's evidence fresh without enterprise infrastructure?",
+      "targets": [
+        "T103",
+        "T104",
+        "T105"
+      ]
+    },
+    {
+      "qid": "Q087",
+      "card": "C-data-lr-schedules-together",
+      "question": "Does the reversal hold on downstream benchmarks, or only on MT validation loss?",
+      "targets": [
+        "T106",
+        "T107",
+        "T108",
+        "T109",
+        "T110"
+      ]
+    },
+    {
+      "qid": "Q088",
+      "card": "C-data-lr-schedules-together",
+      "question": "Larger scales, other data pairs, other optimisers (experiments AdamW; theory SGD)?",
+      "targets": [
+        "T106",
+        "T107",
+        "T108",
+        "T109",
+        "T110"
+      ]
+    },
+    {
+      "qid": "Q089",
+      "card": "C-data-lr-schedules-together",
+      "question": "What is the optimal decay window beyond the tested grid, and does it vary with MT budget?",
+      "targets": [
+        "T106",
+        "T107",
+        "T108",
+        "T109",
+        "T110"
+      ]
+    },
+    {
+      "qid": "Q090",
+      "card": "C-data-lr-schedules-together",
+      "question": "Does the interaction survive realistic forgetting measures beyond DCLM validation loss?",
+      "targets": [
+        "T106",
+        "T107",
+        "T108",
+        "T109",
+        "T110"
+      ]
+    },
+    {
+      "qid": "Q091",
+      "card": "C-data-lr-schedules-together",
+      "question": "Will the authors release code? None is stated in the paper.",
+      "targets": [
+        "T106",
+        "T107",
+        "T108",
+        "T109",
+        "T110"
+      ]
+    },
+    {
+      "qid": "Q092",
+      "card": "C-decision-model-as-tool",
+      "question": "Does the speedup and cost advantage hold across many real requests, or only on this one synthetic case?",
+      "targets": [
+        "T111",
+        "T112",
+        "T113"
+      ]
+    },
+    {
+      "qid": "Q093",
+      "card": "C-decision-model-as-tool",
+      "question": "How does the pattern behave when a needed lookup is missing or returns conflicting evidence?",
+      "targets": [
+        "T111",
+        "T112",
+        "T113"
+      ]
+    },
+    {
+      "qid": "Q094",
+      "card": "C-decision-model-as-tool",
+      "question": "Which decision model (Decision-1, Jev, joey-1) is cheapest per decision at Hydra's volume, and what abstention threshold triggers escalation to the frontier model?",
+      "targets": [
+        "T111",
+        "T112",
+        "T113"
+      ]
+    },
+    {
+      "qid": "Q095",
+      "card": "C-deepmind-agent-cryptanalysis-rsa",
+      "question": "Do the two papers' proofs and complexity analyses hold up once they are actually readable? Re-check the links; if the papers appear, this card should be updated or superseded by a verified one.",
+      "targets": [
+        "T114",
+        "T115",
+        "T116"
+      ]
+    },
+    {
+      "qid": "Q096",
+      "card": "C-deepmind-agent-cryptanalysis-rsa",
+      "question": "What exactly did the agents contribute versus the human cryptographers (search, proof discovery, implementation)? The announcement says \"agents discovered\" for the batch algorithm and \"agents engineered an implementation\" for the signature test, but the division of labour is a papers-level detail.",
+      "targets": [
+        "T114",
+        "T115",
+        "T116"
+      ]
+    },
+    {
+      "qid": "Q097",
+      "card": "C-delta-tau-bench",
+      "question": "Do Steward's gains hold with replicates, variance and other frameworks, and on real MCP registries?",
+      "targets": [
+        "T117",
+        "T118",
+        "T119",
+        "T120",
+        "T121"
+      ]
+    },
+    {
+      "qid": "Q098",
+      "card": "C-delta-tau-bench",
+      "question": "What is the GPT-5.5 maintenance-token reduction: the text's 30.4% or Table 2's 32.7%?",
+      "targets": [
+        "T117",
+        "T118",
+        "T119",
+        "T120",
+        "T121"
+      ]
+    },
+    {
+      "qid": "Q099",
+      "card": "C-delta-tau-bench",
+      "question": "How does incremental maintenance behave over longer horizons and larger tool churn than six versions?",
+      "targets": [
+        "T117",
+        "T118",
+        "T119",
+        "T120",
+        "T121"
+      ]
+    },
+    {
+      "qid": "Q100",
+      "card": "C-delta-tau-bench",
+      "question": "Which DAR definition reconciles Steward's higher Table 2 DAR values with its higher success?",
+      "targets": [
+        "T117",
+        "T118",
+        "T119",
+        "T120",
+        "T121"
+      ]
+    },
+    {
+      "qid": "Q101",
+      "card": "C-delta-tau-bench",
+      "question": "Does the dataset carry a licence, since none is shown on its page?",
+      "targets": [
+        "T117",
+        "T118",
+        "T119",
+        "T120",
+        "T121"
+      ]
+    },
+    {
+      "qid": "Q102",
+      "card": "C-deq-stereo-adaptive-convergence",
+      "question": "How sensitive are the results to the convergence threshold and 16-iteration cap across scenes with large motion?",
+      "targets": [
+        "T122",
+        "T123",
+        "T124",
+        "T125",
+        "T126"
+      ]
+    },
+    {
+      "qid": "Q103",
+      "card": "C-deq-stereo-adaptive-convergence",
+      "question": "Does TST's hidden-state reuse accumulate errors over long sequences, and is there a reset policy?",
+      "targets": [
+        "T122",
+        "T123",
+        "T124",
+        "T125",
+        "T126"
+      ]
+    },
+    {
+      "qid": "Q104",
+      "card": "C-deq-stereo-adaptive-convergence",
+      "question": "Would the same DEQ + simplified-gate recipe transfer to optical flow or multi-view depth?",
+      "targets": [
+        "T122",
+        "T123",
+        "T124",
+        "T125",
+        "T126"
+      ]
+    },
+    {
+      "qid": "Q105",
+      "card": "C-deq-stereo-adaptive-convergence",
+      "question": "Are the benchmark margins robust across seeds, given no variance is reported?",
+      "targets": [
+        "T122",
+        "T123",
+        "T124",
+        "T125",
+        "T126"
+      ]
+    },
+    {
+      "qid": "Q106",
+      "card": "C-distributed-agents-perturb-seq",
+      "question": "Does the scaling advantage hold on independent screens, other modalities (epigenetic, protein, spatial, morphological), and other models?",
+      "targets": [
+        "T127",
+        "T128",
+        "T129",
+        "T130",
+        "T131"
+      ]
+    },
+    {
+      "qid": "Q107",
+      "card": "C-distributed-agents-perturb-seq",
+      "question": "How much of the advantage is the distributed architecture versus the underlying model and literature tools?",
+      "targets": [
+        "T127",
+        "T128",
+        "T129",
+        "T130",
+        "T131"
+      ]
+    },
+    {
+      "qid": "Q108",
+      "card": "C-distributed-agents-perturb-seq",
+      "question": "Can the framework distinguish a true null response from depletion or timing effects prospectively, before follow-up data arrive?",
+      "targets": [
+        "T127",
+        "T128",
+        "T129",
+        "T130",
+        "T131"
+      ]
+    },
+    {
+      "qid": "Q109",
+      "card": "C-drex-foundation-decision-models",
+      "question": "How much of Max's edge is the readout-head architecture versus the training data and RLAF? The paper lists this among the comparisons not run.",
+      "targets": [
+        "T132",
+        "T133",
+        "T134",
+        "T135",
+        "T136"
+      ]
+    },
+    {
+      "qid": "Q110",
+      "card": "C-drex-foundation-decision-models",
+      "question": "Decision Index and its sibling suites come from the Jev ecosystem; the Artificial Analysis index (64 vs 65) is one independent corroboration. A Hydra-side trial on real routing or judging decisions would settle more than another suite.",
+      "targets": [
+        "T132",
+        "T133",
+        "T134",
+        "T135",
+        "T136"
+      ]
+    },
+    {
+      "qid": "Q111",
+      "card": "C-drex-foundation-decision-models",
+      "question": "What does the modified RAIL-M for Max actually restrict? The licence text needs reading before the weights are used for anything beyond evaluation.",
+      "targets": [
+        "T132",
+        "T133",
+        "T134",
+        "T135",
+        "T136"
+      ]
+    },
+    {
+      "qid": "Q112",
+      "card": "C-dsh-superagent-deepseek",
+      "question": "How does the prototype behave on a live repository over weeks: noise rate, false accepts, and worker collisions on shared files?",
+      "targets": [
+        "T137",
+        "T138",
+        "T139"
+      ]
+    },
+    {
+      "qid": "Q113",
+      "card": "C-dsh-superagent-deepseek",
+      "question": "Which designs from the accompanying article are implemented, and which are future directions?",
+      "targets": [
+        "T137",
+        "T138",
+        "T139"
+      ]
+    },
+    {
+      "qid": "Q114",
+      "card": "C-dsh-superagent-deepseek",
+      "question": "Can the domain model (Source, Trigger, Eval, Mandate, Ticket) be reused outside DeepSeek Harness, or is it bound to DSH sessions and tools?",
+      "targets": [
+        "T137",
+        "T138",
+        "T139"
+      ]
+    },
+    {
+      "qid": "Q115",
+      "card": "C-dsh-superagent-deepseek",
+      "question": "What does operating it cost in router and worker model calls per Ticket, and how does that scale with the worker-slot limit?",
+      "targets": [
+        "T137",
+        "T138",
+        "T139"
+      ]
+    },
+    {
+      "qid": "Q116",
+      "card": "C-dynamical-coarse-graining",
+      "question": "Do approximate closures exist with controlled error for GELU/SiLU networks, transformers, and stochastic optimisers, and how does error grow across gate events?",
+      "targets": [
+        "T140",
+        "T141",
+        "T142"
+      ]
+    },
+    {
+      "qid": "Q117",
+      "card": "C-dynamical-coarse-graining",
+      "question": "Can the moment framework predict or control training at scales where the fixed-pattern assumption fails immediately?",
+      "targets": [
+        "T140",
+        "T141",
+        "T142"
+      ]
+    },
+    {
+      "qid": "Q118",
+      "card": "C-dynamical-coarse-graining",
+      "question": "Does the learning-operator descent condition hold, even approximately, for any practical architecture?",
+      "targets": [
+        "T140",
+        "T141",
+        "T142"
+      ]
+    },
+    {
+      "qid": "Q119",
+      "card": "C-dynamical-coarse-graining",
+      "question": "What macroscopic observables, if any, track the quantities Hydra and Academy actually care about: judge calibration, retention, or generalisation?",
+      "targets": [
+        "T140",
+        "T141",
+        "T142"
+      ]
+    },
+    {
+      "qid": "Q120",
+      "card": "C-eaqecc-researcher-loop",
+      "question": "Does iterative evolution's generalization advantage hold for other models, other researcher proposals, and non-binary targets?",
+      "targets": [
+        "T143",
+        "T144",
+        "T145",
+        "T146",
+        "T147"
+      ]
+    },
+    {
+      "qid": "Q121",
+      "card": "C-eaqecc-researcher-loop",
+      "question": "Can exact verification scale past the exponential dual-enumeration cost for longer codes?",
+      "targets": [
+        "T143",
+        "T144",
+        "T145",
+        "T146",
+        "T147"
+      ]
+    },
+    {
+      "qid": "Q122",
+      "card": "C-eaqecc-researcher-loop",
+      "question": "Do the constructions survive realistic decoding and hardware noise, or only ideal-decoding guarantees?",
+      "targets": [
+        "T143",
+        "T144",
+        "T145",
+        "T146",
+        "T147"
+      ]
+    },
+    {
+      "qid": "Q123",
+      "card": "C-eaqecc-researcher-loop",
+      "question": "What other mathematical domains admit this pipeline: exact evaluator plus researcher generalization plus formal certificate?",
+      "targets": [
+        "T143",
+        "T144",
+        "T145",
+        "T146",
+        "T147"
+      ]
+    },
+    {
+      "qid": "Q124",
+      "card": "C-early-termination-pattern-mining",
+      "question": "Does prefix detection hold for frontier models, whose failure modes the authors note may shift toward reasoning-level signals invisible in action sequences? Untested here.",
+      "targets": [
+        "T148",
+        "T149",
+        "T150",
+        "T151",
+        "T152"
+      ]
+    },
+    {
+      "qid": "Q125",
+      "card": "C-early-termination-pattern-mining",
+      "question": "No code release is linked; can the signature library and thresholds be reproduced from the paper alone?",
+      "targets": [
+        "T148",
+        "T149",
+        "T150",
+        "T151",
+        "T152"
+      ]
+    },
+    {
+      "qid": "Q126",
+      "card": "C-eat-evolving-agent-teams",
+      "question": "What is the supervisor timeout interval, and how much supervisor spend does each redesign cost?",
+      "targets": [
+        "T153",
+        "T154",
+        "T155",
+        "T156",
+        "T157"
+      ]
+    },
+    {
+      "qid": "Q127",
+      "card": "C-eat-evolving-agent-teams",
+      "question": "Does removing K alone, keeping evolution, lose the gain, or is the gain mostly role and coordination redesign?",
+      "targets": [
+        "T153",
+        "T154",
+        "T155",
+        "T156",
+        "T157"
+      ]
+    },
+    {
+      "qid": "Q128",
+      "card": "C-eat-evolving-agent-teams",
+      "question": "What does the cost-versus-performance Pareto look like, and do gains hold with replicates, variance and a second model family?",
+      "targets": [
+        "T153",
+        "T154",
+        "T155",
+        "T156",
+        "T157"
+      ]
+    },
+    {
+      "qid": "Q129",
+      "card": "C-eat-evolving-agent-teams",
+      "question": "Does team evolution transfer to noisier domains beyond kernels, serving and RoboDojo, and to Hydra checkers?",
+      "targets": [
+        "T153",
+        "T154",
+        "T155",
+        "T156",
+        "T157"
+      ]
+    },
+    {
+      "qid": "Q130",
+      "card": "C-eat-evolving-agent-teams",
+      "question": "Is the NeurIPS 2026 label confirmed anywhere beyond GitHub, and which serving figure (3.32x, 2.57x, 2.42x) is current?",
+      "targets": [
+        "T153",
+        "T154",
+        "T155",
+        "T156",
+        "T157"
+      ]
+    },
+    {
+      "qid": "Q131",
+      "card": "C-elephant-goldfish-model",
+      "question": "Does the five-stage fresh-context review catch design defects that a same-session self-review misses, measured on real tasks? No data in the repo.",
+      "targets": [
+        "T158",
+        "T159",
+        "T160",
+        "T161",
+        "T162"
+      ]
+    },
+    {
+      "qid": "Q132",
+      "card": "C-elephant-goldfish-model",
+      "question": "Where does the \"thousands of engineers\" claim come from? Not the repo; treat as post-only unless a Google source states it.",
+      "targets": [
+        "T158",
+        "T159",
+        "T160",
+        "T161",
+        "T162"
+      ]
+    },
+    {
+      "qid": "Q133",
+      "card": "C-emerging-theme-process",
+      "question": "Accept the proposed three-card/one-important-need review trigger?",
+      "targets": [
+        "T163",
+        "T164",
+        "T165",
+        "T166",
+        "T167"
+      ]
+    },
+    {
+      "qid": "Q134",
+      "card": "C-emerging-theme-process",
+      "question": "How often should Joi review candidate themes?",
+      "targets": [
+        "T163",
+        "T164",
+        "T165",
+        "T166",
+        "T167"
+      ]
+    },
+    {
+      "qid": "Q135",
+      "card": "C-emerging-theme-process",
+      "question": "Which metadata fields and emerging-theme view should the writer support?",
+      "targets": [
+        "T163",
+        "T164",
+        "T165",
+        "T166",
+        "T167"
+      ]
+    },
+    {
+      "qid": "Q136",
+      "card": "C-engrim",
+      "question": "How accurate is hybrid recall on Hydra's own decisions, and how does it degrade as the store grows?",
+      "targets": [
+        "T168",
+        "T169",
+        "T170",
+        "T171",
+        "T172"
+      ]
+    },
+    {
+      "qid": "Q137",
+      "card": "C-engrim",
+      "question": "How are superseded records handled, and does provenance survive a merge between two stores?",
+      "targets": [
+        "T168",
+        "T169",
+        "T170",
+        "T171",
+        "T172"
+      ]
+    },
+    {
+      "qid": "Q138",
+      "card": "C-engrim",
+      "question": "What is the full cost of a trial, including setup time, hook maintenance, and review-before-clear discipline?",
+      "targets": [
+        "T168",
+        "T169",
+        "T170",
+        "T171",
+        "T172"
+      ]
+    },
+    {
+      "qid": "Q139",
+      "card": "C-engrim",
+      "question": "Does the open-source MIT scope cover a shared Hydra deployment, or does the enterprise tier gate the needed parts?",
+      "targets": [
+        "T168",
+        "T169",
+        "T170",
+        "T171",
+        "T172"
+      ]
+    },
+    {
+      "qid": "Q140",
+      "card": "C-envopt-environment-optimization",
+      "question": "Code repository not reachable at the printed link (GitHub API: Not Found, 2026-11-06); licence unknown until the repo is public.",
+      "targets": [
+        "T173",
+        "T174",
+        "T175",
+        "T176",
+        "T177",
+        "T178"
+      ]
+    },
+    {
+      "qid": "Q141",
+      "card": "C-envopt-environment-optimization",
+      "question": "All target and research agents are frontier models (Claude and OpenAI families). Whether the gains hold for the small and free models Hydra routes most work to is untested.",
+      "targets": [
+        "T173",
+        "T174",
+        "T175",
+        "T176",
+        "T177",
+        "T178"
+      ]
+    },
+    {
+      "qid": "Q142",
+      "card": "C-envopt-environment-optimization",
+      "question": "Environments here are read-mostly artifact stores; a living workspace that changes daily (the Dropbox inbox) may drift out from under a one-off optimization, and re-optimization cadence is unmeasured.",
+      "targets": [
+        "T173",
+        "T174",
+        "T175",
+        "T176",
+        "T177",
+        "T178"
+      ]
+    },
+    {
+      "qid": "Q143",
+      "card": "C-envopt-environment-optimization",
+      "question": "Who owns environment optimization in the pipeline - a standing Night Shift job over the workspace, or a per-project pass before big runs?",
+      "targets": [
+        "T173",
+        "T174",
+        "T175",
+        "T176",
+        "T177",
+        "T178"
+      ]
+    },
+    {
+      "qid": "Q144",
+      "card": "C-envsched-rollout-scheduling",
+      "question": "Does EnvSched transfer to other environment suites, non-Qwen models, or non-GRPO algorithms?",
+      "targets": [
+        "T179",
+        "T180",
+        "T181",
+        "T182",
+        "T183"
+      ]
+    },
+    {
+      "qid": "Q145",
+      "card": "C-envsched-rollout-scheduling",
+      "question": "How does it compare with a pure difficulty-based baseline?",
+      "targets": [
+        "T179",
+        "T180",
+        "T181",
+        "T182",
+        "T183"
+      ]
+    },
+    {
+      "qid": "Q146",
+      "card": "C-envsched-rollout-scheduling",
+      "question": "Do the deltas hold with more seeds and reported variance?",
+      "targets": [
+        "T179",
+        "T180",
+        "T181",
+        "T182",
+        "T183"
+      ]
+    },
+    {
+      "qid": "Q147",
+      "card": "C-envsched-rollout-scheduling",
+      "question": "What does graph construction cost at larger pool sizes, and which extraction model was used?",
+      "targets": [
+        "T179",
+        "T180",
+        "T181",
+        "T182",
+        "T183"
+      ]
+    },
+    {
+      "qid": "Q148",
+      "card": "C-envsched-rollout-scheduling",
+      "question": "Why is there no 30B config in the repository, and what licence covers the EnvScaler data?",
+      "targets": [
+        "T179",
+        "T180",
+        "T181",
+        "T182",
+        "T183"
+      ]
+    },
+    {
+      "qid": "Q149",
+      "card": "C-epiagent-epistemic-self-play",
+      "question": "Does the intrinsic prediction reward still train beliefs with more than 2 agents, longer horizons, or open-ended dialogue?",
+      "targets": [
+        "T184",
+        "T185",
+        "T186",
+        "T187",
+        "T188"
+      ]
+    },
+    {
+      "qid": "Q150",
+      "card": "C-epiagent-epistemic-self-play",
+      "question": "Do the gains hold on larger backbones or with human opponents?",
+      "targets": [
+        "T184",
+        "T185",
+        "T186",
+        "T187",
+        "T188"
+      ]
+    },
+    {
+      "qid": "Q151",
+      "card": "C-epiagent-epistemic-self-play",
+      "question": "Can beliefs stay in text at scale, or is a structured/distributional belief needed?",
+      "targets": [
+        "T184",
+        "T185",
+        "T186",
+        "T187",
+        "T188"
+      ]
+    },
+    {
+      "qid": "Q152",
+      "card": "C-epiagent-epistemic-self-play",
+      "question": "Will the authors release code? None is stated in the paper.",
+      "targets": [
+        "T184",
+        "T185",
+        "T186",
+        "T187",
+        "T188"
+      ]
+    },
+    {
+      "qid": "Q153",
+      "card": "C-epiagent-epistemic-self-play",
+      "question": "What does the loop cost at larger scale, and does the L=10 switch frequency generalise?",
+      "targets": [
+        "T184",
+        "T185",
+        "T186",
+        "T187",
+        "T188"
+      ]
+    },
+    {
+      "qid": "Q154",
+      "card": "C-evolve-ipi-authorization-conflation",
+      "question": "Do authorization-aware feedback and delimiting compose to restore base robustness, and does the protection survive longer adaptation?",
+      "targets": [
+        "T189",
+        "T190",
+        "T191"
+      ]
+    },
+    {
+      "qid": "Q155",
+      "card": "C-evolve-ipi-authorization-conflation",
+      "question": "Does the effect hold for agents that update weights and skills together, and over months of daily use?",
+      "targets": [
+        "T189",
+        "T190",
+        "T191"
+      ]
+    },
+    {
+      "qid": "Q156",
+      "card": "C-evolve-ipi-authorization-conflation",
+      "question": "How should Hydra record authorization in a skill or memory entry so that retrieval cannot carry it across contexts?",
+      "targets": [
+        "T189",
+        "T190",
+        "T191"
+      ]
+    },
+    {
+      "qid": "Q157",
+      "card": "C-evoml-validation-gated-pipelines",
+      "question": "Do the semantic gates generalise beyond imaging-style artifacts, or do they depend on checks the nnU-Net grounding makes easy to write?",
+      "targets": [
+        "T192",
+        "T193",
+        "T194",
+        "T195",
+        "T196"
+      ]
+    },
+    {
+      "qid": "Q158",
+      "card": "C-evoml-validation-gated-pipelines",
+      "question": "Would the evolution gains survive a shuffled dataset order, or reversed difficulty order? The paper runs one fixed sequence.",
+      "targets": [
+        "T192",
+        "T193",
+        "T194",
+        "T195",
+        "T196"
+      ]
+    },
+    {
+      "qid": "Q159",
+      "card": "C-evoml-validation-gated-pipelines",
+      "question": "Is the anonymous artifact repository the full system, and under what licence? Not established from the paper.",
+      "targets": [
+        "T192",
+        "T193",
+        "T194",
+        "T195",
+        "T196"
+      ]
+    },
+    {
+      "qid": "Q160",
+      "card": "C-exo-runtime-self-improvement",
+      "question": "Repository URL and code licence not established; the sorter's source check will need the repo before it can verify implementation claims (20k-line runtime, production deployment).",
+      "targets": [
+        "T197",
+        "T198",
+        "T199",
+        "T200",
+        "T201",
+        "T202"
+      ]
+    },
+    {
+      "qid": "Q161",
+      "card": "C-exo-runtime-self-improvement",
+      "question": "The default guardian checks build success only; richer behavioural checks are sketched but untested, so nothing yet stops a policy that builds fine and behaves worse - Exo's own cost telemetry is the natural signal for a stronger guardian.",
+      "targets": [
+        "T197",
+        "T198",
+        "T199",
+        "T200",
+        "T201",
+        "T202"
+      ]
+    },
+    {
+      "qid": "Q162",
+      "card": "C-exo-runtime-self-improvement",
+      "question": "All results use OpenAI models (gpt-6.1-sol, gpt-5.6-sol); whether the gains hold for the smaller and free models Hydra routes most work to is untested.",
+      "targets": [
+        "T197",
+        "T198",
+        "T199",
+        "T200",
+        "T201",
+        "T202"
+      ]
+    },
+    {
+      "qid": "Q163",
+      "card": "C-exo-runtime-self-improvement",
+      "question": "How would a guardian interact with Hydra's pace gate and switch system - could policy activation be one more signed switch rather than a new mechanism?",
+      "targets": [
+        "T197",
+        "T198",
+        "T199",
+        "T200",
+        "T201",
+        "T202"
+      ]
+    },
+    {
+      "qid": "Q164",
+      "card": "C-first-order-regret-bandits",
+      "question": "Is there an oracle-free polynomial-time version of the master construction, or is the exponential enumeration load-bearing?",
+      "targets": [
+        "T213",
+        "T214",
+        "T215"
+      ]
+    },
+    {
+      "qid": "Q165",
+      "card": "C-first-order-regret-bandits",
+      "question": "For weakly observable graphs, what loss-dependent guarantee replaces the standard L* bound?",
+      "targets": [
+        "T213",
+        "T214",
+        "T215"
+      ]
+    },
+    {
+      "qid": "Q166",
+      "card": "C-first-order-regret-bandits",
+      "question": "Can the dependence be improved beyond worst-case alpha toward the effective difficulty of the graph?",
+      "targets": [
+        "T213",
+        "T214",
+        "T215"
+      ]
+    },
+    {
+      "qid": "Q167",
+      "card": "C-first-order-regret-bandits",
+      "question": "PDF check: confirm the rendered radicals and the kappa/alpha inequality direction in Appendix A.1 from the PDF, since the HTML text layer drops both.",
+      "targets": [
+        "T213",
+        "T214",
+        "T215"
+      ]
+    },
+    {
+      "qid": "Q168",
+      "card": "C-first-order-regret-bandits",
+      "question": "Is there any empirical check on small graphs, or a code release planned?",
+      "targets": [
+        "T213",
+        "T214",
+        "T215"
+      ]
+    },
+    {
+      "qid": "Q169",
+      "card": "C-first-tokens-cot-controllability",
+      "question": "Does the entropy-collapse bottleneck hold for closed and API models?",
+      "targets": [
+        "T216",
+        "T217",
+        "T218",
+        "T219",
+        "T220"
+      ]
+    },
+    {
+      "qid": "Q170",
+      "card": "C-first-tokens-cot-controllability",
+      "question": "Does control extend to semantic or content constraints, not just surface form?",
+      "targets": [
+        "T216",
+        "T217",
+        "T218",
+        "T219",
+        "T220"
+      ]
+    },
+    {
+      "qid": "Q171",
+      "card": "C-first-tokens-cot-controllability",
+      "question": "Would banning several opening tokens, or a longer prefill, close the remaining gaps on numbered sentences and leetspeak?",
+      "targets": [
+        "T216",
+        "T217",
+        "T218",
+        "T219",
+        "T220"
+      ]
+    },
+    {
+      "qid": "Q172",
+      "card": "C-first-tokens-cot-controllability",
+      "question": "Is the control-monitoring relationship causal under experimental manipulation?",
+      "targets": [
+        "T216",
+        "T217",
+        "T218",
+        "T219",
+        "T220"
+      ]
+    },
+    {
+      "qid": "Q173",
+      "card": "C-first-tokens-cot-controllability",
+      "question": "Will the control-task questions and generations be released?",
+      "targets": [
+        "T216",
+        "T217",
+        "T218",
+        "T219",
+        "T220"
+      ]
+    },
+    {
+      "qid": "Q174",
+      "card": "C-fspo-function-space-policy",
+      "question": "Does the function-space cache stay at negligible overhead and the memory saving hold at larger scales and longer training runs?",
+      "targets": [
+        "T225",
+        "T226",
+        "T227"
+      ]
+    },
+    {
+      "qid": "Q175",
+      "card": "C-fspo-function-space-policy",
+      "question": "Do the gains survive re-running the baselines in the same codebase, with seeds and variance, rather than borrowing SDPO-paper numbers?",
+      "targets": [
+        "T225",
+        "T226",
+        "T227"
+      ]
+    },
+    {
+      "qid": "Q176",
+      "card": "C-fspo-function-space-policy",
+      "question": "What are the refresh schedule, top-K, margin, and weighting values, and how sensitive are the results to them?",
+      "targets": [
+        "T225",
+        "T226",
+        "T227"
+      ]
+    },
+    {
+      "qid": "Q177",
+      "card": "C-fspo-function-space-policy",
+      "question": "Is code released, and under what licence, and do the SciKnowEval and ToolAlpaca licences permit Hydra's use?",
+      "targets": [
+        "T225",
+        "T226",
+        "T227"
+      ]
+    },
+    {
+      "qid": "Q178",
+      "card": "C-gpt-6-cyber-daybreak",
+      "question": "What do the ExploitGym Honeypot denominators look like — how many tests, and how are borderline scope judgements scored? The announcement gives percentages only; the system card was not read for this card.",
+      "targets": [
+        "T228",
+        "T229",
+        "T230"
+      ]
+    },
+    {
+      "qid": "Q179",
+      "card": "C-gpt-6-cyber-daybreak",
+      "question": "How does scope-keeping hold up over long, multi-day engagements rather than single benchmark tasks? Not addressed in the announcement.",
+      "targets": [
+        "T228",
+        "T229",
+        "T230"
+      ]
+    },
+    {
+      "qid": "Q180",
+      "card": "C-hybridspec-speculative-decoding-gdn-moe",
+      "question": "How much of the gain survives continuous batching, where per-request length choices interact across the batch? Untested here; the large-batch counterpart (ReplaySSM in vLLM) optimises a different point.",
+      "targets": [
+        "T231",
+        "T232",
+        "T233"
+      ]
+    },
+    {
+      "qid": "Q181",
+      "card": "C-hybridspec-speculative-decoding-gdn-moe",
+      "question": "Does the acceptance/latency calibration transfer across drafter families, or is the policy effectively fitted to DFlash's confidence signals?",
+      "targets": [
+        "T231",
+        "T232",
+        "T233"
+      ]
+    },
+    {
+      "qid": "Q182",
+      "card": "C-hydrogen-1-science-model",
+      "question": "What is FrontierScience-Research, and does the 38.3% vs 33.3% gap survive independent evaluation under a fixed protocol?",
+      "targets": [
+        "T234",
+        "T235",
+        "T236",
+        "T237",
+        "T238"
+      ]
+    },
+    {
+      "qid": "Q183",
+      "card": "C-hydrogen-1-science-model",
+      "question": "How much of the gain comes from lab records and trajectories versus the SFT/RL recipe or the GLM-5.3 base?",
+      "targets": [
+        "T234",
+        "T235",
+        "T236",
+        "T237",
+        "T238"
+      ]
+    },
+    {
+      "qid": "Q184",
+      "card": "C-hydrogen-1-science-model",
+      "question": "Do the tool-using demos hold up when the underlying calculations and spectra are independently checked?",
+      "targets": [
+        "T234",
+        "T235",
+        "T236",
+        "T237",
+        "T238"
+      ]
+    },
+    {
+      "qid": "Q185",
+      "card": "C-hydrogen-1-science-model",
+      "question": "Will the training data or recipe ever be released, or does the MIT licence cover weights only?",
+      "targets": [
+        "T234",
+        "T235",
+        "T236",
+        "T237",
+        "T238"
+      ]
+    },
+    {
+      "qid": "Q186",
+      "card": "C-hyra-2-autoresearch-tools",
+      "question": "When the HyInv/HyPLM technical report and the HyQEC release appear, do the reported figures reproduce under independent evaluation?",
+      "targets": [
+        "T239",
+        "T240",
+        "T241",
+        "T242",
+        "T243"
+      ]
+    },
+    {
+      "qid": "Q187",
+      "card": "C-hyra-2-autoresearch-tools",
+      "question": "Is the Tencent/Hyra repository public, private, or not yet created?",
+      "targets": [
+        "T239",
+        "T240",
+        "T241",
+        "T242",
+        "T243"
+      ]
+    },
+    {
+      "qid": "Q188",
+      "card": "C-hyra-2-autoresearch-tools",
+      "question": "How are Book entries actually verified and retired, and what prevents stale or wrong experience from compounding?",
+      "targets": [
+        "T239",
+        "T240",
+        "T241",
+        "T242",
+        "T243"
+      ]
+    },
+    {
+      "qid": "Q189",
+      "card": "C-hyra-2-autoresearch-tools",
+      "question": "What fraction of the reported tool developments required human intervention, and at which steps?",
+      "targets": [
+        "T239",
+        "T240",
+        "T241",
+        "T242",
+        "T243"
+      ]
+    },
+    {
+      "qid": "Q190",
+      "card": "C-idwm-hierarchical-world-models",
+      "question": "Will code, weights, or datasets be released, and under what licence?",
+      "targets": [
+        "T244",
+        "T245",
+        "T246"
+      ]
+    },
+    {
+      "qid": "Q191",
+      "card": "C-idwm-hierarchical-world-models",
+      "question": "What are the measured inference times vs reactive policies and flat world models?",
+      "targets": [
+        "T244",
+        "T245",
+        "T246"
+      ]
+    },
+    {
+      "qid": "Q192",
+      "card": "C-idwm-hierarchical-world-models",
+      "question": "Do the gains hold on real robots, or only in these three simulated suites?",
+      "targets": [
+        "T244",
+        "T245",
+        "T246"
+      ]
+    },
+    {
+      "qid": "Q193",
+      "card": "C-idwm-hierarchical-world-models",
+      "question": "How sensitive are results to Delta and the number of subgoals (ablated in an appendix section not read)?",
+      "targets": [
+        "T244",
+        "T245",
+        "T246"
+      ]
+    },
+    {
+      "qid": "Q194",
+      "card": "C-implicit-state-machines",
+      "question": "Should the three risky machines be specified explicitly: sorter dispositions including `failed`, a job completion event, and one agreed set of ledger limits?",
+      "targets": [
+        "T247",
+        "T248",
+        "T249",
+        "T250",
+        "T251"
+      ]
+    },
+    {
+      "qid": "Q195",
+      "card": "C-implicit-state-machines",
+      "question": "Who reconciles the open $400 vs $250 item?",
+      "targets": [
+        "T247",
+        "T248",
+        "T249",
+        "T250",
+        "T251"
+      ]
+    },
+    {
+      "qid": "Q196",
+      "card": "C-implicit-state-machines",
+      "question": "Are the other fifteen worth diagrams in project docs, or is this card enough?",
+      "targets": [
+        "T247",
+        "T248",
+        "T249",
+        "T250",
+        "T251"
+      ]
+    },
+    {
+      "qid": "Q197",
+      "card": "C-inla-uav-rem-prior-width",
+      "question": "Does the monotone width improvement on ray-traced fields continue past 16 dB, or turn over?",
+      "targets": [
+        "T256",
+        "T257",
+        "T258",
+        "T259",
+        "T260"
+      ]
+    },
+    {
+      "qid": "Q198",
+      "card": "C-inla-uav-rem-prior-width",
+      "question": "Why does online width estimation settle near 6.5 dB under mismatch, and can a mismatch-aware estimator recover the wider prior?",
+      "targets": [
+        "T256",
+        "T257",
+        "T258",
+        "T259",
+        "T260"
+      ]
+    },
+    {
+      "qid": "Q199",
+      "card": "C-inla-uav-rem-prior-width",
+      "question": "Does the skewness correction matter at larger skewness (max |delta| 0.886 here) or on finer grids (64x64 untested)?",
+      "targets": [
+        "T256",
+        "T257",
+        "T258",
+        "T259",
+        "T260"
+      ]
+    },
+    {
+      "qid": "Q200",
+      "card": "C-inla-uav-rem-prior-width",
+      "question": "Can a censoring-aware observation model fix the measured-field floor problem instead of wider intervals?",
+      "targets": [
+        "T256",
+        "T257",
+        "T258",
+        "T259",
+        "T260"
+      ]
+    },
+    {
+      "qid": "Q201",
+      "card": "C-jevact-decision-gate",
+      "question": "Does the gate hold on Hydra's own tasks and policies, with joey-1 or small Kev as judge, measured against false flags and revision cost?",
+      "targets": [
+        "T261",
+        "T262",
+        "T263",
+        "T264",
+        "T265"
+      ]
+    },
+    {
+      "qid": "Q202",
+      "card": "C-jevact-decision-gate",
+      "question": "How are compiled checks validated and thresholds set on held-out traces before the gate goes live, and who owns that compiler output?",
+      "targets": [
+        "T261",
+        "T262",
+        "T263",
+        "T264",
+        "T265"
+      ]
+    },
+    {
+      "qid": "Q203",
+      "card": "C-jevact-decision-gate",
+      "question": "What is the end-to-end latency and cost of the gate in a live Hydra run, including the compiler and the judge?",
+      "targets": [
+        "T261",
+        "T262",
+        "T263",
+        "T264",
+        "T265"
+      ]
+    },
+    {
+      "qid": "Q204",
+      "card": "C-jevact-decision-gate",
+      "question": "How should a gate handle the 42 of 101 bad calls that break no compiled question, where the failure is the user's request, not the policy?",
+      "targets": [
+        "T261",
+        "T262",
+        "T263",
+        "T264",
+        "T265"
+      ]
+    },
+    {
+      "qid": "Q205",
+      "card": "C-jevact-decision-gate",
+      "question": "When the judge and the code disagree, or revisions are exhausted, what escalation to a human or a stronger model applies?",
+      "targets": [
+        "T261",
+        "T262",
+        "T263",
+        "T264",
+        "T265"
+      ]
+    },
+    {
+      "qid": "Q206",
+      "card": "C-joey-1-decision-model",
+      "question": "Does joey-1 stay calibrated on Hydra's disputed, multi-model, and long-horizon decisions, or only on the decision-index tasks?",
+      "targets": [
+        "T266",
+        "T267",
+        "T268",
+        "T269",
+        "T270"
+      ]
+    },
+    {
+      "qid": "Q207",
+      "card": "C-joey-1-decision-model",
+      "question": "What abstention rate and threshold give the best trade-off between cost, latency, and accuracy on Hydra routing?",
+      "targets": [
+        "T266",
+        "T267",
+        "T268",
+        "T269",
+        "T270"
+      ]
+    },
+    {
+      "qid": "Q208",
+      "card": "C-joey-1-decision-model",
+      "question": "Is the MIT licence confirmed in the model repository, and does self-hosting fit Hydra's available GPU and context needs?",
+      "targets": [
+        "T266",
+        "T267",
+        "T268",
+        "T269",
+        "T270"
+      ]
+    },
+    {
+      "qid": "Q209",
+      "card": "C-joey-1-decision-model",
+      "question": "How do the three family sizes compare on the same Hydra task set when cost and latency are counted together?",
+      "targets": [
+        "T266",
+        "T267",
+        "T268",
+        "T269",
+        "T270"
+      ]
+    },
+    {
+      "qid": "Q210",
+      "card": "C-kimi-k3-1-pro-free-nvidia",
+      "question": "When does NVIDIA open programmatic access for this model, and with what limits?",
+      "targets": [
+        "T271",
+        "T272",
+        "T273",
+        "T274",
+        "T275",
+        "T276"
+      ]
+    },
+    {
+      "qid": "Q211",
+      "card": "C-kimi-k3-1-pro-free-nvidia",
+      "question": "What does the Kimi K3.1 Pro licence text say in full?",
+      "targets": [
+        "T271",
+        "T272",
+        "T273",
+        "T274",
+        "T275",
+        "T276"
+      ]
+    },
+    {
+      "qid": "Q212",
+      "card": "C-kimi-k3-1-pro-free-nvidia",
+      "question": "Is Highspeed a separate checkpoint, and will it get its own weights release?",
+      "targets": [
+        "T271",
+        "T272",
+        "T273",
+        "T274",
+        "T275",
+        "T276"
+      ]
+    },
+    {
+      "qid": "Q213",
+      "card": "C-kimi-k3-1-pro-free-nvidia",
+      "question": "Do the vendor benchmarks hold up now that third parties can run the weights?",
+      "targets": [
+        "T271",
+        "T272",
+        "T273",
+        "T274",
+        "T275",
+        "T276"
+      ]
+    },
+    {
+      "qid": "Q214",
+      "card": "C-kling-4-comfyui",
+      "question": "What do the four Kling 4.0 nodes cost in Comfy credits per second at 720p and 1080p, and does reference or edit input add billed seconds?",
+      "targets": [
+        "T277",
+        "T278",
+        "T279"
+      ]
+    },
+    {
+      "qid": "Q215",
+      "card": "C-kling-4-comfyui",
+      "question": "Do the nodes run in a local ComfyUI install, only on Comfy Cloud, or both, and what are the exact node names and workflow files?",
+      "targets": [
+        "T277",
+        "T278",
+        "T279"
+      ]
+    },
+    {
+      "qid": "Q216",
+      "card": "C-kling-4-comfyui",
+      "question": "Does the ComfyUI video-edit node keep the source clip's original audio, regenerate it, or offer a choice?",
+      "targets": [
+        "T277",
+        "T278",
+        "T279"
+      ]
+    },
+    {
+      "qid": "Q217",
+      "card": "C-kling-4-comfyui",
+      "question": "How well do generated clips hold a character, product, or location across the full 30 seconds compared with the current Studio draft route?",
+      "targets": [
+        "T277",
+        "T278",
+        "T279"
+      ]
+    },
+    {
+      "qid": "Q218",
+      "card": "C-kv-lingo-cache-translation",
+      "question": "No serving framework ships cache translation today; what would it take in vLLM or MLX to extract, translate, and inject a cache between two local models on Cora?",
+      "targets": [
+        "T280",
+        "T281",
+        "T282",
+        "T283",
+        "T284"
+      ]
+    },
+    {
+      "qid": "Q219",
+      "card": "C-kv-lingo-cache-translation",
+      "question": "A reply to the post points to a concurrent paper, \"Swarm Telepathy: Prefill-Free KV-Cache Transfer Across Families\" - not yet read; how its approach and numbers compare is open.",
+      "targets": [
+        "T280",
+        "T281",
+        "T282",
+        "T283",
+        "T284"
+      ]
+    },
+    {
+      "qid": "Q220",
+      "card": "C-kv-lingo-cache-translation",
+      "question": "Translator quality at the sizes Hydra actually routes between locally (around 27B) is untested here; the largest target tested is a 30B MoE with 3.3B active.",
+      "targets": [
+        "T280",
+        "T281",
+        "T282",
+        "T283",
+        "T284"
+      ]
+    },
+    {
+      "qid": "Q221",
+      "card": "C-lang-2-soc-local-models",
+      "question": "Do the results hold on real enterprise telemetry with noise and drift, in the planned beachhead trials?",
+      "targets": [
+        "T285",
+        "T286",
+        "T287",
+        "T288",
+        "T289"
+      ]
+    },
+    {
+      "qid": "Q222",
+      "card": "C-lang-2-soc-local-models",
+      "question": "How does an adaptive attacker probe the structural safeguards to bias severities or summaries?",
+      "targets": [
+        "T285",
+        "T286",
+        "T287",
+        "T288",
+        "T289"
+      ]
+    },
+    {
+      "qid": "Q223",
+      "card": "C-lang-2-soc-local-models",
+      "question": "Will the 2.0 evaluation code, results, and preregistration land in the public repo, and under what licence?",
+      "targets": [
+        "T285",
+        "T286",
+        "T287",
+        "T288",
+        "T289"
+      ]
+    },
+    {
+      "qid": "Q224",
+      "card": "C-language-models-need-sleep",
+      "question": "Where is the code, and does the Hope architecture reproduce outside the authors' setup?",
+      "targets": [
+        "T290",
+        "T291",
+        "T292"
+      ]
+    },
+    {
+      "qid": "Q225",
+      "card": "C-language-models-need-sleep",
+      "question": "What does one sleep cycle cost, and how does capacity growth scale over many cycles before the pre-allocated experts run out?",
+      "targets": [
+        "T290",
+        "T291",
+        "T292"
+      ]
+    },
+    {
+      "qid": "Q226",
+      "card": "C-language-models-need-sleep",
+      "question": "Does consolidation survive noisy or adversarial wake-phase inputs, or does it faithfully distil poisoned context into long-term weights?",
+      "targets": [
+        "T290",
+        "T291",
+        "T292"
+      ]
+    },
+    {
+      "qid": "Q227",
+      "card": "C-language-models-need-sleep",
+      "question": "Can the dreaming reward work without a task measure, for open-ended deployment data?",
+      "targets": [
+        "T290",
+        "T291",
+        "T292"
+      ]
+    },
+    {
+      "qid": "Q228",
+      "card": "C-latent-sparse-attention",
+      "question": "Does sparse training close the tree search accuracy gap past 1M tokens on GLM-5.3-Flash?",
+      "targets": [
+        "T293",
+        "T294",
+        "T295"
+      ]
+    },
+    {
+      "qid": "Q229",
+      "card": "C-latent-sparse-attention",
+      "question": "Does N-LSA hold past 0.5B parameters and 128k tokens, and with tree search?",
+      "targets": [
+        "T293",
+        "T294",
+        "T295"
+      ]
+    },
+    {
+      "qid": "Q230",
+      "card": "C-latent-sparse-attention",
+      "question": "What does bucket-cache replication cost under context parallelism at 10M tokens across many layers?",
+      "targets": [
+        "T293",
+        "T294",
+        "T295"
+      ]
+    },
+    {
+      "qid": "Q231",
+      "card": "C-latent-sparse-attention",
+      "question": "Does LSA combine with KV-cache compression, as the authors suggest is orthogonal but untested?",
+      "targets": [
+        "T293",
+        "T294",
+        "T295"
+      ]
+    },
+    {
+      "qid": "Q232",
+      "card": "C-leave-one-out-rag-eval",
+      "question": "How should Hydra version or snapshot the shared index and memory state so a past decision can be replayed against the state it saw?",
+      "targets": [
+        "T296",
+        "T297",
+        "T298"
+      ]
+    },
+    {
+      "qid": "Q233",
+      "card": "C-leave-one-out-rag-eval",
+      "question": "When the creating input is unknown or the state cannot be reconstructed exactly, what approximation is acceptable, and how is the residual uncertainty reported?",
+      "targets": [
+        "T296",
+        "T297",
+        "T298"
+      ]
+    },
+    {
+      "qid": "Q234",
+      "card": "C-leave-one-out-rag-eval",
+      "question": "Does leave-one-out replay generalise to multi-step agent trajectories, where later steps depend on earlier retrieved state?",
+      "targets": [
+        "T296",
+        "T297",
+        "T298"
+      ]
+    },
+    {
+      "qid": "Q237",
+      "card": "C-lidas-depth-growth-looping",
+      "question": "Does the 26% saving and context advantage hold across training seeds and at other scales and data mixes?",
+      "targets": [
+        "T299",
+        "T300",
+        "T301"
+      ]
+    },
+    {
+      "qid": "Q238",
+      "card": "C-lidas-depth-growth-looping",
+      "question": "Would triggering growth when induction heads emerge beat a fixed schedule, as the thread asks?",
+      "targets": [
+        "T299",
+        "T300",
+        "T301"
+      ]
+    },
+    {
+      "qid": "Q239",
+      "card": "C-lidas-depth-growth-looping",
+      "question": "Does the context bias transfer to agent tasks with tool use and long horizons, or only to few-shot benchmarks?",
+      "targets": [
+        "T299",
+        "T300",
+        "T301"
+      ]
+    },
+    {
+      "qid": "Q240",
+      "card": "C-lidas-depth-growth-looping",
+      "question": "Can LIDAS growth be combined with looping or with mixture-of-experts capacity without losing the effect?",
+      "targets": [
+        "T299",
+        "T300",
+        "T301"
+      ]
+    },
+    {
+      "qid": "Q241",
+      "card": "C-living-brain-persistent-memory",
+      "question": "What is the exact LoCoMo protocol behind 92.2% (subset, judge, answer model, runs, variance)?",
+      "targets": [
+        "T302",
+        "T303",
+        "T304",
+        "T305",
+        "T306"
+      ]
+    },
+    {
+      "qid": "Q242",
+      "card": "C-living-brain-persistent-memory",
+      "question": "Has any independent party replicated the LoCoMo or LongMemEval-S results?",
+      "targets": [
+        "T302",
+        "T303",
+        "T304",
+        "T305",
+        "T306"
+      ]
+    },
+    {
+      "qid": "Q243",
+      "card": "C-living-brain-persistent-memory",
+      "question": "Where is hosted memory stored, who holds the keys, and what is deleted on request?",
+      "targets": [
+        "T302",
+        "T303",
+        "T304",
+        "T305",
+        "T306"
+      ]
+    },
+    {
+      "qid": "Q244",
+      "card": "C-living-brain-persistent-memory",
+      "question": "Is there a code release or licence for the self-hosted tier, and what does the MCP server expose?",
+      "targets": [
+        "T302",
+        "T303",
+        "T304",
+        "T305",
+        "T306"
+      ]
+    },
+    {
+      "qid": "Q245",
+      "card": "C-living-brain-persistent-memory",
+      "question": "Does the nightly Evolve pass change answers on already-stored facts, and is that change itself logged?",
+      "targets": [
+        "T302",
+        "T303",
+        "T304",
+        "T305",
+        "T306"
+      ]
+    },
+    {
+      "qid": "Q246",
+      "card": "C-lm-circuit-design-derivative-pricing",
+      "question": "Does the gate-qubit advantage survive compilation to Clifford+T, depth, and physical-qubit estimates, which the paper explicitly does not report?",
+      "targets": [
+        "T307",
+        "T308",
+        "T309",
+        "T310"
+      ]
+    },
+    {
+      "qid": "Q247",
+      "card": "C-lm-circuit-design-derivative-pricing",
+      "question": "How much of the TARF result is search, and how much is the index-sum identity being visible in the task files the design sessions could read?",
+      "targets": [
+        "T307",
+        "T308",
+        "T309",
+        "T310"
+      ]
+    },
+    {
+      "qid": "Q248",
+      "card": "C-logit-psv-neural-thickets",
+      "question": "Does any weight-space effect appear above 7B that logit PSV cannot capture?",
+      "targets": [
+        "T311",
+        "T312",
+        "T313"
+      ]
+    },
+    {
+      "qid": "Q249",
+      "card": "C-logit-psv-neural-thickets",
+      "question": "Can logit PSV be applied where answers cannot be compared for voting, such as open-ended generation?",
+      "targets": [
+        "T311",
+        "T312",
+        "T313"
+      ]
+    },
+    {
+      "qid": "Q250",
+      "card": "C-logit-psv-neural-thickets",
+      "question": "What are the vision results with the released code, and under what licence?",
+      "targets": [
+        "T311",
+        "T312",
+        "T313"
+      ]
+    },
+    {
+      "qid": "Q251",
+      "card": "C-lucidlyra-3d-scene-understanding",
+      "question": "When will code, weights, data, and benchmarks be released, and under what licence?",
+      "targets": [
+        "T314",
+        "T315",
+        "T316"
+      ]
+    },
+    {
+      "qid": "Q252",
+      "card": "C-lucidlyra-3d-scene-understanding",
+      "question": "Do the gains hold on captured real-world multi-view scenes rather than generated trajectories?",
+      "targets": [
+        "T314",
+        "T315",
+        "T316"
+      ]
+    },
+    {
+      "qid": "Q253",
+      "card": "C-lucidlyra-3d-scene-understanding",
+      "question": "How accurate are the generated geometry and semantics where the scene is hallucinated beyond the input view?",
+      "targets": [
+        "T314",
+        "T315",
+        "T316"
+      ]
+    },
+    {
+      "qid": "Q254",
+      "card": "C-lucidlyra-3d-scene-understanding",
+      "question": "What are the dynamic-scene numbers, and what is the reconstruction trade-off there?",
+      "targets": [
+        "T314",
+        "T315",
+        "T316"
+      ]
+    },
+    {
+      "qid": "Q255",
+      "card": "C-lyra-2-explorable-3d-worlds",
+      "question": "How consistent are revisits at the scale of a real building interior over many segments, beyond benchmark trajectories? The evaluations are dataset trajectories; the in-the-wild section is qualitative.",
+      "targets": [
+        "T317",
+        "T318",
+        "T319"
+      ]
+    },
+    {
+      "qid": "Q256",
+      "card": "C-lyra-2-explorable-3d-worlds",
+      "question": "Do the photometric inconsistencies measurably degrade mesh accuracy for engineering uses, or only appearance? The paper flags artifacts in the splats but does not quantify geometric error against ground-truth scans.",
+      "targets": [
+        "T317",
+        "T318",
+        "T319"
+      ]
+    },
+    {
+      "qid": "Q257",
+      "card": "C-mage-vl-cowork",
+      "question": "Will an arXiv record appear, and will the technical report PDF remain the only report source?",
+      "targets": [
+        "T320",
+        "T321",
+        "T322",
+        "T323",
+        "T324"
+      ]
+    },
+    {
+      "qid": "Q258",
+      "card": "C-mage-vl-cowork",
+      "question": "Does hybrid routing transfer to Windows tasks and to real office workflows outside OSWorld-Verified?",
+      "targets": [
+        "T320",
+        "T321",
+        "T322",
+        "T323",
+        "T324"
+      ]
+    },
+    {
+      "qid": "Q259",
+      "card": "C-mage-vl-cowork",
+      "question": "What safety and permission limits are needed before a bash-capable agent touches a real desktop, a shared drive, or a browser with signed-in sessions?",
+      "targets": [
+        "T320",
+        "T321",
+        "T322",
+        "T323",
+        "T324"
+      ]
+    },
+    {
+      "qid": "Q260",
+      "card": "C-mage-vl-cowork",
+      "question": "How much of the gain comes from harness evolution, from Forge synthesis, and from online reinforcement learning when each is removed in turn?",
+      "targets": [
+        "T320",
+        "T321",
+        "T322",
+        "T323",
+        "T324"
+      ]
+    },
+    {
+      "qid": "Q261",
+      "card": "C-mechanistic-intervention-code-layers",
+      "question": "Is any of this released — code, the inserted layers, or a paper with seeds and error bars? None is linked from the blog as read.",
+      "targets": [
+        "T325",
+        "T326",
+        "T327",
+        "T328",
+        "T329"
+      ]
+    },
+    {
+      "qid": "Q262",
+      "card": "C-mechanistic-intervention-code-layers",
+      "question": "Does the nanochat loss gap survive at scales where the base model's own circuits are stronger, or is this a small-model regime effect?",
+      "targets": [
+        "T325",
+        "T326",
+        "T327",
+        "T328",
+        "T329"
+      ]
+    },
+    {
+      "qid": "Q263",
+      "card": "C-mega-moe-deepgemm-explainer",
+      "question": "Which SSLMs, GPU types, and cloud GPU hours does KetchupPancake have, and is any of them an MoE served expert-parallel?",
+      "targets": [
+        "T330",
+        "T331",
+        "T332"
+      ]
+    },
+    {
+      "qid": "Q264",
+      "card": "C-mega-moe-deepgemm-explainer",
+      "question": "What is Mega MoE's measured latency or throughput on those models and GPUs versus tuned separate kernels?",
+      "targets": [
+        "T330",
+        "T331",
+        "T332"
+      ]
+    },
+    {
+      "qid": "Q265",
+      "card": "C-mega-moe-deepgemm-explainer",
+      "question": "Does a fused backward (Prime or other) hold up on KetchupPancake's training setup, if training is ever in scope?",
+      "targets": [
+        "T330",
+        "T331",
+        "T332"
+      ]
+    },
+    {
+      "qid": "Q266",
+      "card": "C-mega-moe-deepgemm-explainer",
+      "question": "How large is the symmetric buffer for KetchupPancake's expert and token counts, and does it fit alongside the serving stack?",
+      "targets": [
+        "T330",
+        "T331",
+        "T332"
+      ]
+    },
+    {
+      "qid": "Q267",
+      "card": "C-memorilla-latent-memory",
+      "question": "Does the memory module transfer across model families, or to code and science domains beyond biomedicine?",
+      "targets": [
+        "T333",
+        "T334",
+        "T335",
+        "T336",
+        "T337",
+        "T338",
+        "T339"
+      ]
+    },
+    {
+      "qid": "Q268",
+      "card": "C-memorilla-latent-memory",
+      "question": "What does a real hybrid cost — does pairing latent memory with text retrieval keep the token/latency win while recovering exact names?",
+      "targets": [
+        "T333",
+        "T334",
+        "T335",
+        "T336",
+        "T337",
+        "T338",
+        "T339"
+      ]
+    },
+    {
+      "qid": "Q269",
+      "card": "C-memorilla-latent-memory",
+      "question": "Can an encoder trained specifically for compression close the fine-grained-detail gap?",
+      "targets": [
+        "T333",
+        "T334",
+        "T335",
+        "T336",
+        "T337",
+        "T338",
+        "T339"
+      ]
+    },
+    {
+      "qid": "Q270",
+      "card": "C-memorilla-latent-memory",
+      "question": "How does the TextWorld continual-learning result scale past 50-turn episodes, across environments, and over long deployments?",
+      "targets": [
+        "T333",
+        "T334",
+        "T335",
+        "T336",
+        "T337",
+        "T338",
+        "T339"
+      ]
+    },
+    {
+      "qid": "Q271",
+      "card": "C-memorilla-latent-memory",
+      "question": "Where is the released code, and under what licence?",
+      "targets": [
+        "T333",
+        "T334",
+        "T335",
+        "T336",
+        "T337",
+        "T338",
+        "T339"
+      ]
+    },
+    {
+      "qid": "Q272",
+      "card": "C-meridian-air-civoe",
+      "question": "Would the 59.8-to-85.5 gain survive an independent rerun on unselected tasks, with frontier models run directly rather than through Cursor agents and with revisions and reasoning settings controlled?",
+      "targets": [
+        "T340",
+        "T341",
+        "T342",
+        "T343",
+        "T344",
+        "T345",
+        "T346"
+      ]
+    },
+    {
+      "qid": "Q273",
+      "card": "C-meridian-air-civoe",
+      "question": "What does CivoE cost per successful task in latency, memory, and calls, and on what consumer hardware does it actually run?",
+      "targets": [
+        "T340",
+        "T341",
+        "T342",
+        "T343",
+        "T344",
+        "T345",
+        "T346"
+      ]
+    },
+    {
+      "qid": "Q274",
+      "card": "C-meridian-air-civoe",
+      "question": "Does injection resistance hold against adaptive attacks, and does the expert pattern transfer to Hydra's own checker lanes without the 2-9x call overhead?",
+      "targets": [
+        "T340",
+        "T341",
+        "T342",
+        "T343",
+        "T344",
+        "T345",
+        "T346"
+      ]
+    },
+    {
+      "qid": "Q275",
+      "card": "C-meridian-air-civoe",
+      "question": "webAI's LinkedIn post says one more model, \"our best yet,\" arrives the morning of 6 Nov 2026 with general access to webAI — is that a separate card when it lands?",
+      "targets": [
+        "T340",
+        "T341",
+        "T342",
+        "T343",
+        "T344",
+        "T345",
+        "T346"
+      ]
+    },
+    {
+      "qid": "Q276",
+      "card": "C-meridian-air-civoe",
+      "question": "How many experts can the fixed foundation support before accuracy or efficiency degrades?",
+      "targets": [
+        "T340",
+        "T341",
+        "T342",
+        "T343",
+        "T344",
+        "T345",
+        "T346"
+      ]
+    },
+    {
+      "qid": "Q277",
+      "card": "C-meta-models-model-learning",
+      "question": "Does the KAN augmentation generalise beyond StepLaw-derived coordinates, or is it a StepLaw-specific correction?",
+      "targets": [
+        "T347",
+        "T348",
+        "T349",
+        "T350",
+        "T351"
+      ]
+    },
+    {
+      "qid": "Q278",
+      "card": "C-meta-models-model-learning",
+      "question": "Can embedding distance or another signal give a usable reliability warning before an out-of-distribution prediction is trusted?",
+      "targets": [
+        "T347",
+        "T348",
+        "T349",
+        "T350",
+        "T351"
+      ]
+    },
+    {
+      "qid": "Q279",
+      "card": "C-meta-models-model-learning",
+      "question": "What does a prospective, equal-budget comparison look like, counting pilot runs, search, and adaptation against the baseline?",
+      "targets": [
+        "T347",
+        "T348",
+        "T349",
+        "T350",
+        "T351"
+      ]
+    },
+    {
+      "qid": "Q280",
+      "card": "C-meta-models-model-learning",
+      "question": "Which licences govern TabPFN v3, the NCPL checkpoints, and each reused corpus for a reproduction?",
+      "targets": [
+        "T347",
+        "T348",
+        "T349",
+        "T350",
+        "T351"
+      ]
+    },
+    {
+      "qid": "Q281",
+      "card": "C-meta-models-model-learning",
+      "question": "Does pre-run prediction improve Hydra routing or configuration choice on Hydra's own run records, measured against the cost of collecting them?",
+      "targets": [
+        "T347",
+        "T348",
+        "T349",
+        "T350",
+        "T351"
+      ]
+    },
+    {
+      "qid": "Q282",
+      "card": "C-muse-specialized-models-active-memory",
+      "question": "Will Meta publish the Active Memory / Active Focus eval constructions or task sets? Nothing is linked from the blog as read.",
+      "targets": [
+        "T352",
+        "T353",
+        "T354",
+        "T355",
+        "T356"
+      ]
+    },
+    {
+      "qid": "Q283",
+      "card": "C-muse-specialized-models-active-memory",
+      "question": "Which Muse tiers and regions receive the specialized models, and on what schedule? Not stated.",
+      "targets": [
+        "T352",
+        "T353",
+        "T354",
+        "T355",
+        "T356"
+      ]
+    },
+    {
+      "qid": "Q284",
+      "card": "C-neighborhood-elites-uq",
+      "question": "Does the grid transfer beyond extractive QA, to generative answers, multi hop reasoning, or retrieval settings where the context is not a gold passage?",
+      "targets": [
+        "T357",
+        "T358",
+        "T359"
+      ]
+    },
+    {
+      "qid": "Q285",
+      "card": "C-neighborhood-elites-uq",
+      "question": "Can the score be calibrated, or does it stay a ranking signal that needs a threshold per deployment?",
+      "targets": [
+        "T357",
+        "T358",
+        "T359"
+      ]
+    },
+    {
+      "qid": "Q286",
+      "card": "C-neighborhood-elites-uq",
+      "question": "What does the cost curve look like at Hydra scale, and does a smaller budget (fewer than 25 attempts) keep most of the gain?",
+      "targets": [
+        "T357",
+        "T358",
+        "T359"
+      ]
+    },
+    {
+      "qid": "Q287",
+      "card": "C-neighborhood-elites-uq",
+      "question": "Will the authors release code? Without it, the appendix level reproduction is the only route, and the unseeded editor limits exact replay.",
+      "targets": [
+        "T357",
+        "T358",
+        "T359"
+      ]
+    },
+    {
+      "qid": "Q288",
+      "card": "C-neighborhood-elites-uq",
+      "question": "Do the gates hold up semantically? A lexical check that an answer string survives is not proof the rewrite still supports it.",
+      "targets": [
+        "T357",
+        "T358",
+        "T359"
+      ]
+    },
+    {
+      "qid": "Q289",
+      "card": "C-nemotron-3-5-super-lightning",
+      "question": "What are Lightning's scores, and how do Super and Lightning compare on the same Hydra task set when cost is counted?",
+      "targets": [
+        "T360",
+        "T361",
+        "T362",
+        "T363",
+        "T364"
+      ]
+    },
+    {
+      "qid": "Q290",
+      "card": "C-nemotron-3-5-super-lightning",
+      "question": "Which teachers and data were used for multi-teacher on-policy distillation, and are the weights and evaluation code openly available?",
+      "targets": [
+        "T360",
+        "T361",
+        "T362",
+        "T363",
+        "T364"
+      ]
+    },
+    {
+      "qid": "Q291",
+      "card": "C-nemotron-3-5-super-lightning",
+      "question": "How much of the SWE-bench Pro gain comes from mid-training, from distillation, and from test-time scaling when each is removed in turn?",
+      "targets": [
+        "T360",
+        "T361",
+        "T362",
+        "T363",
+        "T364"
+      ]
+    },
+    {
+      "qid": "Q292",
+      "card": "C-nemotron-3-5-super-lightning",
+      "question": "Does NVFP4 quantization keep accuracy on Hydra judge and routing tasks, or only on the benchmarks reported in the paper?",
+      "targets": [
+        "T360",
+        "T361",
+        "T362",
+        "T363",
+        "T364"
+      ]
+    },
+    {
+      "qid": "Q293",
+      "card": "C-neural-exact-cover-zebra",
+      "question": "Does the none/one/many feedback pattern transfer to encodings Hydra cares about (for example a checker that can report under- vs over-constrained on a structured claim), or does it depend on Zebra's guaranteed unique solution?",
+      "targets": [
+        "T365",
+        "T366",
+        "T367",
+        "T368"
+      ]
+    },
+    {
+      "qid": "Q294",
+      "card": "C-neural-exact-cover-zebra",
+      "question": "The code repository shows no licence file; until that is clarified the code is read-only reference, not reusable.",
+      "targets": [
+        "T365",
+        "T366",
+        "T367",
+        "T368"
+      ]
+    },
+    {
+      "qid": "Q295",
+      "card": "C-neuron-lens-catalog",
+      "question": "Can the R-lens/S-lens pair be fitted for a small local model at useful cost, and do its dark-neuron rates match Qwen3-8B's?",
+      "targets": [
+        "T369",
+        "T370",
+        "T371"
+      ]
+    },
+    {
+      "qid": "Q296",
+      "card": "C-neuron-lens-catalog",
+      "question": "Do cross-modal neurons give a checkable handle for multimodal verification, or do their labels fail the way single-prompt persona labels do?",
+      "targets": [
+        "T369",
+        "T370",
+        "T371"
+      ]
+    },
+    {
+      "qid": "Q297",
+      "card": "C-neuron-lens-catalog",
+      "question": "What evidence beyond token-level tests would make a dark neuron's label trustworthy enough to act on?",
+      "targets": [
+        "T369",
+        "T370",
+        "T371"
+      ]
+    },
+    {
+      "qid": "Q298",
+      "card": "C-neuron-lens-catalog",
+      "question": "How do lens reads degrade on non-English corpora, given the lens corpus is English-heavy web text?",
+      "targets": [
+        "T369",
+        "T370",
+        "T371"
+      ]
+    },
+    {
+      "qid": "Q299",
+      "card": "C-nvidia-build-free-endpoints",
+      "question": "What rate limit does NVIDIA actually enforce on these free endpoints? Not published on the pages; only an empirical test with a key would show it, and creating the key is KetchupPancake's call.",
+      "targets": [
+        "T372",
+        "T373",
+        "T374",
+        "T375",
+        "T376"
+      ]
+    },
+    {
+      "qid": "Q300",
+      "card": "C-nvidia-build-free-endpoints",
+      "question": "How long do the free endpoints for these two models persist? Trial terms give NVIDIA the whole discretion; no date is stated.",
+      "targets": [
+        "T372",
+        "T373",
+        "T374",
+        "T375",
+        "T376"
+      ]
+    },
+    {
+      "qid": "Q301",
+      "card": "C-opal-reactive-optimizers",
+      "question": "Do the single-run gains replicate across seeds, and do the Figure 1 and Appendix C.2 modded-nanogpt number sets reconcile?",
+      "targets": [
+        "T377",
+        "T378",
+        "T379",
+        "T380"
+      ]
+    },
+    {
+      "qid": "Q302",
+      "card": "C-opal-reactive-optimizers",
+      "question": "Does reactive optimization help with other agent models, or is the effect specific to Claude Opus 5.5?",
+      "targets": [
+        "T377",
+        "T378",
+        "T379",
+        "T380"
+      ]
+    },
+    {
+      "qid": "Q303",
+      "card": "C-opal-reactive-optimizers",
+      "question": "What would a safety procedure (trial period, rollback) cost in performance, and is it needed before use on expensive runs?",
+      "targets": [
+        "T377",
+        "T378",
+        "T379",
+        "T380"
+      ]
+    },
+    {
+      "qid": "Q304",
+      "card": "C-openai-training-containment",
+      "question": "What do the undisclosed vulnerabilities cover, and when will they be published?",
+      "targets": [
+        "T381",
+        "T382",
+        "T383",
+        "T384",
+        "T385"
+      ]
+    },
+    {
+      "qid": "Q305",
+      "card": "C-openai-training-containment",
+      "question": "How are monitoring and automatic stopping validated against agents that actively conceal activity?",
+      "targets": [
+        "T381",
+        "T382",
+        "T383",
+        "T384",
+        "T385"
+      ]
+    },
+    {
+      "qid": "Q306",
+      "card": "C-openai-training-containment",
+      "question": "Does the no-internet policy extend to evaluation-only runs and third-party models?",
+      "targets": [
+        "T381",
+        "T382",
+        "T383",
+        "T384",
+        "T385"
+      ]
+    },
+    {
+      "qid": "Q307",
+      "card": "C-openai-training-containment",
+      "question": "Which microVM and kernel fixes apply to the open-source components Hydra-adjacent harnesses use?",
+      "targets": [
+        "T381",
+        "T382",
+        "T383",
+        "T384",
+        "T385"
+      ]
+    },
+    {
+      "qid": "Q308",
+      "card": "C-organizing-intelligence",
+      "question": "The paper's threshold is about AI copies coordinating with each other. What is the measured coordination exponent of today's multi-agent systems on Hydra's own workloads, and is it anywhere near 1?",
+      "targets": [
+        "T386",
+        "T387",
+        "T388",
+        "T389"
+      ]
+    },
+    {
+      "qid": "Q309",
+      "card": "C-organizing-intelligence",
+      "question": "The model has one AI type and unlimited replication at constant cost. Does anything change qualitatively with several distinct AI types at different prices, as Hydra actually routes between?",
+      "targets": [
+        "T386",
+        "T387",
+        "T388",
+        "T389"
+      ]
+    },
+    {
+      "qid": "Q310",
+      "card": "C-orthogonal-parametrized-steering",
+      "question": "Does orthogonal parameterized steering hold up across layers and on frontier-scale models, or only at the single most steerable layer of 7-8B models?",
+      "targets": [
+        "T390",
+        "T391",
+        "T392",
+        "T393",
+        "T394"
+      ]
+    },
+    {
+      "qid": "Q311",
+      "card": "C-orthogonal-parametrized-steering",
+      "question": "Can the warmth/sycophancy quadrant be populated with cleaner data, or do the traits inherently co-occur in the examples?",
+      "targets": [
+        "T390",
+        "T391",
+        "T392",
+        "T393",
+        "T394"
+      ]
+    },
+    {
+      "qid": "Q312",
+      "card": "C-orthogonal-parametrized-steering",
+      "question": "How does orthogonalization interact with steering across multiple layers simultaneously?",
+      "targets": [
+        "T390",
+        "T391",
+        "T392",
+        "T393",
+        "T394"
+      ]
+    },
+    {
+      "qid": "Q313",
+      "card": "C-orthogonal-parametrized-steering",
+      "question": "What safeguards detect steering-induced changes outside the targeted evaluation distribution?",
+      "targets": [
+        "T390",
+        "T391",
+        "T392",
+        "T393",
+        "T394"
+      ]
+    },
+    {
+      "qid": "Q314",
+      "card": "C-pauli-correlator-autoencoder-pcae",
+      "question": "At what qubit count, patch size, or dataset scale, if any, does the correlator latent start beating the position-only and raw/local controls it currently ties or trails?",
+      "targets": [
+        "T395",
+        "T396",
+        "T397",
+        "T398"
+      ]
+    },
+    {
+      "qid": "Q315",
+      "card": "C-pauli-correlator-autoencoder-pcae",
+      "question": "Would error mitigation close the roughly 12 dB hardware-to-simulator gap, or is the unmitigated noise floor the binding constraint at this circuit size?",
+      "targets": [
+        "T395",
+        "T396",
+        "T397",
+        "T398"
+      ]
+    },
+    {
+      "qid": "Q316",
+      "card": "C-peripersonal-space-ppst",
+      "question": "How do spatial and temporal features of multisensory integration interact, and do temporal binding windows vary with distance?",
+      "targets": [
+        "T399",
+        "T400",
+        "T401",
+        "T402",
+        "T403"
+      ]
+    },
+    {
+      "qid": "Q317",
+      "card": "C-peripersonal-space-ppst",
+      "question": "Is the E/I-imbalance account of PPS alterations in schizophrenia and autism causally testable, or only descriptive in silico?",
+      "targets": [
+        "T399",
+        "T400",
+        "T401",
+        "T402",
+        "T403"
+      ]
+    },
+    {
+      "qid": "Q318",
+      "card": "C-peripersonal-space-ppst",
+      "question": "Can AI and robotics use PPS principles for human-machine interaction and autonomous navigation without merely copying the biology?",
+      "targets": [
+        "T399",
+        "T400",
+        "T401",
+        "T402",
+        "T403"
+      ]
+    },
+    {
+      "qid": "Q319",
+      "card": "C-peripersonal-space-ppst",
+      "question": "Does the PPS-immune crosstalk replicate, and does it extend beyond visual infection cues?",
+      "targets": [
+        "T399",
+        "T400",
+        "T401",
+        "T402",
+        "T403"
+      ]
+    },
+    {
+      "qid": "Q320",
+      "card": "C-persona-neurons-qwen3",
+      "question": "Does neuron-basis privilege hold for other models, other behaviours, and steering at natural rather than 4x strength?",
+      "targets": [
+        "T404",
+        "T405",
+        "T406"
+      ]
+    },
+    {
+      "qid": "Q321",
+      "card": "C-persona-neurons-qwen3",
+      "question": "Do the shared neurons on the Assistant Axis transfer across model families, or are they Qwen3-8B specific?",
+      "targets": [
+        "T404",
+        "T405",
+        "T406"
+      ]
+    },
+    {
+      "qid": "Q322",
+      "card": "C-persona-neurons-qwen3",
+      "question": "Would the headline gaps survive a second judge, or human scoring, given all scores come from one judge model?",
+      "targets": [
+        "T404",
+        "T405",
+        "T406"
+      ]
+    },
+    {
+      "qid": "Q323",
+      "card": "C-persona-neurons-qwen3",
+      "question": "Can sparse neuron handles give Hydra a checkable steering or auditing primitive, or is the effect too persona-specific to transfer?",
+      "targets": [
+        "T404",
+        "T405",
+        "T406"
+      ]
+    },
+    {
+      "qid": "Q324",
+      "card": "C-planning-coding-separation",
+      "question": "Does planner-ranking consistency hold for repository-level tasks, where the plan must reference real code the planner may not have seen? The benchmarks are self-contained problems.",
+      "targets": [
+        "T407",
+        "T408",
+        "T409"
+      ]
+    },
+    {
+      "qid": "Q325",
+      "card": "C-planning-coding-separation",
+      "question": "What happens to the separation when the coder may push back — flag a plan step as wrong and request revision? Iterative planner-coder protocols are named as untested territory by the authors.",
+      "targets": [
+        "T407",
+        "T408",
+        "T409"
+      ]
+    },
+    {
+      "qid": "Q326",
+      "card": "C-primacy-bias-rlvr",
+      "question": "Does the lazy-regime picture survive at frontier scale and with the regularisation modern RLVR recipes add, or is it a small-model, plain-GRPO effect?",
+      "targets": [
+        "T410",
+        "T411",
+        "T412",
+        "T413"
+      ]
+    },
+    {
+      "qid": "Q327",
+      "card": "C-primacy-bias-rlvr",
+      "question": "If difficulty is kernel alignment with base features, can alignment be measured cheaply enough up front to build drill sets that target the boundary directly?",
+      "targets": [
+        "T410",
+        "T411",
+        "T412",
+        "T413"
+      ]
+    },
+    {
+      "qid": "Q328",
+      "card": "C-quantum-circuit-membership-hardness",
+      "question": "Are the promise-free membership problems in PP, or harder still? The paper proves hardness only and does not address containment.",
+      "targets": [
+        "T414",
+        "T415",
+        "T416",
+        "T417"
+      ]
+    },
+    {
+      "qid": "Q329",
+      "card": "C-quantum-circuit-membership-hardness",
+      "question": "Do the Clifford-set ranges extend to the full diameter, as the identity and Sine/permutation ranges do, or is sqrt(2)/4 a real boundary?",
+      "targets": [
+        "T414",
+        "T415",
+        "T416",
+        "T417"
+      ]
+    },
+    {
+      "qid": "Q330",
+      "card": "C-quantum-circuit-membership-hardness",
+      "question": "Does any of this bear on the practical peephole-optimization setting, where the circuits checked are small subcircuits rather than arbitrary circuits? The reductions are worst-case over all circuits; the paper does not discuss instance structure.",
+      "targets": [
+        "T414",
+        "T415",
+        "T416",
+        "T417"
+      ]
+    },
+    {
+      "qid": "Q331",
+      "card": "C-r2orch-recursive-self-play",
+      "question": "Does the loop replicate on another training backbone, size, or a second training run?",
+      "targets": [
+        "T418",
+        "T419",
+        "T420",
+        "T421",
+        "T422"
+      ]
+    },
+    {
+      "qid": "Q332",
+      "card": "C-r2orch-recursive-self-play",
+      "question": "Does it work on tasks without automatic verifiable outcomes or with real tools?",
+      "targets": [
+        "T418",
+        "T419",
+        "T420",
+        "T421",
+        "T422"
+      ]
+    },
+    {
+      "qid": "Q333",
+      "card": "C-r2orch-recursive-self-play",
+      "question": "What do the v2 changes (22 Oct 2026) alter?",
+      "targets": [
+        "T418",
+        "T419",
+        "T420",
+        "T421",
+        "T422"
+      ]
+    },
+    {
+      "qid": "Q334",
+      "card": "C-r2orch-recursive-self-play",
+      "question": "Is the released anonymous code the same as the paper's training setup?",
+      "targets": [
+        "T418",
+        "T419",
+        "T420",
+        "T421",
+        "T422"
+      ]
+    },
+    {
+      "qid": "Q335",
+      "card": "C-r2orch-recursive-self-play",
+      "question": "How much does the 10B-params tag vs 9B naming reflect the merged model?",
+      "targets": [
+        "T418",
+        "T419",
+        "T420",
+        "T421",
+        "T422"
+      ]
+    },
+    {
+      "qid": "Q336",
+      "card": "C-rare-earth-quantum-memories-review",
+      "question": "Can NLPE be combined with an impedance-matched cavity to get high efficiency at minute-scale quantum storage times? The review names this as the obvious next step but reports no such device yet.",
+      "targets": [
+        "T423",
+        "T424"
+      ]
+    },
+    {
+      "qid": "Q337",
+      "card": "C-rare-earth-quantum-memories-review",
+      "question": "How far can the quantum storage time be pushed before DD-induced noise, not coherence, sets the ceiling — is there a demonstrated path from 27.6 s toward the light-storage regime?",
+      "targets": [
+        "T423",
+        "T424"
+      ]
+    },
+    {
+      "qid": "Q338",
+      "card": "C-raw-rag-obelisk",
+      "question": "Does raw-history retrieval hold for coding-agent histories, where state is files and tool effects rather than conversation, and with weaker readers?",
+      "targets": [
+        "T425",
+        "T426",
+        "T427"
+      ]
+    },
+    {
+      "qid": "Q339",
+      "card": "C-raw-rag-obelisk",
+      "question": "What does Obelisk retrieval actually achieve on Hydra's own session histories, measured against a baseline?",
+      "targets": [
+        "T425",
+        "T426",
+        "T427"
+      ]
+    },
+    {
+      "qid": "Q340",
+      "card": "C-raw-rag-obelisk",
+      "question": "How are deletion and privacy handled when raw history is retained indefinitely, and who can read whose sessions?",
+      "targets": [
+        "T425",
+        "T426",
+        "T427"
+      ]
+    },
+    {
+      "qid": "Q341",
+      "card": "C-raw-rag-obelisk",
+      "question": "When does structured or compressed memory beat raw retrieval, once accuracy, latency, and cost are all counted?",
+      "targets": [
+        "T425",
+        "T426",
+        "T427"
+      ]
+    },
+    {
+      "qid": "Q342",
+      "card": "C-recurrent-vlm-retrofit",
+      "question": "Does prune-then-loop hold on larger VLMs and on tasks beyond VQA, such as site capture or embodied action?",
+      "targets": [
+        "T428",
+        "T429",
+        "T430"
+      ]
+    },
+    {
+      "qid": "Q343",
+      "card": "C-recurrent-vlm-retrofit",
+      "question": "Can adaptive stopping recover test-time scaling, or is the saturation at trained depth fundamental here?",
+      "targets": [
+        "T428",
+        "T429",
+        "T430"
+      ]
+    },
+    {
+      "qid": "Q344",
+      "card": "C-recurrent-vlm-retrofit",
+      "question": "Can KV-cache sharing be made cheap without the accuracy cost, or is a separate cache per pass inherent?",
+      "targets": [
+        "T428",
+        "T429",
+        "T430"
+      ]
+    },
+    {
+      "qid": "Q345",
+      "card": "C-recurrent-vlm-retrofit",
+      "question": "When code and checkpoints appear, do the headline numbers reproduce, and under what licence?",
+      "targets": [
+        "T428",
+        "T429",
+        "T430"
+      ]
+    },
+    {
+      "qid": "Q346",
+      "card": "C-regdiff-metamaterial-geometry",
+      "question": "Is the NeurIPS 2026 status real? Nothing in the paper or arXiv record states acceptance; the checklist reads as a submission draft.",
+      "targets": [
+        "T431",
+        "T432",
+        "T433"
+      ]
+    },
+    {
+      "qid": "Q347",
+      "card": "C-regdiff-metamaterial-geometry",
+      "question": "Do the point estimates hold across seeds and stated sample counts, and what split separates training from novelty reference sets?",
+      "targets": [
+        "T431",
+        "T432",
+        "T433"
+      ]
+    },
+    {
+      "qid": "Q348",
+      "card": "C-regdiff-metamaterial-geometry",
+      "question": "Does any generated candidate survive physics-based validation (FEA, stiffness) or fabrication, at 48-cubed or higher resolution?",
+      "targets": [
+        "T431",
+        "T432",
+        "T433"
+      ]
+    },
+    {
+      "qid": "Q349",
+      "card": "C-rethinking-asymmetry-3d",
+      "question": "Does the asymmetry placement hold for extrapolative (forward-facing, wide-baseline) settings, or only interpolative ones?",
+      "targets": [
+        "T434",
+        "T435",
+        "T436",
+        "T437",
+        "T438"
+      ]
+    },
+    {
+      "qid": "Q350",
+      "card": "C-rethinking-asymmetry-3d",
+      "question": "Can an explicit dynamic representation separate object motion from camera motion without losing the static-scene gains?",
+      "targets": [
+        "T434",
+        "T435",
+        "T436",
+        "T437",
+        "T438"
+      ]
+    },
+    {
+      "qid": "Q351",
+      "card": "C-rethinking-asymmetry-3d",
+      "question": "How do results change with variance reporting and repeated seeds, given no uncertainty estimates are published?",
+      "targets": [
+        "T434",
+        "T435",
+        "T436",
+        "T437",
+        "T438"
+      ]
+    },
+    {
+      "qid": "Q352",
+      "card": "C-rewindable-interactive-proofs",
+      "question": "Does rewinding survive real prover deployments, where state includes caches, external tools, or distributed workers that a snapshot may miss?",
+      "targets": [
+        "T439",
+        "T440",
+        "T441",
+        "T442",
+        "T443"
+      ]
+    },
+    {
+      "qid": "Q353",
+      "card": "C-rewindable-interactive-proofs",
+      "question": "Which realistic oversight tasks are epsilon-robust, and how is epsilon measured rather than assumed?",
+      "targets": [
+        "T439",
+        "T440",
+        "T441",
+        "T442",
+        "T443"
+      ]
+    },
+    {
+      "qid": "Q354",
+      "card": "C-rewindable-interactive-proofs",
+      "question": "Can the construction extend beyond robust circuits, or is robustness the hard boundary for relativizing verification?",
+      "targets": [
+        "T439",
+        "T440",
+        "T441",
+        "T442",
+        "T443"
+      ]
+    },
+    {
+      "qid": "Q355",
+      "card": "C-rewindable-interactive-proofs",
+      "question": "What does verifier preprocessing cost for circuits that change between evaluations rather than staying fixed?",
+      "targets": [
+        "T439",
+        "T440",
+        "T441",
+        "T442",
+        "T443"
+      ]
+    },
+    {
+      "qid": "Q356",
+      "card": "C-rollback-world-model-backtracking",
+      "question": "Does backtracking search help when the world model is weaker, open, or trained on less task-specific data than GE-Sim 2.0?",
+      "targets": [
+        "T444",
+        "T445",
+        "T446"
+      ]
+    },
+    {
+      "qid": "Q357",
+      "card": "C-rollback-world-model-backtracking",
+      "question": "How much of the gain survives with far fewer search GPUs, and does the tree supervision transfer across tasks or robots?",
+      "targets": [
+        "T444",
+        "T445",
+        "T446"
+      ]
+    },
+    {
+      "qid": "Q358",
+      "card": "C-rollback-world-model-backtracking",
+      "question": "Can the reward model be learned jointly with the world model, as the authors propose, without reintroducing the value-model bias they avoid?",
+      "targets": [
+        "T444",
+        "T445",
+        "T446"
+      ]
+    },
+    {
+      "qid": "Q359",
+      "card": "C-rollback-world-model-backtracking",
+      "question": "What verifier or grounding check would catch a world model that invents successes before they corrupt the policy, in a Foreman-style capture setting?",
+      "targets": [
+        "T444",
+        "T445",
+        "T446"
+      ]
+    },
+    {
+      "qid": "Q360",
+      "card": "C-route-to-remember-weight-memory",
+      "question": "What does the per-user distillation run cost, and how often must it re-run before the token savings beat retrieval? The paper argues cost qualitatively (fewer tokens per query); a per-user training bill is not headline-reported in what was read.",
+      "targets": [
+        "T447",
+        "T448",
+        "T449",
+        "T450",
+        "T451"
+      ]
+    },
+    {
+      "qid": "Q361",
+      "card": "C-route-to-remember-weight-memory",
+      "question": "Does OPSD weight memory survive continual updates — new facts distilled monthly without eroding older ones (the plasticity question the retention section opens)?",
+      "targets": [
+        "T447",
+        "T448",
+        "T449",
+        "T450",
+        "T451"
+      ]
+    },
+    {
+      "qid": "Q362",
+      "card": "C-routed-continual-learning",
+      "question": "Does routed partitioning hold when several models write to the same cluster concurrently, with stale reads and conflicting updates?",
+      "targets": [
+        "T452",
+        "T453",
+        "T454",
+        "T455",
+        "T456"
+      ]
+    },
+    {
+      "qid": "Q363",
+      "card": "C-routed-continual-learning",
+      "question": "Which cluster descriptions and router prompts stay stable across Hydra's own tasks, and how are router errors detected before they pollute a cluster?",
+      "targets": [
+        "T452",
+        "T453",
+        "T454",
+        "T455",
+        "T456"
+      ]
+    },
+    {
+      "qid": "Q364",
+      "card": "C-routed-continual-learning",
+      "question": "Does the cost advantage survive when routing, adapter, and extractor calls are priced at Hydra's actual model mix and Vertex budget?",
+      "targets": [
+        "T452",
+        "T453",
+        "T454",
+        "T455",
+        "T456"
+      ]
+    },
+    {
+      "qid": "Q365",
+      "card": "C-routed-continual-learning",
+      "question": "Would a ground-truth or task-labelled partition beat the prompted router enough on Hydra tasks to justify labels?",
+      "targets": [
+        "T452",
+        "T453",
+        "T454",
+        "T455",
+        "T456"
+      ]
+    },
+    {
+      "qid": "Q366",
+      "card": "C-routed-continual-learning",
+      "question": "When, if ever, should a cluster be merged, retired, or deleted, and who authorises that under the single-writer rule?",
+      "targets": [
+        "T452",
+        "T453",
+        "T454",
+        "T455",
+        "T456"
+      ]
+    },
+    {
+      "qid": "Q367",
+      "card": "C-rpsd-retrieval-privileged-self-distillation",
+      "question": "What is the teacher re-scoring pass worth in compute, and does the gain survive when that cost is counted?",
+      "targets": [
+        "T457",
+        "T458",
+        "T459",
+        "T460",
+        "T461"
+      ]
+    },
+    {
+      "qid": "Q368",
+      "card": "C-rpsd-retrieval-privileged-self-distillation",
+      "question": "Which numeric hyperparameters were used, and how sensitive are the results to the transport and guidance settings?",
+      "targets": [
+        "T457",
+        "T458",
+        "T459",
+        "T460",
+        "T461"
+      ]
+    },
+    {
+      "qid": "Q369",
+      "card": "C-rpsd-retrieval-privileged-self-distillation",
+      "question": "Does token-level credit help Hydra's own judge or GRPO-style training, where the reward is a checker verdict rather than a next item?",
+      "targets": [
+        "T457",
+        "T458",
+        "T459",
+        "T460",
+        "T461"
+      ]
+    },
+    {
+      "qid": "Q370",
+      "card": "C-rpsd-retrieval-privileged-self-distillation",
+      "question": "Would the same retrieved evidence help at inference time, and how would that change cost and leakage controls?",
+      "targets": [
+        "T457",
+        "T458",
+        "T459",
+        "T460",
+        "T461"
+      ]
+    },
+    {
+      "qid": "Q371",
+      "card": "C-rpsd-retrieval-privileged-self-distillation",
+      "question": "Why does MLLMRec-R1 exceed RPSD on MicroLens HR@5 despite the table bolding, and what do the unreported variances say about the small MicroLens gains?",
+      "targets": [
+        "T457",
+        "T458",
+        "T459",
+        "T460",
+        "T461"
+      ]
+    },
+    {
+      "qid": "Q372",
+      "card": "C-s3-scaling-swarms",
+      "question": "Does learned coordination survive frontier-scale models and real tasks, or is it an artefact of small models on synthetic tasks? The authors are scaling up; nothing yet answers it.",
+      "targets": [
+        "T462",
+        "T463",
+        "T464",
+        "T465",
+        "T466"
+      ]
+    },
+    {
+      "qid": "Q373",
+      "card": "C-s3-scaling-swarms",
+      "question": "Hydra's lanes are different models with different strengths, not N copies of one policy. Does the shared-reward result transfer to heterogeneous teams where a shared policy is impossible?",
+      "targets": [
+        "T462",
+        "T463",
+        "T464",
+        "T465",
+        "T466"
+      ]
+    },
+    {
+      "qid": "Q374",
+      "card": "C-s3-scaling-swarms",
+      "question": "The token-cost term prices communication inside one training run. Is there a prompting- or routing-level analogue for Hydra's crews, which are not RL-trained?",
+      "targets": [
+        "T462",
+        "T463",
+        "T464",
+        "T465",
+        "T466"
+      ]
+    },
+    {
+      "qid": "Q375",
+      "card": "C-safewebworld-safety-sufficiency",
+      "question": "Does safety sufficiency hold for live rollouts, where predictions feed replanning and execution rather than a locked evaluator?",
+      "targets": [
+        "T467",
+        "T468",
+        "T469",
+        "T470",
+        "T471"
+      ]
+    },
+    {
+      "qid": "Q376",
+      "card": "C-safewebworld-safety-sufficiency",
+      "question": "What training or architecture preserves Ask/Block score structure through security fine-tuning instead of collapsing it?",
+      "targets": [
+        "T467",
+        "T468",
+        "T469",
+        "T470",
+        "T471"
+      ]
+    },
+    {
+      "qid": "Q377",
+      "card": "C-safewebworld-safety-sufficiency",
+      "question": "Can exact-triplet accuracy be raised without sacrificing the aggregate gains, and what does that cost in other families?",
+      "targets": [
+        "T467",
+        "T468",
+        "T469",
+        "T470",
+        "T471"
+      ]
+    },
+    {
+      "qid": "Q378",
+      "card": "C-safewebworld-safety-sufficiency",
+      "question": "Will the benchmark, evaluator, and LAR code be released, and under what licence?",
+      "targets": [
+        "T467",
+        "T468",
+        "T469",
+        "T470",
+        "T471"
+      ]
+    },
+    {
+      "qid": "Q379",
+      "card": "C-sage2-decision-extraction",
+      "question": "Can anyone independent reproduce the leaderboard, including a live Sage 2 run, and does the lead hold on the sealed 20 percent holdout?",
+      "targets": [
+        "T472",
+        "T473",
+        "T474"
+      ]
+    },
+    {
+      "qid": "Q380",
+      "card": "C-sage2-decision-extraction",
+      "question": "What is the basis for the post's 166x figure, and why does it differ from the 75x and over-100x figures on the pricing page?",
+      "targets": [
+        "T472",
+        "T473",
+        "T474"
+      ]
+    },
+    {
+      "qid": "Q381",
+      "card": "C-sage2-decision-extraction",
+      "question": "How calibrated are the returned probabilities under distribution shift?",
+      "targets": [
+        "T472",
+        "T473",
+        "T474"
+      ]
+    },
+    {
+      "qid": "Q382",
+      "card": "C-sage2-decision-extraction",
+      "question": "What are the service terms for data handling and retention, and what happens past the 16,384-token session cap?",
+      "targets": [
+        "T472",
+        "T473",
+        "T474"
+      ]
+    },
+    {
+      "qid": "Q383",
+      "card": "C-sceneagent",
+      "question": "Is SceneAgent code available, and which simulator and skills does it require?",
+      "targets": [
+        "T475",
+        "T476",
+        "T477",
+        "T478",
+        "T479"
+      ]
+    },
+    {
+      "qid": "Q384",
+      "card": "C-sceneagent",
+      "question": "Does the inspect-and-repair loop work on ordinary phone or photogrammetry captures of a real site, not only benchmark scenes?",
+      "targets": [
+        "T475",
+        "T476",
+        "T477",
+        "T478",
+        "T479"
+      ]
+    },
+    {
+      "qid": "Q385",
+      "card": "C-sceneagent",
+      "question": "How much does one scene cost in time and compute, and where does the loop fail most often?",
+      "targets": [
+        "T475",
+        "T476",
+        "T477",
+        "T478",
+        "T479"
+      ]
+    },
+    {
+      "qid": "Q386",
+      "card": "C-sceneagent",
+      "question": "What does preliminary policy transfer to a real robot cover, and what was measured on the robot?",
+      "targets": [
+        "T475",
+        "T476",
+        "T477",
+        "T478",
+        "T479"
+      ]
+    },
+    {
+      "qid": "Q387",
+      "card": "C-scholarevolve-harness-evolution",
+      "question": "When will the ScholarEvolve repository actually contain code, and under what licence?",
+      "targets": [
+        "T480",
+        "T481",
+        "T482"
+      ]
+    },
+    {
+      "qid": "Q388",
+      "card": "C-scholarevolve-harness-evolution",
+      "question": "What does one evolution cycle cost in meta-agent calls, rollouts, and wall-clock time, and how does that scale to Hydra's harness?",
+      "targets": [
+        "T480",
+        "T481",
+        "T482"
+      ]
+    },
+    {
+      "qid": "Q389",
+      "card": "C-scholarevolve-harness-evolution",
+      "question": "Which papers and mechanisms were actually selected per module, and how many candidates hurt performance before selection?",
+      "targets": [
+        "T480",
+        "T481",
+        "T482"
+      ]
+    },
+    {
+      "qid": "Q390",
+      "card": "C-scholarevolve-harness-evolution",
+      "question": "Do the gains survive a fresh evolution set and a different meta-agent backbone, rather than GPT-5.4 through Codex?",
+      "targets": [
+        "T480",
+        "T481",
+        "T482"
+      ]
+    },
+    {
+      "qid": "Q391",
+      "card": "C-search-when-needed-reliability",
+      "question": "Has the promised code/checkpoint release appeared, and under what licence? Nothing was linked at send time.",
+      "targets": [
+        "T483",
+        "T484",
+        "T485",
+        "T486",
+        "T487"
+      ]
+    },
+    {
+      "qid": "Q392",
+      "card": "C-search-when-needed-reliability",
+      "question": "Does the reliability mapping transfer to live-web retrieval, other retrievers/corpora, and non-QA agentic tasks, or is it tied to Wikipedia QA?",
+      "targets": [
+        "T483",
+        "T484",
+        "T485",
+        "T486",
+        "T487"
+      ]
+    },
+    {
+      "qid": "Q393",
+      "card": "C-search-when-needed-reliability",
+      "question": "What happens at larger scales (13B+), longer horizons, and more than 4 search turns?",
+      "targets": [
+        "T483",
+        "T484",
+        "T485",
+        "T486",
+        "T487"
+      ]
+    },
+    {
+      "qid": "Q394",
+      "card": "C-splice-information-gaps",
+      "question": "Does multi-edge or multi-hop repair help, or does the adopt/rollback gate break down?",
+      "targets": [
+        "T488",
+        "T489",
+        "T490",
+        "T491",
+        "T492",
+        "T493"
+      ]
+    },
+    {
+      "qid": "Q395",
+      "card": "C-splice-information-gaps",
+      "question": "Can the message policy be learned instead of a fixed template, and the selector refitted per backbone?",
+      "targets": [
+        "T488",
+        "T489",
+        "T490",
+        "T491",
+        "T492",
+        "T493"
+      ]
+    },
+    {
+      "qid": "Q396",
+      "card": "C-splice-information-gaps",
+      "question": "What does parallel re-execution do to the 2.2-2.6x wall-clock overhead?",
+      "targets": [
+        "T488",
+        "T489",
+        "T490",
+        "T491",
+        "T492",
+        "T493"
+      ]
+    },
+    {
+      "qid": "Q397",
+      "card": "C-splice-information-gaps",
+      "question": "Does the gap definition transfer from evidence delivery to Hydra-style model handoffs, where the missing input may be a judgement, not a fact?",
+      "targets": [
+        "T488",
+        "T489",
+        "T490",
+        "T491",
+        "T492",
+        "T493"
+      ]
+    },
+    {
+      "qid": "Q398",
+      "card": "C-sys1-sys2-codesign",
+      "question": "What are measured epsilon, Delta_min, rho_u, and r on any real workload?",
+      "targets": [
+        "T494",
+        "T495",
+        "T496",
+        "T497",
+        "T498"
+      ]
+    },
+    {
+      "qid": "Q399",
+      "card": "C-sys1-sys2-codesign",
+      "question": "What threshold rule works under distribution shift and censored feedback?",
+      "targets": [
+        "T494",
+        "T495",
+        "T496",
+        "T497",
+        "T498"
+      ]
+    },
+    {
+      "qid": "Q400",
+      "card": "C-sys1-sys2-codesign",
+      "question": "How do hierarchical multi-level gates behave jointly?",
+      "targets": [
+        "T494",
+        "T495",
+        "T496",
+        "T497",
+        "T498"
+      ]
+    },
+    {
+      "qid": "Q401",
+      "card": "C-sys1-sys2-codesign",
+      "question": "What reconciles the printed 26x with the Proposition 14 ratio at r = 0.01, rho_u = 0.02?",
+      "targets": [
+        "T494",
+        "T495",
+        "T496",
+        "T497",
+        "T498"
+      ]
+    },
+    {
+      "qid": "Q402",
+      "card": "C-sys1-sys2-codesign",
+      "question": "Will code or data be released?",
+      "targets": [
+        "T494",
+        "T495",
+        "T496",
+        "T497",
+        "T498"
+      ]
+    },
+    {
+      "qid": "Q403",
+      "card": "C-teaching-ai-scientific-models",
+      "question": "Which systems the essay's footnote on recent model-building agents refers to, and whether any of them report a distribution of models rather than a single model (systems not named in the essay body; not checked).",
+      "targets": [
+        "T499",
+        "T500",
+        "T501",
+        "T502",
+        "T503"
+      ]
+    },
+    {
+      "qid": "Q404",
+      "card": "C-teaching-ai-scientific-models",
+      "question": "Whether the cited SBI work reports calibration, meaning how often true parameters fall outside the returned distribution; the essay does not discuss it.",
+      "targets": [
+        "T499",
+        "T500",
+        "T501",
+        "T502",
+        "T503"
+      ]
+    },
+    {
+      "qid": "Q405",
+      "card": "C-teaching-ai-scientific-models",
+      "question": "Whether the pinned / open / failed-alternatives / new-puzzles report format should transfer to Hydra's own card take-aways (for KetchupPancake and the writer to judge; no change proposed here).",
+      "targets": [
+        "T499",
+        "T500",
+        "T501",
+        "T502",
+        "T503"
+      ]
+    },
+    {
+      "qid": "Q406",
+      "card": "C-teamgym-team-decision-making",
+      "question": "What does a Hydra version of pivotal-information drills look like, with no single lane able to decide alone and synthesis scored separately?",
+      "targets": [
+        "T504",
+        "T505",
+        "T506",
+        "T507",
+        "T508"
+      ]
+    },
+    {
+      "qid": "Q407",
+      "card": "C-teamgym-team-decision-making",
+      "question": "Which communication structure and coordinator policy recover dispersed facts best on Hydra's own tasks, and how does that change with team size?",
+      "targets": [
+        "T504",
+        "T505",
+        "T506",
+        "T507",
+        "T508"
+      ]
+    },
+    {
+      "qid": "Q408",
+      "card": "C-teamgym-team-decision-making",
+      "question": "How should the judge weight a claim from a lane that held no pivotal information?",
+      "targets": [
+        "T504",
+        "T505",
+        "T506",
+        "T507",
+        "T508"
+      ]
+    },
+    {
+      "qid": "Q409",
+      "card": "C-teamgym-team-decision-making",
+      "question": "Does training or prompting for synthesis transfer across domains, or only within the collection it was trained on?",
+      "targets": [
+        "T504",
+        "T505",
+        "T506",
+        "T507",
+        "T508"
+      ]
+    },
+    {
+      "qid": "Q410",
+      "card": "C-teamgym-team-decision-making",
+      "question": "When the promised TeamGym code and archive appear, what licence and dataset terms govern reuse?",
+      "targets": [
+        "T504",
+        "T505",
+        "T506",
+        "T507",
+        "T508"
+      ]
+    },
+    {
+      "qid": "Q411",
+      "card": "C-time-to-first-token-roadmap",
+      "question": "Does the author finish the plan and publish his own benchmark? That finished artifact, not the syllabus, is the test of the 30-minutes-a-day claim.",
+      "targets": [
+        "T509",
+        "T510",
+        "T511",
+        "T512",
+        "T513",
+        "T514"
+      ]
+    },
+    {
+      "qid": "Q412",
+      "card": "C-time-to-first-token-roadmap",
+      "question": "Which licence governs the roadmap content, CC BY 4.0 (README) or Apache-2.0 (LICENSE file)?",
+      "targets": [
+        "T509",
+        "T510",
+        "T511",
+        "T512",
+        "T513",
+        "T514"
+      ]
+    },
+    {
+      "qid": "Q413",
+      "card": "C-timon-agentic-workstation",
+      "question": "Does the quota handoff actually preserve full working context (tool state, worktree state) or only the chat transcript? Vendor copy says context; nothing demonstrates it.",
+      "targets": [
+        "T515",
+        "T516",
+        "T517",
+        "T518"
+      ]
+    },
+    {
+      "qid": "Q414",
+      "card": "C-timon-agentic-workstation",
+      "question": "How does the per-role model picker interact with subscription CLIs' own limits and terms - does Timon drive the CLIs as subprocesses, or reimplement their protocols?",
+      "targets": [
+        "T515",
+        "T516",
+        "T517",
+        "T518"
+      ]
+    },
+    {
+      "qid": "Q415",
+      "card": "C-timon-agentic-workstation",
+      "question": "Is the Hermes support a first-class lane or a shell wrapper? It decides whether Cora's runtime could sit inside Timon or only beside it.",
+      "targets": [
+        "T515",
+        "T516",
+        "T517",
+        "T518"
+      ]
+    },
+    {
+      "qid": "Q416",
+      "card": "C-tinyastral-harness-distillation",
+      "question": "Do the headline scores hold across replicates, and what do the Table 4 success columns on the 20 shared episodes mean? They do not match Table 2 rates and were not converted to counts here.",
+      "targets": [
+        "T519",
+        "T520",
+        "T521",
+        "T522"
+      ]
+    },
+    {
+      "qid": "Q417",
+      "card": "C-tinyastral-harness-distillation",
+      "question": "What does RSI evolution cost in accelerator time, and does harness RSI transfer beyond manipulation to Hydra-style checking harnesses?",
+      "targets": [
+        "T519",
+        "T520",
+        "T521",
+        "T522"
+      ]
+    },
+    {
+      "qid": "Q418",
+      "card": "C-tinyastral-harness-distillation",
+      "question": "Can the harness gains survive a real-robot benchmark with episode counts and success rates, rather than two qualitative runs?",
+      "targets": [
+        "T519",
+        "T520",
+        "T521",
+        "T522"
+      ]
+    },
+    {
+      "qid": "Q419",
+      "card": "C-train-a-swarm",
+      "question": "Does RLCR transfer to frontier-scale models and other base models?",
+      "targets": [
+        "T523",
+        "T524",
+        "T525",
+        "T526",
+        "T527",
+        "T528"
+      ]
+    },
+    {
+      "qid": "Q420",
+      "card": "C-train-a-swarm",
+      "question": "Would a matched single-agent RL ablation keep the organisation gain?",
+      "targets": [
+        "T523",
+        "T524",
+        "T525",
+        "T526",
+        "T527",
+        "T528"
+      ]
+    },
+    {
+      "qid": "Q421",
+      "card": "C-train-a-swarm",
+      "question": "What per-agent credit method beats flat advantage without breaking the collective signal?",
+      "targets": [
+        "T523",
+        "T524",
+        "T525",
+        "T526",
+        "T527",
+        "T528"
+      ]
+    },
+    {
+      "qid": "Q422",
+      "card": "C-train-a-swarm",
+      "question": "Does coordination survive village scale: hundreds of agents, days, one shared codebase?",
+      "targets": [
+        "T523",
+        "T524",
+        "T525",
+        "T526",
+        "T527",
+        "T528"
+      ]
+    },
+    {
+      "qid": "Q423",
+      "card": "C-train-a-swarm",
+      "question": "Will weights, harnesses, and environments be released, when, and under what licence?",
+      "targets": [
+        "T523",
+        "T524",
+        "T525",
+        "T526",
+        "T527",
+        "T528"
+      ]
+    },
+    {
+      "qid": "Q424",
+      "card": "C-ttme-test-time-memory-evolution",
+      "question": "Does TTME still win in a same-stack, multi-seed re-run of TTT, with variance reported?",
+      "targets": [
+        "T529",
+        "T530",
+        "T531"
+      ]
+    },
+    {
+      "qid": "Q425",
+      "card": "C-ttme-test-time-memory-evolution",
+      "question": "Do the memories transfer across tasks, or must every run start empty and relearn its own lessons?",
+      "targets": [
+        "T529",
+        "T530",
+        "T531"
+      ]
+    },
+    {
+      "qid": "Q426",
+      "card": "C-ttme-test-time-memory-evolution",
+      "question": "What happens when a distilled guideline is wrong: is there any correction mechanism beyond expiry?",
+      "targets": [
+        "T529",
+        "T530",
+        "T531"
+      ]
+    },
+    {
+      "qid": "Q427",
+      "card": "C-ttme-test-time-memory-evolution",
+      "question": "Does the advantage hold outside verifier-scored math, where feedback is noisy or judgement-based, as in Hydra?",
+      "targets": [
+        "T529",
+        "T530",
+        "T531"
+      ]
+    },
+    {
+      "qid": "Q428",
+      "card": "C-ttsp-test-time-self-play",
+      "question": "What does one TTSP run cost per target problem (steps, tokens, GPU time) against simply sampling the base model for the same budget?",
+      "targets": [
+        "T532",
+        "T533",
+        "T534",
+        "T535",
+        "T536"
+      ]
+    },
+    {
+      "qid": "Q429",
+      "card": "C-ttsp-test-time-self-play",
+      "question": "Does the effect survive outside code — a domain where synthetic problems cannot carry executable labels?",
+      "targets": [
+        "T532",
+        "T533",
+        "T534",
+        "T535",
+        "T536"
+      ]
+    },
+    {
+      "qid": "Q430",
+      "card": "C-ttsp-test-time-self-play",
+      "question": "Any code release? None is linked in the paper as read.",
+      "targets": [
+        "T532",
+        "T533",
+        "T534",
+        "T535",
+        "T536"
+      ]
+    },
+    {
+      "qid": "Q431",
+      "card": "C-unified-training-single-algorithm",
+      "question": "What mixture and schedule principles scale beyond 1B parameters and single-task RL?",
+      "targets": [
+        "T537",
+        "T538",
+        "T539"
+      ]
+    },
+    {
+      "qid": "Q432",
+      "card": "C-unified-training-single-algorithm",
+      "question": "Does the unified view hold for preference and alignment data, or does alignment need its own stage after all?",
+      "targets": [
+        "T537",
+        "T538",
+        "T539"
+      ]
+    },
+    {
+      "qid": "Q433",
+      "card": "C-unified-training-single-algorithm",
+      "question": "How should optimisation (learning rate, update rule) change with the data schedule, as the authors flag?",
+      "targets": [
+        "T537",
+        "T538",
+        "T539"
+      ]
+    },
+    {
+      "qid": "Q434",
+      "card": "C-unified-training-single-algorithm",
+      "question": "Can the accuracy-coverage-retention tradeoff be predicted from mixture proportions before training?",
+      "targets": [
+        "T537",
+        "T538",
+        "T539"
+      ]
+    },
+    {
+      "qid": "Q435",
+      "card": "C-user-presence-negotiation",
+      "question": "What counts as misaligned behaviour in each game, and what are the baseline and presence rates per model?",
+      "targets": [
+        "T540",
+        "T541",
+        "T542",
+        "T543",
+        "T544"
+      ]
+    },
+    {
+      "qid": "Q436",
+      "card": "C-user-presence-negotiation",
+      "question": "Does user presence change behaviour in Hydra's coding, checking, and routing tasks, or only in negotiation?",
+      "targets": [
+        "T540",
+        "T541",
+        "T542",
+        "T543",
+        "T544"
+      ]
+    },
+    {
+      "qid": "Q437",
+      "card": "C-user-presence-negotiation",
+      "question": "Which user messages drive the effect, if even templated neutral messages do, and what reduces it without removing the user?",
+      "targets": [
+        "T540",
+        "T541",
+        "T542",
+        "T543",
+        "T544"
+      ]
+    },
+    {
+      "qid": "Q438",
+      "card": "C-user-presence-negotiation",
+      "question": "Does the effect persist across Hydra's different model lanes, or is it concentrated in particular models?",
+      "targets": [
+        "T540",
+        "T541",
+        "T542",
+        "T543",
+        "T544"
+      ]
+    },
+    {
+      "qid": "Q439",
+      "card": "C-view-from-nowhere-population-evolution",
+      "question": "Does population-centred diagnosis help when variants come from different model families, as in Hydra, rather than one DeepSeek family?",
+      "targets": [
+        "T545",
+        "T546",
+        "T547",
+        "T548",
+        "T549"
+      ]
+    },
+    {
+      "qid": "Q440",
+      "card": "C-view-from-nowhere-population-evolution",
+      "question": "How is the archive managed as the population grows, and when does distillation cost or noise outweigh its benefit?",
+      "targets": [
+        "T545",
+        "T546",
+        "T547",
+        "T548",
+        "T549"
+      ]
+    },
+    {
+      "qid": "Q441",
+      "card": "C-view-from-nowhere-population-evolution",
+      "question": "Does the gain survive on non-coding tasks, where task records and patches do not have the same structure?",
+      "targets": [
+        "T545",
+        "T546",
+        "T547",
+        "T548",
+        "T549"
+      ]
+    },
+    {
+      "qid": "Q442",
+      "card": "C-view-from-nowhere-population-evolution",
+      "question": "What attribution or compression rules keep a population block trustworthy as histories grow?",
+      "targets": [
+        "T545",
+        "T546",
+        "T547",
+        "T548",
+        "T549"
+      ]
+    },
+    {
+      "qid": "Q443",
+      "card": "C-view-from-nowhere-population-evolution",
+      "question": "Can the population-block idea be tested cheaply on Hydra's existing run records before any evolution loop is built?",
+      "targets": [
+        "T545",
+        "T546",
+        "T547",
+        "T548",
+        "T549"
+      ]
+    },
+    {
+      "qid": "Q445",
+      "card": "C-weight-space-programming",
+      "question": "What is GPT-6 Astra (released, internal, or otherwise), and can any other frontier model reproduce these runs?",
+      "targets": [
+        "T550",
+        "T551",
+        "T552",
+        "T553"
+      ]
+    },
+    {
+      "qid": "Q446",
+      "card": "C-weight-space-programming",
+      "question": "Do the Qwen gains hold across seeds, replicates, and sampling settings, with base numbers printed for all eight benchmarks?",
+      "targets": [
+        "T550",
+        "T551",
+        "T552",
+        "T553"
+      ]
+    },
+    {
+      "qid": "Q447",
+      "card": "C-weight-space-programming",
+      "question": "Does the loop-direction edit generalise to larger models and other failure modes, or is it specific to this 0.8B model's loop habit?",
+      "targets": [
+        "T550",
+        "T551",
+        "T552",
+        "T553"
+      ]
+    },
+    {
+      "qid": "Q448",
+      "card": "C-weight-space-programming",
+      "question": "Is the data repository live under another URL, and what licence covers the released networks and code?",
+      "targets": [
+        "T550",
+        "T551",
+        "T552",
+        "T553"
+      ]
+    },
+    {
+      "qid": "Q449",
+      "card": "C-when-should-agents-ask",
+      "question": "What changes when agents may act on a guessed requirement and redo work, or when a retrieved record is outdated or wrong?",
+      "targets": [
+        "T554",
+        "T555",
+        "T556"
+      ]
+    },
+    {
+      "qid": "Q450",
+      "card": "C-when-should-agents-ask",
+      "question": "How should questions be timed when the human works in sessions, answering several at once, rather than one per period?",
+      "targets": [
+        "T554",
+        "T555",
+        "T556"
+      ]
+    },
+    {
+      "qid": "Q451",
+      "card": "C-when-should-agents-ask",
+      "question": "Can recoverability, search success, and availability be learned online without the costly misestimation the paper documents?",
+      "targets": [
+        "T554",
+        "T555",
+        "T556"
+      ]
+    },
+    {
+      "qid": "Q452",
+      "card": "C-when-should-agents-ask",
+      "question": "Does the pairwise pricing hold up with fallible agents that misjudge whether a search succeeded?",
+      "targets": [
+        "T554",
+        "T555",
+        "T556"
+      ]
+    },
+    {
+      "qid": "Q453",
+      "card": "C-a2ui-1-generative-ui-protocol",
+      "question": "How does A2UI handle the long tail — a user need no registered component expresses — beyond falling back to text? Is there a sanctioned generic-component escape hatch, and if so, who audits it?",
+      "targets": [
+        "T557",
+        "T558"
+      ]
+    },
+    {
+      "qid": "Q454",
+      "card": "C-a2ui-1-generative-ui-protocol",
+      "question": "Governance: the project is Google-originated (github.com/a2ui-project) — how open is spec evolution in practice, and does the MCP Apps overlap converge or compete over time?",
+      "targets": [
+        "T557",
+        "T558"
+      ]
+    },
+    {
+      "qid": "Q455",
+      "card": "C-against-all-likelihood-invariance",
+      "question": "Who or what chooses the admissible environments is the whole ballgame, and the paper leaves it open: a model proposing its own perspectives can only find invariances it can already conceive. Does the council-of-models version actually decorrelate errors in practice, or do frontier models share enough training data to fail together?",
+      "targets": [
+        "T559",
+        "T560"
+      ]
+    },
+    {
+      "qid": "Q456",
+      "card": "C-against-all-likelihood-invariance",
+      "question": "The invariance prompt is itself an LLM call with likelihood-trained behavior — what keeps the extractor from reintroducing the probable-over-true bias at the last step?",
+      "targets": [
+        "T559",
+        "T560"
+      ]
+    },
+    {
+      "qid": "Q457",
+      "card": "C-antigravity-knowledge-work-remote-agents",
+      "question": "Do Remote Agent runs draw on the same weekly free pool / meter as local agy CLI use, or a separate allowance? Not stated in the changelog or the coverage read; this decides whether remote execution is a real second lane for the Gemini seat or the same meter in a new place.",
+      "targets": [
+        "T561",
+        "T562",
+        "T563"
+      ]
+    },
+    {
+      "qid": "Q458",
+      "card": "C-antigravity-knowledge-work-remote-agents",
+      "question": "Does the cross-harness import preserve behaviour (hooks, permission rules) or only the declarative parts it names (MCP servers, skills, commands, subagents, instruction files)? And is the import one-shot, or does the plugin track the source harness's setup as it changes?",
+      "targets": [
+        "T561",
+        "T562",
+        "T563"
+      ]
+    },
+    {
+      "qid": "Q459",
+      "card": "C-bell-states-monolithic-waveguides-crystal",
+      "question": "Has any group fabricated the cuboid-waveguide source since the June 2025 preprint — and does measured concurrence track the simulated bandwidth advantage for BaTiO3?",
+      "targets": [
+        "T564",
+        "T565",
+        "T566"
+      ]
+    },
+    {
+      "qid": "Q460",
+      "card": "C-bell-states-monolithic-waveguides-crystal",
+      "question": "BaTiO3 thin-film integration is less mature than lithium-niobate-on-insulator; do current BaTiO3 film losses erase the tensor advantage in a real device?",
+      "targets": [
+        "T564",
+        "T565",
+        "T566"
+      ]
+    },
+    {
+      "qid": "Q461",
+      "card": "C-boxbox-recursive-harness-self-improvement",
+      "question": "The revised harness dies with the run. Is there a safe way to distil recurring in-run revisions into a reusable harness without recreating the offline-transfer failure — e.g. only revisions that reappear independently across many runs?",
+      "targets": [
+        "T567",
+        "T568",
+        "T569"
+      ]
+    },
+    {
+      "qid": "Q462",
+      "card": "C-boxbox-recursive-harness-self-improvement",
+      "question": "Validation of a self-revision is done by the kernel before reload, but the paper's gate is structural/functional; who audits a harness that has edited the process by which it audits itself, over many recursive rounds?",
+      "targets": [
+        "T567",
+        "T568",
+        "T569"
+      ]
+    },
+    {
+      "qid": "Q463",
+      "card": "C-cid-cognitive-work-semantic-state",
+      "question": "Does the full text contain validation the abstract omits? (The abstract is the record read for this card; if the paper body reports human-judgment correlations, this card's grading should be revised via a sibling note.)",
+      "targets": [
+        "T570",
+        "T571"
+      ]
+    },
+    {
+      "qid": "Q464",
+      "card": "C-cid-cognitive-work-semantic-state",
+      "question": "CID is defined between two states of presumably the same artifact lineage; what is the proposed aggregation over a trajectory (a whole tutoring session, a whole research run)? Sum of steps is path-dependent and rewards churn — is there a principled alternative in the paper?",
+      "targets": [
+        "T570",
+        "T571"
+      ]
+    },
+    {
+      "qid": "Q465",
+      "card": "C-claude-fable-mythos-5-2-launch",
+      "question": "Does the system card disclose per-benchmark harness and criteria details (especially RoboDojo and the internal evals) sufficient for an outside party to reproduce any row?",
+      "targets": [
+        "T572",
+        "T573",
+        "T574"
+      ]
+    },
+    {
+      "qid": "Q466",
+      "card": "C-claude-fable-mythos-5-2-launch",
+      "question": "The 1,000-agent FLT run: what did it cost, and will the formalization artefact be published for independent checking?",
+      "targets": [
+        "T572",
+        "T573",
+        "T574"
+      ]
+    },
+    {
+      "qid": "Q467",
+      "card": "C-criteria-exposure-verifier-overfitting",
+      "question": "How large is the criteria–instruction gap in the benchmarks Hydra-style work actually uses (coding and reasoning evals rather than robot simulation)? The paper measures it for embodied benchmarks; nobody has audited the common LLM evals this way.",
+      "targets": [
+        "T575",
+        "T576",
+        "T577"
+      ]
+    },
+    {
+      "qid": "Q468",
+      "card": "C-criteria-exposure-verifier-overfitting",
+      "question": "Instruction-faithful rewriting is manual here — can criteria be audited for instruction-faithfulness automatically, e.g. by checking whether every verified condition is entailed by the instruction?",
+      "targets": [
+        "T575",
+        "T576",
+        "T577"
+      ]
+    },
+    {
+      "qid": "Q469",
+      "card": "C-dictllm-dictionary-kernel-compression",
+      "question": "How does the compressed model hold up on instruction-following and long-context tasks, where perplexity is a weak proxy — and at what ratio does the shared-dictionary assumption (grouped layers are near-relatives) break for architecturally diverse models?",
+      "targets": [
+        "T578",
+        "T579"
+      ]
+    },
+    {
+      "qid": "Q470",
+      "card": "C-dictllm-dictionary-kernel-compression",
+      "question": "Dictionary size and layer grouping are design choices; how sensitive is the 5.1×/+2.9 point to them?",
+      "targets": [
+        "T578",
+        "T579"
+      ]
+    },
+    {
+      "qid": "Q471",
+      "card": "C-e-means-outperforming-k-means",
+      "question": "Independent replication: do the scaling-law formulas hold off the authors' dataset family (text embeddings at Academy scale, not just image embeddings at Meta scale)?",
+      "targets": [
+        "T580",
+        "T581"
+      ]
+    },
+    {
+      "qid": "Q472",
+      "card": "C-e-means-outperforming-k-means",
+      "question": "At small k and small n (the regime of most practical index builds), does e-means still beat a well-tuned Lloyd, or is the advantage a large-scale phenomenon?",
+      "targets": [
+        "T580",
+        "T581"
+      ]
+    },
+    {
+      "qid": "Q473",
+      "card": "C-energy-based-reasoners-ebr",
+      "question": "Can an energy over latent states be trained when supervision is a noisy judge rather than an exact checker — does the landscape stay meaningful, or does it inherit the judge's noise as false minima?",
+      "targets": [
+        "T582",
+        "T583",
+        "T584"
+      ]
+    },
+    {
+      "qid": "Q474",
+      "card": "C-energy-based-reasoners-ebr",
+      "question": "The descent is over one latent state with no hierarchy (unlike HRM's two-latent design); does the single-state formulation cap the puzzle complexity reachable, and at what size does it show?",
+      "targets": [
+        "T582",
+        "T583",
+        "T584"
+      ]
+    },
+    {
+      "qid": "Q475",
+      "card": "C-exceptional-topological-bics",
+      "question": "Exceptional-point sensitivity is famously double-edged: the same fractional-power response amplifies noise and fabrication error. Does the topological protection measurably claw back usable sensitivity in a real device, or do the two properties fight?",
+      "targets": [
+        "T585",
+        "T586"
+      ]
+    },
+    {
+      "qid": "Q476",
+      "card": "C-exceptional-topological-bics",
+      "question": "Higher-order ET-BICs (three or more states coalescing) are the natural next cell — the construction suggests a route via more chains, untested here.",
+      "targets": [
+        "T585",
+        "T586"
+      ]
+    },
+    {
+      "qid": "Q477",
+      "card": "C-google-maps-platform-ai-studio",
+      "question": "Does the demo-key flow work from a Canadian account with the full API set, and what does a generated app's key security look like in practice (browser-visible JS keys need restrictions the announcement doesn't discuss)?",
+      "targets": [
+        "T587",
+        "T588"
+      ]
+    },
+    {
+      "qid": "Q478",
+      "card": "C-google-maps-platform-ai-studio",
+      "question": "When a generated maps app is exported or deployed, who owns the Cloud project and the key — the demo project's limits may bind earlier than expected.",
+      "targets": [
+        "T587",
+        "T588"
+      ]
+    },
+    {
+      "qid": "Q479",
+      "card": "C-google-tpu-8tx-8i-max-agent-stack",
+      "question": "Published pricing/availability for 8tx and 8i Max, and whether Agent Compute Engine and TPU Sync are usable outside Google-operated clusters (e.g. in customer data centers, where Google says TPUs can now be deployed).",
+      "targets": [
+        "T589",
+        "T590"
+      ]
+    },
+    {
+      "qid": "Q480",
+      "card": "C-jittests-catching-test-generation",
+      "question": "What precision does the scaled system actually run at? The blog's 60% is engineer-reported; a confirmed-catch audit of the full-scale deployment, like the paper's 41-escalation study, has not been published.",
+      "targets": [
+        "T591",
+        "T592",
+        "T593"
+      ]
+    },
+    {
+      "qid": "Q481",
+      "card": "C-jittests-catching-test-generation",
+      "question": "Does the approach transfer off Meta's stack? Everything depends on fast test execution against parent and child revisions and a risk model trained on the organisation's own diff history — neither is off-the-shelf elsewhere.",
+      "targets": [
+        "T591",
+        "T592",
+        "T593"
+      ]
+    },
+    {
+      "qid": "Q482",
+      "card": "C-laq-compressed-agent-memory",
+      "question": "G is one author's framework — does the far-end damage show up as plainly under an independent global-structure measure, and do consolidation/deletion errors in a live agent memory track it as the paper's offline correlations suggest?",
+      "targets": [
+        "T594",
+        "T595",
+        "T596"
+      ]
+    },
+    {
+      "qid": "Q483",
+      "card": "C-laq-compressed-agent-memory",
+      "question": "The tested memories are documents and conversations; agent memories that mix tool traces, code and multimodal items may have different distance-noise structure — untested here.",
+      "targets": [
+        "T594",
+        "T595",
+        "T596"
+      ]
+    },
+    {
+      "qid": "Q484",
+      "card": "C-littlebit-sub-1-bit-quantization",
+      "question": "All headline models are ≤32B and mostly Llama-family; does the gentle sub-1-bit slope hold for current-generation architectures (GQA everywhere, MoE), where the low-rank assumption varies by layer type?",
+      "targets": [
+        "T597",
+        "T598"
+      ]
+    },
+    {
+      "qid": "Q485",
+      "card": "C-littlebit-sub-1-bit-quantization",
+      "question": "What does the QAT run cost at 13B scale, in GPU-hours? The paper's practicality story is incomplete without it.",
+      "targets": [
+        "T597",
+        "T598"
+      ]
+    },
+    {
+      "qid": "Q486",
+      "card": "C-meta-muse-models-google-cloud",
+      "question": "Published pricing and quota terms for the three models on Google Cloud, and whether Spark 1.3's \"long-running multi-agent\" positioning comes with documented context/session features or is purely a capability claim.",
+      "targets": [
+        "T599",
+        "T600"
+      ]
+    },
+    {
+      "qid": "Q487",
+      "card": "C-mobilespec-phone-specialist-training",
+      "question": "How many distinct specialists can one generalist carry before the shared INT4 base becomes the bottleneck, and does specialist quality degrade as the task moves away from checkable outcomes toward judgement-scored ones?",
+      "targets": [
+        "T601",
+        "T602",
+        "T603"
+      ]
+    },
+    {
+      "qid": "Q488",
+      "card": "C-mobilespec-phone-specialist-training",
+      "question": "The fitness checkers here are app-state inspections; what is the failure mode when a specialist learns to satisfy the checker rather than the task (the verifier-fitting problem of card 131, now on-device)?",
+      "targets": [
+        "T601",
+        "T602",
+        "T603"
+      ]
+    },
+    {
+      "qid": "Q489",
+      "card": "C-openai-control-room-workload-killswitch",
+      "question": "Will METR, Redwood, or another external party assess Control Room as deployed, the way the monitoring layers were assessed in mid-2026?",
+      "targets": [
+        "T604",
+        "T605",
+        "T606"
+      ]
+    },
+    {
+      "qid": "Q490",
+      "card": "C-openai-control-room-workload-killswitch",
+      "question": "What happens to a generation already in progress when the stop lands — the public description covers the NEXT request only?",
+      "targets": [
+        "T604",
+        "T605",
+        "T606"
+      ]
+    },
+    {
+      "qid": "Q491",
+      "card": "C-opus55-deepseek-v41-workflow",
+      "question": "Does the pair beat Opus alone on Hydra-sized, well-sliced tickets, measured as cost per accepted task?",
+      "targets": [
+        "T607",
+        "T608",
+        "T609",
+        "T610",
+        "T611"
+      ]
+    },
+    {
+      "qid": "Q492",
+      "card": "C-opus55-deepseek-v41-workflow",
+      "question": "Does an event-driven orchestrator (no waiting with a live cache) remove the cache penalty?",
+      "targets": [
+        "T607",
+        "T608",
+        "T609",
+        "T610",
+        "T611"
+      ]
+    },
+    {
+      "qid": "Q493",
+      "card": "C-p2-mopd-parameter-priors",
+      "question": "Does the coefficient channel still help at 30B+ scale, where task vectors are far larger and expert interference patterns differ? All evidence here is 1.7B/4B.",
+      "targets": [
+        "T612",
+        "T613",
+        "T614"
+      ]
+    },
+    {
+      "qid": "Q494",
+      "card": "C-p2-mopd-parameter-priors",
+      "question": "The experts here were RL-trained siblings of one base; KetchupPancake's local experts would more likely be SFT/LoRA variants — does the same prior effect hold when the \"task vectors\" come from adapters rather than full fine-tunes?",
+      "targets": [
+        "T612",
+        "T613",
+        "T614"
+      ]
+    },
+    {
+      "qid": "Q495",
+      "card": "C-palantir-evals-sovereign-ai",
+      "question": "The paper is a position piece selling a platform (Foundry/AIP); which of these mechanisms survive outside Palantir's Ontology/Scenario stack, and what does the trace-capture discipline cost in operator time per decision?",
+      "targets": [
+        "T615",
+        "T616"
+      ]
+    },
+    {
+      "qid": "Q496",
+      "card": "C-palantir-evals-sovereign-ai",
+      "question": "\"Distilled into weights\" is asserted as a sovereign path, but the paper gives no worked example of the distillation path comparable to the PSS coding path — how often does it actually happen in their deployments?",
+      "targets": [
+        "T615",
+        "T616"
+      ]
+    },
+    {
+      "qid": "Q497",
+      "card": "C-pcrouteagent-planner-executor-routing",
+      "question": "D3-C's 40%: what distinguishes the failing boards (density, differential pairs, layer count), and does planner revision depth or executor recovery bounds cap out first?",
+      "targets": [
+        "T617",
+        "T618"
+      ]
+    },
+    {
+      "qid": "Q498",
+      "card": "C-pcrouteagent-planner-executor-routing",
+      "question": "Placement and routing are coupled in real design; how much of the remaining gap is the benchmark's fixed placement rather than routing ability?",
+      "targets": [
+        "T617",
+        "T618"
+      ]
+    },
+    {
+      "qid": "Q499",
+      "card": "C-photonic-bath-infinity-negf",
+      "question": "The treatment is stationary and linear; how much of the four-way agreement survives in time-dependent (Floquet/driven) or nonlinear media, where the bath concept is used but less carefully founded?",
+      "targets": [
+        "T619",
+        "T620"
+      ]
+    },
+    {
+      "qid": "Q500",
+      "card": "C-photonic-bath-infinity-negf",
+      "question": "The finite-boundary distinction (pure radiative bath vs full embedding operator) is flagged as a common conflation — how many published photon-NEGF results actually commit it?",
+      "targets": [
+        "T619",
+        "T620"
+      ]
+    },
+    {
+      "qid": "Q501",
+      "card": "C-phycad-physics-aware-text-to-cad",
+      "question": "FEM-in-the-loop training is expensive per sample; how does the method scale to assemblies and multi-part designs where a single FEA run is far costlier?",
+      "targets": [
+        "T621",
+        "T622"
+      ]
+    },
+    {
+      "qid": "Q502",
+      "card": "C-phycad-physics-aware-text-to-cad",
+      "question": "The verifier checks global bounding boxes but not local features — how often do jointly-\"feasible\" outputs violate an unstated local constraint a human engineer would catch?",
+      "targets": [
+        "T621",
+        "T622"
+      ]
+    },
+    {
+      "qid": "Q503",
+      "card": "C-scientist-world-executable-papers",
+      "question": "Reproduction fidelity is the world's foundation: when a builder's reproduction undershoots the paper's true result, every FNI score in that environment is inflated. How is reproduction quality itself audited across 1,000 environments, beyond the verifier role?",
+      "targets": [
+        "T623",
+        "T624",
+        "T625"
+      ]
+    },
+    {
+      "qid": "Q504",
+      "card": "C-scientist-world-executable-papers",
+      "question": "The environments skew to papers whose experiments are reproducible at reduced scale on shared compute — which fields does that silently exclude, and does the 74% figure survive in wet-lab or large-compute domains?",
+      "targets": [
+        "T623",
+        "T624",
+        "T625"
+      ]
+    },
+    {
+      "qid": "Q505",
+      "card": "C-scout-before-you-route",
+      "question": "The study routes single-shot with no fallback; in a swarm with verification and retries, does per-query cost prediction still pay, or does the verifier's outcome dominate the economics?",
+      "targets": [
+        "T626",
+        "T627"
+      ]
+    },
+    {
+      "qid": "Q506",
+      "card": "C-scout-before-you-route",
+      "question": "Probes are fitted per candidate on labelled problems; how fast do they drift as providers silently change endpoints (the paper itself found one candidate's length varied significantly by provider)?",
+      "targets": [
+        "T626",
+        "T627"
+      ]
+    },
+    {
+      "qid": "Q507",
+      "card": "C-self-play-data-scarcity-agenda",
+      "question": "Learnability-aware valuation of synthesized data is proposed but not demonstrated: is there a cheap proxy for a sample's marginal learning value inside a running loop?",
+      "targets": [
+        "T628",
+        "T629"
+      ]
+    },
+    {
+      "qid": "Q508",
+      "card": "C-self-play-data-scarcity-agenda",
+      "question": "Provenance-grounded trust certification for self-generated data: what would a certificate actually attest, and who verifies the verifier chain as generations compound?",
+      "targets": [
+        "T628",
+        "T629"
+      ]
+    },
+    {
+      "qid": "Q509",
+      "card": "C-skild-steel-heterogeneous-simulation",
+      "question": "Independent reproduction on other hardware and task suites, and end-to-end policy-training wall-clock (not just physics stepping) versus PhysX/MuJoCo Warp pipelines.",
+      "targets": [
+        "T630",
+        "T631"
+      ]
+    },
+    {
+      "qid": "Q510",
+      "card": "C-skild-steel-heterogeneous-simulation",
+      "question": "Solver accuracy/fidelity trade-offs at these speeds: contact-rich manipulation quality is the historical price of throughput — what do the fidelity comparisons show?",
+      "targets": [
+        "T630",
+        "T631"
+      ]
+    },
+    {
+      "qid": "Q511",
+      "card": "C-spot-self-improving-post-thinking",
+      "question": "Does post-thinking survive at frontier scale and on open-ended work (drafting, design, code), where verdicts have no ground truth and the teacher is the only signal?",
+      "targets": [
+        "T632",
+        "T633"
+      ]
+    },
+    {
+      "qid": "Q512",
+      "card": "C-spot-self-improving-post-thinking",
+      "question": "The verdict adds tokens to every generation; at what task value does an always-on self-judge beat spending the same tokens on more samples?",
+      "targets": [
+        "T632",
+        "T633"
+      ]
+    },
+    {
+      "qid": "Q513",
+      "card": "C-stepback-error-localized-resampling",
+      "question": "How does localization quality degrade on long agentic trajectories (tool calls, code) where \"steps\" are not blank-line text and errors can be silent state corruption rather than a wrong sentence?",
+      "targets": [
+        "T634",
+        "T635"
+      ]
+    },
+    {
+      "qid": "Q514",
+      "card": "C-stepback-error-localized-resampling",
+      "question": "Does suffix resampling reduce answer diversity enough to hurt majority voting on genuinely ambiguous problems, where SC's independent full chains are the point?",
+      "targets": [
+        "T634",
+        "T635"
+      ]
+    },
+    {
+      "qid": "Q515",
+      "card": "C-swarmevolve-latent-agent-swarms",
+      "question": "The core code is unreleased — do the throughput and score results replicate once it is public, and at what engineering cost (the RoPE repositioning and cache concatenation are the delicate parts)?",
+      "targets": [
+        "T636",
+        "T637",
+        "T638"
+      ]
+    },
+    {
+      "qid": "Q516",
+      "card": "C-swarmevolve-latent-agent-swarms",
+      "question": "Can the summarizer bottleneck (one text decode per swarm per round) and the linear KV memory growth be pushed far enough for hour-scale runs, or is this a sprint technique for the first minutes of a search?",
+      "targets": [
+        "T636",
+        "T637",
+        "T638"
+      ]
+    },
+    {
+      "qid": "Q517",
+      "card": "C-tact-travel-cost-calibration",
+      "question": "Calibration quality depends on the fast planner's fidelity: LaCAM's suboptimal routes bias the observed costs — how much of TACT's remaining gap on medium instances is surrogate bias from the evaluator rather than assignment error?",
+      "targets": [
+        "T639",
+        "T640"
+      ]
+    },
+    {
+      "qid": "Q518",
+      "card": "C-tact-travel-cost-calibration",
+      "question": "The noise-perturbation diversification is uniform random; would directed exploration (perturb the pairs whose estimates are stalest or most contested) converge faster?",
+      "targets": [
+        "T639",
+        "T640"
+      ]
+    },
+    {
+      "qid": "Q519",
+      "card": "C-understanding-ai-from-the-inside-mi-survey",
+      "question": "The survey names evaluation methodology as the field's most pressing gap but (in the sections read) proposes the framework rather than a benchmark suite — is there a concrete shared benchmark in the full text, and has any group adopted the five dimensions as a reporting standard?",
+      "targets": [
+        "T641",
+        "T642",
+        "T643"
+      ]
+    },
+    {
+      "qid": "Q520",
+      "card": "C-understanding-ai-from-the-inside-mi-survey",
+      "question": "How much of the survey's caution applies to the smaller, open-weight models where MI is actually tractable — is the \"largely untested\" verdict a frontier-scale verdict, or does it hold at the scales KetchupPancake's local work runs at?",
+      "targets": [
+        "T641",
+        "T642",
+        "T643"
+      ]
+    },
+    {
+      "qid": "Q521",
+      "card": "C-verified-quantum-programs-lean-agents",
+      "question": "Which agent models and compute budgets produced these results, and how much of the gain is the proof-scored loop versus the underlying models' strength?",
+      "targets": [
+        "T644",
+        "T645",
+        "T646"
+      ]
+    },
+    {
+      "qid": "Q522",
+      "card": "C-verified-quantum-programs-lean-agents",
+      "question": "Will the Lean quantum library and the discovered programs be released, so the proofs can be re-checked outside Google?",
+      "targets": [
+        "T644",
+        "T645",
+        "T646"
+      ]
+    },
+    {
+      "qid": "Q524",
+      "card": "C-wikitrace-evidence-linked-memory",
+      "question": "Descending into raw trajectories costs time and tokens at task time; what is the cost curve — how much of the +3.2 over insights-only survives a strict per-task budget on evidence consultation?",
+      "targets": [
+        "T647",
+        "T648"
+      ]
+    },
+    {
+      "qid": "Q525",
+      "card": "C-wikitrace-evidence-linked-memory",
+      "question": "Insights are extracted per-run independently; conflicting insights are handled at use time by descending. Does conflict frequency grow with corpus size until use-time checking becomes the bottleneck?",
+      "targets": [
+        "T647",
+        "T648"
+      ]
+    }
+  ],
+  "inner_stderr": "",
+  "reason": "Engrim semantic embedder unavailable (offline cached model2vec model required); lexical fallback is not hybrid.",
+  "finished": "2026-11-12T23:27:46.582422-06:00",
+  "runtime_s": 0.609498,
+  "records_written": [
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q136/result.json",
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q136/notes.md"
+  ]
+}

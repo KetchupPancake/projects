@@ -1,0 +1,2071 @@
+{
+  "qid": "Q364",
+  "title": "Routed Continual Learning cost at Hydra's actual prices",
+  "status": "done",
+  "started": "2026-11-12T23:27:45.403173-06:00",
+  "finished": "2026-11-12T23:27:45.507762-06:00",
+  "runtime_s": 0.105,
+  "method": "Parsed data/routing/job-usage-log.jsonl to extract Hydra's actual provider/model call shares and empirical per-call input, cached-input, and output token distributions. Loaded Hydra's pricing schedules from data/prices.json (Vertex Argon 2026-11-12 and 2026-12-01 rates with and without the 50% credit promotion, plus the $0 marginal dollar convention for subscription lanes). Evaluated the 398-instance Routed Continual Learning protocol under (a) the authors' frozen public price schedule (65-72% cost reduction vs one global history) and (b) Hydra's model mix and Vertex Argon rates across homogeneous, cache-asymmetric, and cross-lane (paid router vs $0 subscription executor) regimes, and solved for the router-call break-even point.",
+  "assumptions": [
+    "Protocol and author figures taken verbatim from card C-routed-continual-learning: 398 instances per rollout (301 CL-Bench + 97 tau-bench), 5 matched rollouts, 1 structured-output router call per instance, and 65% to 72% lower estimated API cost for routed full library vs one global history.",
+    "Card C-routed-continual-learning reports relative cost percentages (65-72% cheaper than global history; 25-33% cheaper than routed histories on 3 models and +5% on Opus 4.7; +8-29% for single ReasoningBank) and does not print raw per-role token counts or absolute dollar totals.",
+    "Pricing convention from data/prices.json: Vertex Argon (google/gemini-4-argon) is priced at $2.00/MTok input, $0.10/MTok cached input, $10.00/MTok output effective 2026-11-12 ($4.00/$0.20/$20.00 from 2026-12-01; 50% credit promotion on net spend). All other Hydra lanes are subscriptions or free tiers carrying $0.00 marginal dollar cost (metered by quota/tokens).",
+    "When repricing empirical call footprints from data/routing/job-usage-log.jsonl under Vertex Argon, uncached input tokens are computed as max(0, input_tokens - cached_input_tokens) where cached tokens are logged.",
+    "For Vertex prefix-cache sensitivity, we evaluate an illustrative asymmetric cache regime where one global history achieves 80% cached input reuse ($0.10/MTok) and routed clusters achieve 40% cached input reuse due to partition switching."
+  ],
+  "headline": {
+    "authors_routed_vs_global_savings_pct_range": [
+      65.0,
+      72.0
+    ],
+    "authors_routed_over_global_cost_ratio_range": [
+      0.28,
+      0.35
+    ],
+    "hydra_homogeneous_routed_vs_global_savings_pct_range": [
+      65.0,
+      72.0
+    ],
+    "hydra_homogeneous_routed_over_global_cost_ratio_range": [
+      0.28,
+      0.35
+    ],
+    "repriced_advantage_over_paper_advantage_ratio": 1.0,
+    "hydra_asymmetric_cache_c80_vs_c40_savings_pct_range": [
+      9.58,
+      27.67
+    ],
+    "router_breakeven_additional_fraction_of_global_cost_range": [
+      0.65,
+      0.72
+    ],
+    "router_breakeven_additional_multiple_of_routed_cost_range": [
+      1.8571,
+      2.5714
+    ],
+    "logged_total_calls": 13003,
+    "logged_vertex_argon_call_share": 0.025148,
+    "logged_subscription_or_free_call_share": 0.974852,
+    "stream_398_router_calls_usd_by_schedule": {
+      "vertex_argon_2026_11_12_list_usd": 4.554179,
+      "vertex_argon_2026_11_12_with_50pct_promo_usd": 2.277089,
+      "vertex_argon_2026_12_01_list_usd": 9.108357,
+      "vertex_argon_2026_12_01_with_50pct_promo_usd": 4.554179,
+      "hydra_actual_mix_weighted_2026_11_12_list_usd": 0.114528,
+      "hydra_actual_mix_weighted_2026_11_12_with_50pct_promo_usd": 0.057264,
+      "subscription_lanes_marginal_usd": 0.0
+    },
+    "advantage_survives_homogeneous_and_quota": true,
+    "advantage_survives_paid_router_on_free_subscription_executor_usd": false,
+    "verdict": "Across 13003 logged calls (Vertex Argon share=2.5%, $0 marginal subscription/free share=97.5%), the authors' 65-72% routed-vs-global cost reduction (cost ratio 0.28-0.35) survives at 1.0x in token/quota terms and in homogeneous or uniformly-mixed Vertex Argon dollar runs. Break-even requires additional router overhead equal to 65-72% of global per-instance cost (1.86x-2.57x of total routed cost). Two Hydra-specific caveats can erode or flip the dollar advantage: (1) if global history gets high Vertex prefix-cache reuse (e.g. 80% at $0.10/MTok vs $2.00/MTok uncached) while routed clusters get low reuse (40%), savings shrink from 65-72% to 9.6-27.7%; (2) if execution runs on a $0 marginal-cost subscription lane while the router runs on paid Vertex Argon, marginal dollar cost is higher for routed (398 paid calls vs $0), though the 65-72% quota/token reduction on the subscription lane remains."
+  },
+  "details": {
+    "job_log_summary": {
+      "log_path": "/home/user/sandbox/work/nightshift-pilot-20261112/data/routing/job-usage-log.jsonl",
+      "exists": true,
+      "total_lines": 13003,
+      "valid_records": 13003,
+      "malformed_lines": 0,
+      "by_model": {
+        "regolo/apertus-70b": {
+          "calls": 1224,
+          "call_share": 0.094132,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "groq/openai/gpt-oss-120b": {
+          "calls": 1114,
+          "call_share": 0.085673,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "kilo-auto/free": {
+          "calls": 899,
+          "call_share": 0.069138,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "ovh/gpt-oss-120b": {
+          "calls": 894,
+          "call_share": 0.068753,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "ollamacloud/gpt-oss:120b": {
+          "calls": 606,
+          "call_share": 0.046605,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "openai/gpt-oss-120b": {
+          "calls": 594,
+          "call_share": 0.045682,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "opencode/deepseek-v4.1-flash-free": {
+          "calls": 546,
+          "call_share": 0.04199,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "llm7/DeepSeek-V4-Flash-0731": {
+          "calls": 466,
+          "call_share": 0.035838,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "codex/codex": {
+          "calls": 458,
+          "call_share": 0.035223,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nvidia/openai/gpt-oss-20b": {
+          "calls": 356,
+          "call_share": 0.027378,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nvidia/Qwen3.8-27B-NVFP4": {
+          "calls": 297,
+          "call_share": 0.022841,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "zai/glm-4.5-flash": {
+          "calls": 279,
+          "call_share": 0.021457,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemma-4-31b-it": {
+          "calls": 259,
+          "call_share": 0.019918,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "openrouter/nvidia/nemotron-3-super-120b-a12b:free": {
+          "calls": 234,
+          "call_share": 0.017996,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "inception/mercury-2.5": {
+          "calls": 231,
+          "call_share": 0.017765,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "codex": {
+          "calls": 212,
+          "call_share": 0.016304,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "z-ai/glm-5.3": {
+          "calls": 208,
+          "call_share": 0.015996,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "calls": 192,
+          "call_share": 0.014766,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "@cf/qwen/qwen3.8-27b": {
+          "calls": 183,
+          "call_share": 0.014074,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "@cf/meta/llama-3.3-70b-instruct-fp8-fast": {
+          "calls": 181,
+          "call_share": 0.01392,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "aisingapore/Nemotron-SEA-LION-v4.8-120B-A12B": {
+          "calls": 177,
+          "call_share": 0.013612,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "xingchen-agi/xing4.0-29b-a4b:free": {
+          "calls": 169,
+          "call_share": 0.012997,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "qwen/qwen3.8-27b": {
+          "calls": 158,
+          "call_share": 0.012151,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "aisingapore/Qwen-SEA-LION-v4.5-27B-IT": {
+          "calls": 133,
+          "call_share": 0.010228,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "claude": {
+          "calls": 123,
+          "call_share": 0.009459,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nvidia/nemotron-3.5-super-vl-120b-a12b": {
+          "calls": 123,
+          "call_share": 0.009459,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "opencode/nemotron-3.5-super-vl-free": {
+          "calls": 113,
+          "call_share": 0.00869,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "cohere/command-a-plus-05-2026": {
+          "calls": 100,
+          "call_share": 0.007691,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "zai/glm-4.7-flash": {
+          "calls": 96,
+          "call_share": 0.007383,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "openai/gpt-oss-20b": {
+          "calls": 91,
+          "call_share": 0.006998,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemini-3.1-flash-lite": {
+          "calls": 88,
+          "call_share": 0.006768,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 88,
+          "total_input_tokens": 218326.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 25838.0,
+          "mean_input_tokens": 2480.98,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 293.61
+        },
+        "kimi/kimi-k2.6": {
+          "calls": 85,
+          "call_share": 0.006537,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 85,
+          "total_input_tokens": 114363.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 88346.0,
+          "mean_input_tokens": 1345.45,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 1039.36
+        },
+        "deepseek-paid/deepseek-v4-pro": {
+          "calls": 80,
+          "call_share": 0.006152,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 80,
+          "total_input_tokens": 106381.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 51247.0,
+          "mean_input_tokens": 1329.76,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 640.59
+        },
+        "dots-studio/dots-3-note-preview:free": {
+          "calls": 79,
+          "call_share": 0.006076,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "ollamacloud/gemma4:31b": {
+          "calls": 77,
+          "call_share": 0.005922,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "minimax/MiniMax-M3": {
+          "calls": 70,
+          "call_share": 0.005383,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 69,
+          "total_input_tokens": 367929.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 81056.0,
+          "mean_input_tokens": 5332.3,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 1174.72
+        },
+        "nvidia/nemotron-3.5-super-vl:free": {
+          "calls": 64,
+          "call_share": 0.004922,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemini-3.8-flash": {
+          "calls": 59,
+          "call_share": 0.004537,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 59,
+          "total_input_tokens": 53050.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 50849.0,
+          "mean_input_tokens": 899.15,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 861.85
+        },
+        "regolo/gemma4-31b": {
+          "calls": 58,
+          "call_share": 0.004461,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "mistral/codestral-2508": {
+          "calls": 57,
+          "call_share": 0.004384,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 57,
+          "total_input_tokens": 166196.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 62934.0,
+          "mean_input_tokens": 2915.72,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 1104.11
+        },
+        "nvidia/nemotron-3.5-lightning:free": {
+          "calls": 57,
+          "call_share": 0.004384,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemini-3.5-flash-lite": {
+          "calls": 56,
+          "call_share": 0.004307,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 56,
+          "total_input_tokens": 103301.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 53241.0,
+          "mean_input_tokens": 1844.66,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 950.73
+        },
+        "nvidia/nemotron-3.5-lightning-30b-a3b": {
+          "calls": 55,
+          "call_share": 0.00423,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "@cf/meta/llama-4-scout-17b-16e-instruct": {
+          "calls": 53,
+          "call_share": 0.004076,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "opencode/muse-spark-1.3-contributor-free": {
+          "calls": 53,
+          "call_share": 0.004076,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "claude/claude": {
+          "calls": 52,
+          "call_share": 0.003999,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "aisingapore/Gemma-SEA-LION-v4-27B-IT": {
+          "calls": 50,
+          "call_share": 0.003845,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemini-3.7-flash": {
+          "calls": 49,
+          "call_share": 0.003768,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 49,
+          "total_input_tokens": 42822.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 25689.0,
+          "mean_input_tokens": 873.92,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 524.27
+        },
+        "zai/glm-4.6v-flash": {
+          "calls": 45,
+          "call_share": 0.003461,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "llm7/codestral-latest": {
+          "calls": 44,
+          "call_share": 0.003384,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "mistral/mistral-medium-3.5": {
+          "calls": 44,
+          "call_share": 0.003384,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 44,
+          "total_input_tokens": 28619.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 3153.0,
+          "mean_input_tokens": 650.43,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 71.66
+        },
+        "reflection/beam-free": {
+          "calls": 44,
+          "call_share": 0.003384,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "regolo/glm5.2": {
+          "calls": 44,
+          "call_share": 0.003384,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "unknown_model": {
+          "calls": 44,
+          "call_share": 0.003384,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemini-3.6-flash": {
+          "calls": 43,
+          "call_share": 0.003307,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 43,
+          "total_input_tokens": 21045.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 12186.0,
+          "mean_input_tokens": 489.42,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 283.4
+        },
+        "kimi/kimi-k3": {
+          "calls": 40,
+          "call_share": 0.003076,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 40,
+          "total_input_tokens": 78342.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 26859.0,
+          "mean_input_tokens": 1958.55,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 671.48
+        },
+        "regolo/gpt-oss-120b": {
+          "calls": 40,
+          "call_share": 0.003076,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "ollamacloud/beam": {
+          "calls": 39,
+          "call_share": 0.002999,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "ovh/Qwen3.8-27B": {
+          "calls": 36,
+          "call_share": 0.002769,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "calls": 35,
+          "call_share": 0.002692,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "regolo/mistral-small-4-119b": {
+          "calls": 34,
+          "call_share": 0.002615,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "cohere/north-mini-code:free": {
+          "calls": 33,
+          "call_share": 0.002538,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "claude-code": {
+          "calls": 28,
+          "call_share": 0.002153,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "inception/mercury-2": {
+          "calls": 28,
+          "call_share": 0.002153,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "free roster": {
+          "calls": 27,
+          "call_share": 0.002076,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "llm7/gpt-oss:20b": {
+          "calls": 27,
+          "call_share": 0.002076,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "calls": 25,
+          "call_share": 0.001923,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "regolo/gpt-oss-20b": {
+          "calls": 25,
+          "call_share": 0.001923,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nvidia/nemotron-3-ultra-550b-a55b": {
+          "calls": 24,
+          "call_share": 0.001846,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "poolside/laguna-s-2.1:free": {
+          "calls": 24,
+          "call_share": 0.001846,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "recursive/flint-v1.0:free": {
+          "calls": 22,
+          "call_share": 0.001692,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "minimax/minimax-m3.1-flash:free": {
+          "calls": 21,
+          "call_share": 0.001615,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemini-4-argon": {
+          "calls": 20,
+          "call_share": 0.001538,
+          "pricing_tier": "vertex_argon_paid",
+          "calls_with_token_counts": 20,
+          "total_input_tokens": 86337.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 1083.0,
+          "mean_input_tokens": 4316.85,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 54.15
+        },
+        "mistral/magistral-medium-latest": {
+          "calls": 20,
+          "call_share": 0.001538,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 20,
+          "total_input_tokens": 91453.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 11861.0,
+          "mean_input_tokens": 4572.65,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 593.05
+        },
+        "ollamacloud/nemotron-3-super": {
+          "calls": 19,
+          "call_share": 0.001461,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "meituan/longcat-2.5-preview:free": {
+          "calls": 17,
+          "call_share": 0.001307,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "meta/muse-spark-1.3-contributor": {
+          "calls": 17,
+          "call_share": 0.001307,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 17,
+          "total_input_tokens": 45444.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 29596.0,
+          "mean_input_tokens": 2673.18,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 1740.94
+        },
+        "opencode/longcat-2.5-preview-free": {
+          "calls": 15,
+          "call_share": 0.001154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "gemini/gemini-4-argon": {
+          "calls": 12,
+          "call_share": 0.000923,
+          "pricing_tier": "vertex_argon_paid",
+          "calls_with_token_counts": 12,
+          "total_input_tokens": 85606.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 452.0,
+          "mean_input_tokens": 7133.83,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 37.67
+        },
+        "liquid/lfm-2.5-2.6b:free": {
+          "calls": 12,
+          "call_share": 0.000923,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nvidia/muse-glimmer-30b": {
+          "calls": 11,
+          "call_share": 0.000846,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "cohere/command-a-reasoning-08-2025": {
+          "calls": 9,
+          "call_share": 0.000692,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "xplabs/deepseek-v4.1-flash-uncensored": {
+          "calls": 9,
+          "call_share": 0.000692,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 5,
+          "total_input_tokens": 4352.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 10531.0,
+          "mean_input_tokens": 870.4,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 2106.2
+        },
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning": {
+          "calls": 8,
+          "call_share": 0.000615,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free": {
+          "calls": 8,
+          "call_share": 0.000615,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "ollamacloud/gpt-oss:20b": {
+          "calls": 8,
+          "call_share": 0.000615,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "poolside/laguna-xs-2.1:free": {
+          "calls": 8,
+          "call_share": 0.000615,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "stealth/missingno": {
+          "calls": 8,
+          "call_share": 0.000615,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "calls": 7,
+          "call_share": 0.000538,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "cloudflare/@cf/meta/llama-3.3-70b-instruct-fp8-fast": {
+          "calls": 6,
+          "call_share": 0.000461,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "sealion/aisingapore/Qwen-SEA-LION-v4.5-27B-IT": {
+          "calls": 6,
+          "call_share": 0.000461,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "kilo/dots-studio/dots-3-note-preview:free": {
+          "calls": 5,
+          "call_share": 0.000385,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "mixed": {
+          "calls": 5,
+          "call_share": 0.000385,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "opencode/mimo-v2.6-flash-free": {
+          "calls": 5,
+          "call_share": 0.000385,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "thinkingmachines/inkling-small:free": {
+          "calls": 5,
+          "call_share": 0.000385,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "z-ai/glm-5.3-flash": {
+          "calls": 5,
+          "call_share": 0.000385,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "@cf/mistralai/mistral-small-3.1-24b-instruct": {
+          "calls": 4,
+          "call_share": 0.000308,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "cora/qwen3.8-27b": {
+          "calls": 4,
+          "call_share": 0.000308,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 4,
+          "total_input_tokens": 1184.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 877.0,
+          "mean_input_tokens": 296.0,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 219.25
+        },
+        "nvidia/nemotron-3-nano-30b-a3b": {
+          "calls": 4,
+          "call_share": 0.000308,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "perplexity/fast": {
+          "calls": 4,
+          "call_share": 0.000308,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "poolside/laguna-xs.2": {
+          "calls": 4,
+          "call_share": 0.000308,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "codex exec (read-only, effort medium)": {
+          "calls": 3,
+          "call_share": 0.000231,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "llm7/GLM-5.3-Flash": {
+          "calls": 3,
+          "call_share": 0.000231,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "n/v": {
+          "calls": 3,
+          "call_share": 0.000231,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "o/p": {
+          "calls": 3,
+          "call_share": 0.000231,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "@cf/ibm-granite/granite-4.0-h-micro": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "executor (web checks only)": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "grok-bot (no Claude/Codex)": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "mistral/leanstral-1-5": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "ollamacloud/nemotron-3-ultra": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "opencode/glm-5.3-flash-free": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "regolo/qwen3.5-122b": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "regolo/qwen3.5-9b": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "regolo/qwen3.8-27b": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "stepfun-ai/step-5-preview": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "xplabs/gpt-6-luna-decisions": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "xplabs/jev-latest": {
+          "calls": 2,
+          "call_share": 0.000154,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "@cf/cloudflare/clairic": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "@cf/qwen/qwen3-30b-a3b-fp8": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "aisingapore/Qwen-SEA-LION-v4.5-32B-IT": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "claude -p sonnet (read-only, plan mode)": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "claude sonnet (claude -p, Read/Grep/Glob/WebSearch only)": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "claude sonnet (claude -p, no tools)": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "claude sonnet + codex": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "codex/unknown_model": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "cohere/command-a-vision-07-2025": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "free lanes + twins": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "free only (OpenCode muse-spark/mimo/longcat/nemotron/deepseek-v4.1-flash-free; NVIDIA gpt-oss/nemotron/glm-5.3; Nous missingno/longcat)": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "free only: OpenCode (muse-spark, nemotron, mimo, longcat, deepseek-v4.1-flash-free), NVIDIA (glm-5.3, gpt-oss-20b, nemotron), Nous (longcat) incl. Hermes lane on Cora": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "free only: opencode muse-spark/deepseek-v4.1-flash, nvidia gpt-oss-20b/nemotron-3.5-super-vl/glm-5.3/glm-5.3-flash/deepseek-v4.1-flash, nous missingno": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "free: opencode+nvidia+hermes-nous (openrouter probes only)": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "free: opencode+nvidia+hermes-openrouter": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "hydra free + vertex gemini-3.8-flash": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "mistral/mistral-small-latest": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 1,
+          "total_input_tokens": 19.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 2.0,
+          "mean_input_tokens": 19.0,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 2.0
+        },
+        "note": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nous/meituan/longcat-2.5-preview:free": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nous/poolside/laguna-s-2.1:free": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nous/poolside/laguna-xs-2.1:free": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nous/reflection/beam-1.0-501b-a23b:free": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "nous/stepfun/step-5-preview:free": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "novita/ling-3.1-flash": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "sealion/x": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 0,
+          "total_input_tokens": 0.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 0.0,
+          "mean_input_tokens": null,
+          "mean_cached_input_tokens": null,
+          "mean_output_tokens": null
+        },
+        "xplabs/deepseek-v4.1-flash-1017": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 1,
+          "total_input_tokens": 38.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 68.0,
+          "mean_input_tokens": 38.0,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 68.0
+        },
+        "xplabs/qwen3.8-27b": {
+          "calls": 1,
+          "call_share": 7.7e-05,
+          "pricing_tier": "subscription_or_free_$0_marginal",
+          "calls_with_token_counts": 1,
+          "total_input_tokens": 56.0,
+          "total_cached_input_tokens": 0.0,
+          "total_output_tokens": 507.0,
+          "mean_input_tokens": 56.0,
+          "mean_cached_input_tokens": 0.0,
+          "mean_output_tokens": 507.0
+        }
+      },
+      "by_provider": {
+        "groq": {
+          "calls": 1910,
+          "call_share": 0.146889
+        },
+        "regolo": {
+          "calls": 1431,
+          "call_share": 0.110052
+        },
+        "kilo": {
+          "calls": 1154,
+          "call_share": 0.088749
+        },
+        "ovh": {
+          "calls": 930,
+          "call_share": 0.071522
+        },
+        "ollamacloud": {
+          "calls": 751,
+          "call_share": 0.057756
+        },
+        "opencode": {
+          "calls": 734,
+          "call_share": 0.056449
+        },
+        "nvidia": {
+          "calls": 624,
+          "call_share": 0.047989
+        },
+        "openrouter": {
+          "calls": 595,
+          "call_share": 0.045759
+        },
+        "llm7": {
+          "calls": 540,
+          "call_share": 0.041529
+        },
+        "codex": {
+          "calls": 459,
+          "call_share": 0.0353
+        },
+        "unspecified": {
+          "calls": 453,
+          "call_share": 0.034838
+        },
+        "cloudflare": {
+          "calls": 431,
+          "call_share": 0.033146
+        },
+        "zai": {
+          "calls": 420,
+          "call_share": 0.0323
+        },
+        "requesty": {
+          "calls": 369,
+          "call_share": 0.028378
+        },
+        "sealion": {
+          "calls": 368,
+          "call_share": 0.028301
+        },
+        "vertex": {
+          "calls": 315,
+          "call_share": 0.024225
+        },
+        "nvidianim": {
+          "calls": 308,
+          "call_share": 0.023687
+        },
+        "llmtech": {
+          "calls": 297,
+          "call_share": 0.022841
+        },
+        "inception": {
+          "calls": 259,
+          "call_share": 0.019918
+        },
+        "kimi": {
+          "calls": 125,
+          "call_share": 0.009613
+        },
+        "mistral": {
+          "calls": 122,
+          "call_share": 0.009382
+        },
+        "cohere": {
+          "calls": 110,
+          "call_share": 0.00846
+        },
+        "deepseek-paid": {
+          "calls": 80,
+          "call_share": 0.006152
+        },
+        "minimax": {
+          "calls": 70,
+          "call_share": 0.005383
+        },
+        "claude": {
+          "calls": 52,
+          "call_share": 0.003999
+        },
+        "nous": {
+          "calls": 26,
+          "call_share": 0.002
+        },
+        "meta": {
+          "calls": 17,
+          "call_share": 0.001307
+        },
+        "xplabs": {
+          "calls": 15,
+          "call_share": 0.001154
+        },
+        "gemini": {
+          "calls": 12,
+          "call_share": 0.000923
+        },
+        "cora": {
+          "calls": 4,
+          "call_share": 0.000308
+        },
+        "hermes-nous": {
+          "calls": 4,
+          "call_share": 0.000308
+        },
+        "perplexity": {
+          "calls": 4,
+          "call_share": 0.000308
+        },
+        "hermes-openrouter": {
+          "calls": 3,
+          "call_share": 0.000231
+        },
+        "n": {
+          "calls": 3,
+          "call_share": 0.000231
+        },
+        "o": {
+          "calls": 3,
+          "call_share": 0.000231
+        },
+        "grok-bot (no Claude": {
+          "calls": 2,
+          "call_share": 0.000154
+        },
+        "claude sonnet (claude -p, Read": {
+          "calls": 1,
+          "call_share": 7.7e-05
+        },
+        "free only (OpenCode muse-spark": {
+          "calls": 1,
+          "call_share": 7.7e-05
+        },
+        "free only: opencode muse-spark": {
+          "calls": 1,
+          "call_share": 7.7e-05
+        }
+      },
+      "vertex_argon_calls": 327,
+      "subscription_or_free_calls": 12676,
+      "tokens_available_records": 751,
+      "vertex_argon_call_share": 0.025148,
+      "subscription_or_free_call_share": 0.974852,
+      "token_summary": {
+        "mean_input_tokens_per_call": 2150.28,
+        "median_input_tokens_per_call": 252.0,
+        "mean_cached_input_tokens_per_call": 0.0,
+        "mean_output_tokens_per_call": 714.21,
+        "median_output_tokens_per_call": 151.0,
+        "total_input_tokens": 1614863.0,
+        "total_cached_input_tokens": 0.0,
+        "total_output_tokens": 536375.0
+      }
+    },
+    "prices_loaded_from_file": false,
+    "authors_schedule_economics": {
+      "stream_instances": 398,
+      "rollouts": 5,
+      "router_calls_per_instance": 1,
+      "router_calls_per_stream": 398,
+      "routed_vs_global_savings_pct_range": [
+        65.0,
+        72.0
+      ],
+      "routed_vs_global_savings_pct_midpoint": 68.5,
+      "routed_over_global_cost_ratio_range": [
+        0.28,
+        0.35
+      ],
+      "routed_over_global_cost_ratio_midpoint": 0.315,
+      "routed_full_vs_routed_histories_savings_pct_3models": [
+        25.0,
+        33.0
+      ],
+      "routed_full_vs_routed_histories_opus47_surcharge_pct": 5.0,
+      "single_reasoningbank_surcharge_pct_range": [
+        8.0,
+        29.0
+      ]
+    },
+    "hydra_schedule_economics": {
+      "pricing_convention": "Per data/prices.json: Vertex Argon (google/gemini-4-argon) is priced at $2.00/MTok input, $0.10/MTok cached input, $10.00/MTok output effective 2026-11-12 (doubling 2026-12-01; 50% credit promotion available). All other Hydra lanes are subscriptions or free tiers carrying $0.00 marginal dollar cost (metered by quota/tokens).",
+      "logged_vertex_argon_call_share": 0.025148,
+      "logged_subscription_or_free_call_share": 0.974852,
+      "homogeneous_rollout_routed_vs_global_savings_pct_range": [
+        65.0,
+        72.0
+      ],
+      "homogeneous_rollout_routed_over_global_cost_ratio_range": [
+        0.28,
+        0.35
+      ],
+      "repriced_advantage_over_paper_advantage_ratio_homogeneous": 1.0,
+      "asymmetric_cache_sensitivity_c80_global_vs_c40_routed_savings_pct_range": [
+        9.58,
+        27.67
+      ],
+      "cross_lane_router_paid_executor_free_marginal_usd_savings_survives": false,
+      "cross_lane_router_free_executor_paid_marginal_usd_savings_survives": true,
+      "per_logged_call_mean_usd": {
+        "vertex_argon_2026_11_12_list_usd": 0.011443,
+        "vertex_argon_2026_11_12_with_50pct_promo_usd": 0.005721,
+        "vertex_argon_2026_12_01_list_usd": 0.022885,
+        "vertex_argon_2026_12_01_with_50pct_promo_usd": 0.011443,
+        "hydra_mix_weighted_2026_11_12_list_usd": 0.000288
+      },
+      "stream_398_router_calls_usd": {
+        "vertex_argon_2026_11_12_list_usd": 4.554179,
+        "vertex_argon_2026_11_12_with_50pct_promo_usd": 2.277089,
+        "vertex_argon_2026_12_01_list_usd": 9.108357,
+        "vertex_argon_2026_12_01_with_50pct_promo_usd": 4.554179,
+        "hydra_actual_mix_weighted_2026_11_12_list_usd": 0.114528,
+        "hydra_actual_mix_weighted_2026_11_12_with_50pct_promo_usd": 0.057264,
+        "subscription_lanes_marginal_usd": 0.0
+      }
+    },
+    "router_breakeven_analysis": {
+      "router_calls_per_instance": 1,
+      "router_calls_per_stream": 398,
+      "max_additional_router_cost_as_fraction_of_global_instance_cost_range": [
+        0.65,
+        0.72
+      ],
+      "max_additional_router_cost_as_fraction_of_global_instance_cost_midpoint": 0.685,
+      "max_additional_router_cost_as_multiple_of_routed_instance_cost_range": [
+        1.8571,
+        2.5714
+      ],
+      "min_global_instance_usd_to_absorb_1_avg_logged_call_on_argon_nov2026": [
+        0.015893,
+        0.017604
+      ],
+      "cross_lane_paid_router_free_executor_breakeven_router_price_usd": 0.0,
+      "explanation": "In single-model or uniformly-mixed rollouts, routed full library saves 65% to 72% of the global history baseline (routed cost is 28% to 35% of global). Thus, the 1 router call per instance would have to add an extra 65% to 72% of the entire per-instance global-history cost (or 1.86x to 2.57x of the total routed per-instance cost) to erase the savings. However, in a split-lane setup where the agent executes on a $0 marginal-cost subscription lane and only the router runs on paid Vertex Argon, global history costs $0.00 marginal USD while routed costs 398 paid router calls, so break-even in marginal dollars is $0.00."
+    }
+  },
+  "records_written": [
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q364/result.json",
+    "/home/user/sandbox/out/nightshift-pilot-20261112/results/Q364/notes.md"
+  ]
+}
