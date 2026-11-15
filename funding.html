@@ -363,6 +363,41 @@
       footer { padding: 34px 0 46px; color: var(--muted); font-size: 14px; }
       footer .foot-in { display: flex; flex-wrap: wrap; gap: 8px 26px; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 22px; }
 
+/* Field notes / evals */
+      .evals { display: grid; grid-template-columns: 1fr; gap: 18px; }
+      .eval-card {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: var(--radius); padding: 26px 28px;
+      }
+      @media (max-width: 640px) { .eval-card { padding: 22px 18px; } }
+      .eval-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+      .eval-verdict {
+        font-size: 12.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+        padding: 4px 11px; border-radius: 999px;
+      }
+      .eval-verdict.split { background: #fdf0e3; color: #7a3d08; }
+      .eval-verdict.math { background: #e6f2f0; color: #0d5c53; }
+      .eval-verdict.depends { background: var(--chip-bg); color: var(--ink-soft); }
+      @media (prefers-color-scheme: dark) {
+        .eval-verdict.split { background: #3a2410; color: #f0b27a; }
+        .eval-verdict.math { background: #12322e; color: var(--teal-bright); }
+      }
+      .eval-date { font-size: 13.5px; color: var(--muted); }
+      .eval-card h3 { font-size: 22px; margin-bottom: 4px; line-height: 1.25; }
+      .eval-source { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+      .eval-source a { color: var(--copper); }
+      @media (prefers-color-scheme: dark) { .eval-source a { color: var(--copper-bright); } }
+      .eval-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 6px; }
+      @media (max-width: 720px) { .eval-grid { grid-template-columns: 1fr; } }
+      .eval-grid h4 { font-size: 13px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+      .eval-grid p { font-size: 15.5px; color: var(--ink-soft); }
+      .eval-caveat {
+        margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line);
+        font-size: 14.5px; color: var(--ink-soft);
+      }
+      .eval-caveat b { color: var(--ink); }
+      .evals-intro-note { margin-top: 18px; font-size: 14.5px; color: var(--muted); max-width: 52em; }
+
       /* Content is always visible — no scroll-gated reveal. */
     </style>
   </head>
@@ -374,6 +409,7 @@
           <a href="#problem">The Problem</a>
           <a href="#projects">Projects</a>
           <a href="#map">Frontier Map</a>
+          <a href="#field-notes">Field notes</a>
           <a href="#ask">The Ask</a>
           <a href="#faq">FAQ</a>
           <a class="btn" href="https://github.com/KetchupPancake">Start a conversation</a>
@@ -499,6 +535,77 @@
       </section>
 
       <!-- THE ASK -->
+      <section id="field-notes">
+        <div class="wrap">
+          <div class="sec-head reveal">
+            <h2>Field notes: what our evals found</h2>
+            <p>An independent multi-model swarm reads papers in full — not abstracts, not posts about them — then runs the claims that can be run. Papers that were only read are labelled as read; papers that were run are labelled as run. These three are from the Night Shift pilot on 12 November 2026 and its filed verification note. The caveats are part of the result.</p>
+          </div>
+          <div class="evals">
+            <article class="eval-card reveal" id="eval-emeans">
+              <div class="eval-meta">
+                <span class="eval-verdict split">Split verdict — ran it</span>
+                <span class="eval-date">Night Shift pilot · 12 Nov 2026</span>
+              </div>
+              <h3>e-means vs Lloyd&rsquo;s k-means</h3>
+              <p class="eval-source">Meta FAIR · arXiv:2611.09501 · k-means clustering</p>
+              <div class="eval-grid">
+                <div>
+                  <h4>What was claimed</h4>
+                  <p>That e-means reaches Lloyd&rsquo;s 25-epoch loss in just 1.4&ndash;2.6 epochs — 10&ndash;45&times; faster.</p>
+                </div>
+                <div>
+                  <h4>What we found</h4>
+                  <p><strong>Speed confirmed.</strong> Wall-clock scaling exponent ~0.73 vs Lloyd&rsquo;s ~1.10 — the edge grows with scale. <strong>Loss did not reproduce:</strong> 0 of 6 text cells beat Lloyd&rsquo;s loss.</p>
+                </div>
+              </div>
+              <p class="eval-caveat"><b>Caveat:</b> The paper&rsquo;s tuning formulas are not published, so the test solver was e-means-style, not the authors&rsquo; Faiss code. That limits what the loss result can prove — and it is itself a finding about reproducibility.</p>
+            </article>
+
+            <article class="eval-card reveal" id="eval-sys1sys2">
+              <div class="eval-meta">
+                <span class="eval-verdict math">Headline doesn&rsquo;t match its own math — checked</span>
+                <span class="eval-date">Filed verification note · Nov 2026</span>
+              </div>
+              <h3>Sys1 / Sys2 codesign</h3>
+              <p class="eval-source">System-1 / System-2 codesign paper · Headline figure checked against its own proposition</p>
+              <div class="eval-grid">
+                <div>
+                  <h4>What was claimed</h4>
+                  <p>A headline improvement of 26&times;.</p>
+                </div>
+                <div>
+                  <h4>What we found</h4>
+                  <p>At the paper&rsquo;s own stated values, its proposition gives <strong>33.3&times;, not 26&times;</strong>. Getting to 26&times; requires an extra, unexplained cost fraction of ~0.0085. Headline and math should agree.</p>
+                </div>
+              </div>
+              <p class="eval-caveat"><b>Why it matters:</b> This wasn&rsquo;t a rerun — it was arithmetic. If the numbers inside a paper don&rsquo;t reconcile, downstream claims built on the headline inherit the gap.</p>
+            </article>
+
+            <article class="eval-card reveal" id="eval-rcl">
+              <div class="eval-meta">
+                <span class="eval-verdict depends">Mechanism works — number depends</span>
+                <span class="eval-date">Filed verification note · Nov 2026</span>
+              </div>
+              <h3>Routed Continual Learning</h3>
+              <p class="eval-source">Routed Continual Learning · Saving re-measured under asymmetric caching</p>
+              <div class="eval-grid">
+                <div>
+                  <h4>What was claimed</h4>
+                  <p>A 65&ndash;72% saving.</p>
+                </div>
+                <div>
+                  <h4>What we found</h4>
+                  <p>Under asymmetric caching, the measured saving is <strong>9.6&ndash;27.7%</strong>. The mechanism works; the number depends on the caching regime.</p>
+                </div>
+              </div>
+              <p class="eval-caveat"><b>Caveat:</b> A saving quoted without its caching assumptions isn&rsquo;t portable. Change the regime, change the result — the paper&rsquo;s figure and ours can both be described honestly, but only with the conditions attached.</p>
+            </article>
+          </div>
+          <p class="evals-intro-note">How to read this page: <strong>Ran it</strong> means code was executed and measured. <strong>Checked</strong> means the paper was read in full and its internal claims reconciled. Neither is dressed up as the other. New notes are shared as replies under the original papers&rsquo; posts, linking back here.</p>
+        </div>
+      </section>
+
       <section id="ask">
         <div class="wrap">
           <div class="sec-head reveal">
