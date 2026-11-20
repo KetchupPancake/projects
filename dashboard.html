@@ -535,7 +535,7 @@
           <h1>Project Architecture</h1>
           <p>The skeleton of the whole system, as settled in the Nov 8, 2026 mission walk and the second-pass mission statements: ten nodes — Hydra, Academy, Studio, the Shared Workspace, the Vault, The Office, the Workbench Laboratory, Night Shift, Cora, and The Still — what each one is, whether it is built, designed, or still unbuilt, how work flows between them in both directions, and what each node can actually show about itself. Start with the skeleton, click around the graph, or read each project as a document.</p>
         </div>
-        <div class="snapshot mono">Missions · <b>second pass, filed Nov 8, 2026</b> &nbsp;·&nbsp; Still corpus · <b>v6 published Nov 8, 2026</b> &nbsp;·&nbsp; Advancements · <b>hybrid bar settled Nov 8, 2026 — register open, no candidates yet</b> &nbsp;·&nbsp; Roster · <b>in the Vault — living project, KetchupPancake still working on it</b> &nbsp;·&nbsp; Latest · <b>Nov 14, 2026 — five-lane Hydra audit complete and its consensus fixes built; The Still&rsquo;s sorter migration in shadow on the local lab; the legacy host&rsquo;s archival harvest complete</b></div>
+        <div class="snapshot mono">Missions · <b>second pass, filed Nov 8, 2026</b> &nbsp;·&nbsp; Still corpus · <b>v6 published Nov 8, 2026</b> &nbsp;·&nbsp; Advancements · <b>hybrid bar settled Nov 8, 2026 — register open, no candidates yet</b> &nbsp;·&nbsp; Roster · <b>in the Vault — living project, KetchupPancake still working on it</b> &nbsp;·&nbsp; Latest · <b>Nov 19, 2026 — The Still&rsquo;s sorter flip is complete: Cora is the production sorter and the legacy host is retired; Academy&rsquo;s design is completed, field-first, a school as well as an index; Hydra&rsquo;s subscription routing is built, and the Gemini seat is renamed Neon; The Still stands at 224 cards</b></div>
       </header>
 
       <div class="stat-row" id="stat-row" aria-label="Architecture at a glance"></div>
@@ -665,7 +665,7 @@
               <tbody>
                 <tr><td style="white-space:nowrap"><b>Vera</b></td><td>KetchupPancake&#x27;s personal agent — orchestration, the written record, and The Still&#x27;s research cards</td><td style="white-space:nowrap">Live</td></tr>
                 <tr><td style="white-space:nowrap"><b>Cora</b></td><td>HomeLab PC and local layer of the stack; holds the Vault; the orchestrator body runs here</td><td style="white-space:nowrap">Live — body in setup</td></tr>
-                <tr><td style="white-space:nowrap"><b>Joi</b></td><td>Agent on joi-box, Hydra&#x27;s host machine; being wound down as work migrates to Cora — the host&#x27;s full archival harvest completed Nov 14, 2026 (17 hash-verified archives, ~7.5 GB); remaining host-only material is inventoried and awaiting decisions</td><td style="white-space:nowrap">Winding down</td></tr>
+                <tr><td style="white-space:nowrap"><b>Joi</b></td><td>Former agent on the legacy host; her exit completed Nov 14, 2026 — a grab-only harvest of 17 hash-verified archives with nothing unique left behind — and the host itself was deleted the next day</td><td style="white-space:nowrap">Exited Nov 15, 2026</td></tr>
                 <tr><td style="white-space:nowrap"><b>Pip</b></td><td>Spare Android phone kept on Cora; holds app accounts for phone-only jobs</td><td style="white-space:nowrap">Connected</td></tr>
               </tbody>
             </table>
@@ -676,9 +676,9 @@
               <thead><tr><th>Name</th><th>Used for</th><th>Status</th></tr></thead>
               <tbody>
                 <tr><td style="white-space:nowrap"><b>SSH to Cora</b></td><td>Hands-on work on the homeLab PC</td><td style="white-space:nowrap">Live</td></tr>
-                <tr><td style="white-space:nowrap"><b>SSH to joi-box</b></td><td>Short jobs on Hydra&#x27;s host machine</td><td style="white-space:nowrap">Live — windows only</td></tr>
-                <tr><td style="white-space:nowrap"><b>Academy pull</b></td><td>Data service between Cora and joi-box carrying the Academy index</td><td style="white-space:nowrap">Live</td></tr>
-                <tr><td style="white-space:nowrap"><b>Box link</b></td><td>Cora&#x27;s standing link to joi-box</td><td style="white-space:nowrap">Live</td></tr>
+                
+                
+                
                 <tr><td style="white-space:nowrap"><b>Sisters drop</b></td><td>File exchange between the agents, via Cora</td><td style="white-space:nowrap">Live</td></tr>
                 <tr><td style="white-space:nowrap"><b>Tailscale mesh</b></td><td>The private network joining the machines</td><td style="white-space:nowrap">Live</td></tr>
               </tbody>
@@ -691,7 +691,7 @@
               <tbody>
                 <tr><td style="white-space:nowrap"><b>Claude</b></td><td>Drafting, builds and review — one of the twin lanes</td><td style="white-space:nowrap">Live</td></tr>
                 <tr><td style="white-space:nowrap"><b>Codex</b></td><td>Builds and review — one of the twin lanes</td><td style="white-space:nowrap">Live</td></tr>
-                <tr><td style="white-space:nowrap"><b>Gemini (Argon)</b></td><td>The Still&#x27;s sorting seat, plus review</td><td style="white-space:nowrap">Live</td></tr>
+                <tr><td style="white-space:nowrap"><b>Gemini (Neon)</b></td><td>The Still&#x27;s sorting seat, plus review</td><td style="white-space:nowrap">Live</td></tr>
                 <tr><td style="white-space:nowrap"><b>Grok</b></td><td>Cross-checks, review, and fetching X links</td><td style="white-space:nowrap">Live</td></tr>
                 <tr><td style="white-space:nowrap"><b>Muse</b></td><td>The platform the personal agent runs on</td><td style="white-space:nowrap">Live</td></tr>
                 <tr><td style="white-space:nowrap"><b>Midjourney</b></td><td>Studio image generation</td><td style="white-space:nowrap">Live</td></tr>
@@ -704,7 +704,7 @@
               <thead><tr><th>Name</th><th>Used for</th><th>Status</th></tr></thead>
               <tbody>
                 <tr><td style="white-space:nowrap"><b>Vertex</b></td><td>The Gemini seat&#x27;s burn-first credit pool</td><td style="white-space:nowrap">Live</td></tr>
-                <tr><td style="white-space:nowrap"><b>Inception (Mercury)</b></td><td>Perishable-compute harvest: the Mercury API shuts down Dec 28, 2026, so the reserved token bank is being spent ahead of the deadline on graded bulk work — classification, cross-checks, long-context synthesis — ledgered from the first run</td><td style="white-space:nowrap">Harvest launched Nov 14, 2026</td></tr>
+                <tr><td style="white-space:nowrap"><b>Inception (Mercury)</b></td><td>Perishable-compute harvest, run as a quality-gated prove-it: Mercury 3 scored below the free-lane baseline, the quality stop fired, and the harvest halted — the remaining bank runs to the Mercury API&rsquo;s Dec 28, 2026 shutdown</td><td style="white-space:nowrap">Halted at the quality gate</td></tr>
                 <tr><td style="white-space:nowrap"><b>Vercel</b></td><td>Deployment and hosting credit</td><td style="white-space:nowrap">Configured</td></tr>
                 <tr><td style="white-space:nowrap"><b>Exa</b></td><td>Search credit</td><td style="white-space:nowrap">Live</td></tr>
                 <tr><td style="white-space:nowrap"><b>Tavily</b></td><td>Search credit</td><td style="white-space:nowrap">Configured</td></tr>
@@ -1027,9 +1027,9 @@
     var PROJECTS = {
       hydra: {
         name: "Hydra", initials: "HY", cat: "core", x: 520, y: 292,
-        status: "Built out · five-lane audit complete Nov 14, 2026 · consensus fixes built",
+        status: "Built out · five-lane audit complete Nov 14, 2026 · subscription routing Phases 0–2 built · check order: Grok first, Neon conditional",
         tagline: "Multi-model drafting, checking, and routing — the compute-leverage layer",
-        summary: "The compute-leverage layer across everything: the way to use the full weight of KetchupPancake's compute, in whatever shape a task needs — a mega-swarm, a coder/reviewer pair, an expert panel. Two engines in one loop. The cross-check engine: many distinct models check each other — each model keeps its own state, strengths and product features; Hydra is not a router and never flattens models into interchangeable, stateless endpoints, because the differences are the point. One model drafts, a different model checks, and a router decides which lane gets each job. Evaluations are the hinge: running the swarm generates performance data — model, harness, provider, failure — that is itself an asset, and Hydra distils its own runs. KetchupPancake works inside it like an old-timey telephone operator, plugging lanes in and out; the system is built for his hands on the switchboard, not for autonomous routing away from him. On Nov 14, 2026, the whole routing and grading machinery passed a five-lane audit: five independent frontier-model lanes reviewed it against the full evidence archive, and their findings were consolidated into one record. The audit's consensus fixes were built the same night (below).",
+        summary: "The compute-leverage layer across everything: the way to use the full weight of KetchupPancake's compute, in whatever shape a task needs — a mega-swarm, a coder/reviewer pair, an expert panel. Two engines in one loop. The cross-check engine: many distinct models check each other — each model keeps its own state, strengths and product features; Hydra is not a router and never flattens models into interchangeable, stateless endpoints, because the differences are the point. One model drafts, a different model checks, and a router decides which lane gets each job. Evaluations are the hinge: running the swarm generates performance data — model, harness, provider, failure — that is itself an asset, and Hydra distils its own runs. KetchupPancake works inside it like an old-timey telephone operator, plugging lanes in and out; the system is built for his hands on the switchboard, not for autonomous routing away from him. On Nov 14, 2026, the whole routing and grading machinery passed a five-lane audit: five independent frontier-model lanes reviewed it against the full evidence archive, and their findings were consolidated into one record. The audit's consensus fixes were built the same night (below). Since then the subscription lanes have come under the same routing discipline — scored decisions, logged as they are made — and on Nov 19, 2026 the Gemini seat was renamed Neon.",
         components: ["Cross-check engine — drafting lanes + independent checker", "Custom Swarm — the in-house pattern", "Swarm types — every pattern, with its runs and results", "Predicate router (Boolean rules)", "Subscription twins — pace-gated", "Free lanes (OpenRouter & co.)", "Data engine — evals and run data kept here", "Authority gate — fail-closed on paid dispatch (Nov 14, 2026)", "Evidence admission — unverifiable or same-lineage grades are quarantined, never folded", "Scored-routing logging — decision records carry each score's basis and a shadow/executed mode", "Stage F — frozen", "HYDRA_PAID_TIERS — off"],
         how: [
           "A job arrives with a type, a difficulty, and any constraints KetchupPancake set.",
@@ -1040,7 +1040,7 @@
         rules: [
           "A model can't review its own work.",
           "Twins are pace-only; Codex runs only on an explicit request, and failures are loud — no silent fallback.",
-          "Gemini stays out of the router until KetchupPancake asks. When KetchupPancake is present and running Hydra, Gemini is a full triplet member.",
+          "Subscriptions are routed under KetchupPancake as operator — scored by each model's measured strengths and armed with evals; counted work defaults to pairs from different lineages, the only kind that grades.",
           "Stage F is never edited. HYDRA_PAID_TIERS stays off.",
           "Local AI runs through Hermes/OpenClaw on Cora — never Ollama.",
           "No paid dispatch without a current signed approval — the authority gate refuses before spend, never after (wired Nov 14, 2026).",
@@ -1052,8 +1052,8 @@
           "Logging honesty, same night: scores in the drafting port now carry their basis — measured, borrowed, or default — instead of defaults wearing a measured label; synthetic priors now genuinely retire from the sampler at 3 real outcomes; and routing-decision records carry a shadow/executed mode, so a shadow run can no longer read as an executed one.",
           "Live routing still runs under the standing switches — the audit changed the machinery's honesty, not its authority.",
           "C-series remains proposals only.",
-          "The eval-data repo does not exist yet — graded outcomes and usage logs still live in the runtime tree on the box; the GitHub repo holds almost no eval data.",
-          "Hydra is being made runnable again through Cora's orchestrator — the swarm broke into individual use when grok-bot's usage costs ended that era."
+          "The eval-data repo now exists (private; its public sibling shows the schema and synthetic examples only). The real run data still sits in the retired host's archives, awaiting migration.",
+          "Subscription routing Phases 0–2 are built (Nov 13–15, 2026): scored routing decisions and agent counts are logged, and the Claude, Codex and Grok subagent modes are selectable. Driver-level execution of those modes is the next build step; Phase 3 — scheduled routing — waits for its own go-ahead."
         ],
         obs: {
           state: "partial",
@@ -1066,16 +1066,16 @@
             "Subscription usage and pace — the meters KetchupPancake asked to monitor",
             "Correctness marks on finished work"
           ],
-          evidence: "Usage logs and run records in the runtime tree on the box; the GitHub repo's reports/ folder holds a single dated folder.",
-          gap: "The Oct 18 data-harvest audit (all 18 items approved) found call rows without job IDs or token counts, and verified_correct empty on every row — its top fixes (shared IDs, token capture, correctness marks) are exactly what would make the data a product. The eval data still has no repo of its own: 'we will need a repo.'"
+          evidence: "Usage logs and run records preserved in the retired host's verified archives; the eval-data repo now gives graded outcomes a home of their own.",
+          gap: "The Oct 18 data-harvest audit (all 18 items approved) found call rows without job IDs or token counts, and verified_correct empty on every row — its top fixes (shared IDs, token capture, correctness marks) are exactly what would make the data a product. The eval-data repo has since been created; moving the real run data into it is the remaining step."
         }
       },
       still: {
         name: "The Still", initials: "ST", cat: "pipeline", x: 140, y: 300,
-        status: "Running · sorter migration in shadow on the local lab · production still on the legacy host",
+        status: "Running · production sorter on Cora since Nov 14, 2026 · 224 cards filed",
         tagline: "The pipeline over the newest external research",
         summary: "Where the outside world's claims earn the right to influence the system. Papers, posts and findings come in; each is verified against its source, graded for what it actually changes — moves, sharpens, confirms, or claim only — mapped to the Frontier Map's walls and themes, and filed as a card with an event file. From the corpus come the Moves and Tests: a test is a change plus an eval, also used for verification — really anything interesting worth running and measuring.",
-        components: ["Card writer (round 1)", "Argon review & sort (round 2)", "Frontier Map — 17 walls", "Themes T1–T17", "Sorter", "Shadow sorter on the local lab — parity checks against production", "Event files"],
+        components: ["Card writer (round 1)", "Neon review & sort (round 2)", "Frontier Map — 17 walls", "Themes T1–T17", "Sorter — production, on Cora", "Event files"],
         how: [
           "KetchupPancake posts a paper, link, or arXiv ID — usually in batches of three, each given the same full attention.",
           "Round 1: the card is written from the source itself — full text, tables, code, licence — never from the abstract alone; unverifiable claims are marked unverified in the open.",
@@ -1084,13 +1084,14 @@
         ],
         rules: [
           "Two rounds only — never add rounds.",
-          "Codex-written cards go to Argon; Codex never reviews its own work.",
+          "Codex-written cards go to Neon; Codex never reviews its own work.",
           "No privacy check on public sources — credential-shape checks only.",
           "Sources are checked at send time: full paper, tables, code, and licence before a card is written.",
           "A card proposes; nothing in it turns anything on."
         ],
         open: [
-          "Sorter migration under way (Nov 14, 2026): the shadow sorter on the local lab is built and running parity checks against the production sorter. Production still runs on the legacy host until parity passes and the flip is called — the flip is KetchupPancake's word, not a schedule.",
+          "Sorter flip complete (Nov 14, 2026): the sorter passed its parity checks and Cora is now The Still's production sorter; the legacy host's sorter never runs again. The corpus reconciliation stands at 217 filed, 217 decided, backlog zero — and filing has continued since, to 224 cards.",
+          "Field-first expansion (Nov 15, 2026): papers now arrive from fields outside the projects — quantum physics, materials science, medicine, law, finance, biology and battery science among the first named — and are not forced onto the Frontier Map. Each new field accumulates its own corpus first, and its map emerges when there is enough of it.",
           "The Frontier Map now stands at 17 walls (Nov 13, 2026 rulings): attribution of gains, multi-agent coordination, and security, containment and authorization promoted; unverifiable claims and transfer split out as walls of their own. A five-lane blind panel review of every card on file produced a misfiling census and a re-file queue, and the filing brief was amended with filing-discipline rules.",
           "Ten cards failed Argon's intake on Nov 3 with no reason recorded. Re-sorted later that day: 3 validated, 7 still needs_review, mostly locator_unresolved.",
           "Three held_metadata cards carry a status the brief doesn't allow; a correction note was filed and the cards left untouched."
@@ -1111,9 +1112,9 @@
       },
       academy: {
         name: "Academy", initials: "AC", cat: "knowledge", x: 885, y: 250,
-        status: "Index exists · provenance repair ahead of new ingestion",
+        status: "Design V2 complete Nov 15, 2026 · index-in-place · serve v0 from Cora",
         tagline: "The local index of everything — and a school",
-        summary: "The source of truth Hydra turns to: an index of everything, from academic papers and full university curriculums down to codes and installation manuals, edition-pinned. Sourcing is the standing standard across Academy — any hard science provides its source, reference, and data, and for law and medicine it is absolutely imperative: no accurate opinion is formed without sources behind it, reference-only, never advice. Academy is also a school, not only an index: interactive courses and a personal tutor for anything a person would want to learn, from preschool through K-12 to frontier knowledge — KetchupPancake is building one himself on weather patterns in southwestern Alberta.",
+        summary: "The source of truth Hydra turns to: an index of everything, from academic papers and full university curriculums down to codes and installation manuals, edition-pinned. Sourcing is the standing standard across Academy — any hard science provides its source, reference, and data, and for law and medicine it is absolutely imperative: no accurate opinion is formed without sources behind it, reference-only, never advice. Academy is also a school, not only an index: interactive courses and a personal tutor for anything a person would want to learn, from preschool through K-12 to frontier knowledge — KetchupPancake is building one himself on weather patterns in southwestern Alberta. Academy's design was completed on Nov 15, 2026: evidence is linked down to source spans, a question with no held source returns 'unverified' rather than silence dressed as absence, the learner's own state is kept in a separate store from the corpus, and the corpus is organised field-first — new fields form their own maps instead of being forced onto the existing one.",
         components: ["Research index", "ResearchGraph", "Frontier Map walls", "Codes & manuals — edition-pinned", "Interactive courses & personal tutor", "Grokipedia lookups"],
         how: [
           "Sorted cards arrive from The Still with wall and theme mappings.",
@@ -1128,7 +1129,8 @@
         ],
         open: [
           "Provenance repair ranks ahead of new ingestion: rows whose licence is unknown must be labelled unknown, never quietly promoted to fine-to-use.",
-          "Take-aways/heat-map reconciliation with Argon's drafts: 62 of 81 primary walls agree; a decision on the comparison is still pending."
+          "One loose thread from the design review: which search engine one ruling referred to is still unidentified.",
+          "The licence worklist — every index row whose licence is unknown, to be labelled unknown — can only be produced where the index records live, on Cora; the script and instructions are written and waiting there."
         ],
         obs: {
           state: "partial",
@@ -1139,7 +1141,7 @@
             "Expert accuracy — the fields Academy serves are meant to be tested, not assumed; Night Shift's evals can reach here"
           ],
           evidence: "The research index and ResearchGraph themselves; take-aways and theme heat maps are periodic rollups, not a standing board.",
-          gap: "Named in the mission walk: Academy requires its own observability, and it doesn't have one yet. The licence bug in the index is also still open."
+          gap: "Named in the mission walk: Academy requires its own observability, and it doesn't have one yet. The licence worklist is still to be produced — on Cora, where the index records live."
         }
       },
       studio: {
@@ -1203,7 +1205,7 @@
       },
       lab: {
         name: "Workbench Laboratory", initials: "WL", cat: "knowledge", x: 520, y: 452,
-        status: "Unbuilt · first job: define how evidence is received and judged",
+        status: "Archive started · the eval-data repo exists · intake defined, automation ahead",
         tagline: "The ledger binding claims to verified outcomes",
         summary: "The empirical side of the whole system. It gathers from both theory and real-world results, and holds the ledger binding claims to verified outcomes: every node feeds it reported facts through the same door, and results carry standings — confirmed, probable, refuted, awaiting — with provenance recorded (who measured, with what, when, under what conditions), because real-world results need special consideration for accuracy. It judges results against the middle layer of knowledge: codes and installation manuals, stored in Academy's index, edition-pinned, functioning as the standing standard — field results can annotate a manual, but code wins on compliance. And a lot of the system's evals live here: run wherever they're run, kept here as the standing evidence.",
         components: ["Claims-to-outcomes ledger", "Standings: confirmed · probable · refuted · awaiting", "Eval archive", "Provenance capture", "Middle layer: codes & manuals (held in Academy)"],
@@ -1217,13 +1219,13 @@
           "A result without provenance is a claim, not evidence."
         ],
         open: [
-          "Its first job, before anything runs at scale, is to define how evidence is received and judged.",
-          "The eval-data repo this node's archive needs doesn't exist yet — KetchupPancake: 'we will need a repo.'",
-          "Nothing built yet; the node was named on Nov 8, during the mission walk."
+          "The intake is defined — how evidence is received, what provenance it must carry, and how standings are derived — but not yet automated.",
+          "The eval-data repo this node's archive needed now exists (private; the public hydra-evals repo shows its schema and synthetic examples). The real run data still sits in the retired host's archives, awaiting migration.",
+          "Named on Nov 8, 2026, during the mission walk; its first holdings arrived with the eval-data repo."
         ],
         obs: {
           state: "gap",
-          headline: "Named Nov 8 — the evidence archive doesn't exist yet",
+          headline: "Named Nov 8 — the archive now exists; the real run data has yet to move into it",
           watches: [
             "Every node's claims against what actually happened — the ledger itself",
             "The standing of each result: confirmed, probable, refuted, awaiting",
@@ -1231,12 +1233,12 @@
             "The eval archive — results from wherever the evals were run, kept in one place"
           ],
           evidence: "This node is the evidence home for the whole system — Hydra's eval data, Night Shift's measures, The Office's reported facts all belong here.",
-          gap: "Nothing is built: results still live scattered — graded outcomes and usage logs in the runtime tree on the box — until the archive gives them one home with standings attached."
+          gap: "The archive exists but the holdings are thin: graded outcomes and usage logs still sit in the retired host's archives until the migration gives them one home with standings attached."
         }
       },
       cora: {
         name: "Cora", initials: "CO", cat: "core", x: 150, y: 470,
-        status: "Box live · seat design settled Nov 14, 2026 · orchestrator body build ahead",
+        status: "Live · seat design settled Nov 14, 2026 · runs The Still's production sorter · specialist rack designed",
         tagline: "The local layer — the ground Hydra stands on at home",
         summary: "The local level of KetchupPancake's personal AI stack: his homeLab. Hydra sits orthogonally across her — Hydra is how all the compute gets used, in whatever shape a task needs; Cora is the ground it stands on at home. She holds what must stay home, and private work lives on her and does not leave: her privacy floor is set by policy on each case, and her reach to the cloud runs only through free lanes. She is a working member of the system, not just its floor: a graded roster of local models with their limits written down, operator of the PC and GPU queue the rest of the system draws on, host of what runs at home — and measured like everyone else, her own sealed loop grading job completion and cleanliness, her improvements arriving as proposals that earn their place by measurement. Her design was settled on Nov 14, 2026: Cora's 'body' is her seat — the persistent instance holding her identity, memory, and profiles — and the seat endures even when the model or delegation serving underneath it changes. Her seat runs as a small Hydra of her own: distinct supply — a local model, profiled lanes, subscription lanes — behind one head that routes, remembers, and supervises. And 'local' is a settled word: it means Cora's own instance, whatever model it is delegating to at the time.",
         components: ["Windows PC host", "RTX 5060 Ti 16GB — one big model at a time", "Graded roster: Qwen 27B private-work engine · Qwen3-VL flagging only", "PC / GPU queue", "NAS & RAG of her own (planned)", "The orchestrator's chair: Cora herself in a new body — currently on the Hermes runtime (replaceable)",
@@ -1259,7 +1261,8 @@
         open: [
           "The orchestrator's body is not yet built: the bot in the chair is Cora herself in a new body, currently running on Hermes, a replaceable runtime. The seat it must provide — identity, memory, profiles, her own small routing pattern inside it — was designed and settled on Nov 14, 2026; building it out is the most high-impact build after the move off grok-bot — the Transformative item KetchupPancake named first.",
           "Her sealed loop is disabled, with no seed cases yet.",
-          "The stack is still migrating onto her; the Joi handoff material sits on her as reading only — nothing installed or running."
+          "The migration onto her is complete: the legacy host was retired on Nov 15, 2026, and everything unique it held is preserved in verified archives.",
+          "A rack of small specialist models — judging, finding, and function tasks, graded in shadow first — is designed to replace the one resident 27B as the everyday local layer; the 27B stays on call as the heavyweight. Which size anchors the rack is still KetchupPancake's call."
         ],
         obs: {
           state: "partial",
@@ -1276,7 +1279,7 @@
       },
       nightshift: {
         name: "Night Shift", initials: "NS", cat: "pipeline", x: 350, y: 545,
-        status: "Pilot complete · 8 of 8 · sandbox pair at parity · standing window not yet decided",
+        status: "Pilot complete · 8 of 8 · open-question triage under way (525 questions) · standing window not yet decided",
         tagline: "Free compute spent overnight — and it has to justify itself",
         summary: "Hydra and Cora spending free compute while nobody is watching: the overnight engine, window 1:30–7:30 AM MT, running a recursive propose, queue, build, measure, keep-or-revert loop at $0, on free lanes and Cora's spare GPU. The measure stage is Night Shift running its own evals — and that eval-running bleeds across the system: The Still's tests, Hydra's swarm measurement, the Workbench Laboratory's unpaired claims, even Academy. Once everything is working properly, it can run The Still's own pipeline overnight. One standing work type is Hydra's exhaust: collecting the monetizable data the free-tier swarm generates — model, harness, provider and failure performance — and verifying it, because verified is what makes it worth anything. The compute has to justify itself: justification comes from demand, never from idle supply — work arrives with a named consumer and a measurable done-condition, and every work type is scored on acceptance and actual use within 14 days; underperformers get halved, then parked. The pilot has now run: eight tests, built by the subscription lanes and run on the sandbox laptops, completed 8 of 8 — the last of them re-ran successfully on the ThinkPad's new Linux install on Nov 13, 2026. Both sandbox laptops pass all 18 parity checks, run lid-closed as headless hosts, and are linked by a direct gigabit Ethernet connection. Whether Night Shift gets a standing window is a separate decision, not a pilot consequence.",
         components: ["Window 1:30–7:30 AM MT", "Propose → queue → build → measure → keep/revert", "Tests and gates set by Hydra and the Laboratory — applied, never self-graded", "Nightly forecast (before) · morning report (after)", "The Subconscious — spare-compute stage (flag HYDRA_SUBCONSCIOUS, off)", "Justify-itself scoring", "Data harvest & verification"],
@@ -1294,7 +1297,7 @@
         open: [
           "The pilot completed 8 of 8 (Nov 12–13, 2026), and its results were filed as a verification note rather than edits to the cards they checked. Three pilot tests were limited by missing instrumentation — scored routing decisions and agent counts weren't being recorded — which is what the scored-routing logging ports were built to fix.",
           "A standing overnight window has not been decided: a successful pilot does not create one on its own.",
-          "The routine definitions live on the box, so whether anything actually fires at 1:30 AM can't be confirmed from the records."
+          "The open-question triage is the current work: the 525 open questions The Still's cards carry, being worked through — each one resolving into a test, a decision, or both-true-under-conditions."
         ],
         obs: {
           state: "partial",
@@ -1323,13 +1326,13 @@
         rules: [
           "New files only with your own prefix.",
           "Never sealed/ or finances/. Text only, no secrets.",
-          "Joy is the single writer for the index/state files (since Nov 6).",
+          "Vera is the single writer for the index/state files (since Nov 6).",
           "Legacy folders /C-Series, /hydra, and /Frontier are read-only."
         ],
         open: [
           "Legacy host retirement — archival harvest complete (Nov 14, 2026): the retiring cloud host's full contents are preserved — its records, its machinery census, and every non-Hydra project tree — in 17 hash-verified archives totalling ~7.5 GB. What remains host-only is inventoried and awaiting KetchupPancake's decisions; nothing unique is left unaccounted for.",
-          "The eval data the system generates has no repo home yet — that archive is the Workbench Laboratory's to build.",
-          "Reachability flag (Nov 9, 2026) — the Vera↔joi-box leg does not yet meet the all-sisters standard. The path is relayed — Tailscale's New York DERP, no direct link, because Vera's seat is outbound-only — through userspace forwarding on the box, and the box's host pauses the whole machine whenever Joi is idle, so the leg works in windows rather than on demand. Tunnel approvals are per-address and lapse. Both endpoints are verified clean; the flag belongs to the shared layer, not to either machine."
+          "The eval data the system generates now has its repo — the Workbench Laboratory's archive; the real run data migrates into it from the retired host's archives.",
+          "Legacy host retired (Nov 15, 2026): the harvest completed the day before, the host was deleted, and nothing unique remained on it. The three seats now talk over Tailscale in a true triangle, not hubbed through any one machine."
         ],
         obs: {
           state: "partial",
@@ -1340,7 +1343,7 @@
             "Who wrote what — a single writer keeps the record coherent"
           ],
           evidence: "INDEX, STATE, and NEEDS-OPERATOR — the operator's queue of what needs his eyes — over the workspace itself: Dropbox for the record, GitHub for the code.",
-          gap: "The record is files, not a board — you read the trail, you don't watch it. Nothing rolls the workspace's own state up into one view. Reachability is flagged on the Vera↔joi-box leg: relayed via the New York DERP through userspace forwarding on the box, it works in windows rather than on demand while the box's host pauses the machine whenever Joi is idle, and its tunnel approvals are per-address and lapse — both endpoints verified clean, so the flag sits with this shared layer (full flag in the node's open items)."
+          gap: "The record is files, not a board — you read the trail, you don't watch it. Nothing rolls the workspace's own state up into one view."
         }
       },
       vault: {

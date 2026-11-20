@@ -25,7 +25,7 @@ brain, not scattered folders. Private work lives on this layer and
 does not cross to the cloud side.
 
 **How it stays trustworthy.** One writer for the index and state files
-— Joy, since 2026-11-06, when KetchupPancake moved the duty from Joi — so the
+— Vera, since 2026-11-06, when KetchupPancake moved the duty from Joi — so the
 record never forks. Every agent authors new files under its own prefix
 and never edits another agent's files; corrections go in as siblings.
 Nothing is deleted: old versions move to /99-SUPERSEDED. Legacy folders

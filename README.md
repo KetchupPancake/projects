@@ -1,7 +1,7 @@
 # Projects
 
 The public face of a personal multi-project AI system built by
-KetchupPancake W (KetchupPancake) in Calgary, Alberta — a multi-model swarm,
+KetchupPancake in Calgary, Alberta — a multi-model swarm,
 a local home lab, a research pipeline, and the projects they serve.
 
 ## Pages

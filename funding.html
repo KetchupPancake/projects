@@ -437,7 +437,7 @@
           <figcaption><b>The idea in one picture:</b> distinct models, connected by checks — no node verifies itself.</figcaption>
         </figure>
         <div class="stats" role="list">
-          <div class="stat" role="listitem"><b>85+</b><span>research cards filed through The Still pipeline — each one read at the source and reviewed by a second model</span></div>
+          <div class="stat" role="listitem"><b>220+</b><span>research cards filed through The Still pipeline — each one read at the source and reviewed by a second model</span></div>
           <div class="stat" role="listitem"><b>12</b><span>open problems (&ldquo;walls&rdquo;) on the Frontier Map that every paper and project is measured against</span></div>
           <div class="stat" role="listitem"><b>5</b><span>core projects — Hydra, The Still, Academy, Studio, Foreman — plus overnight and local lanes</span></div>
           <div class="stat" role="listitem"><b>0</b><span>self-reviews. A standing rule: a model never checks its own work</span></div>
@@ -688,7 +688,7 @@
             <div class="reveal">
               <div class="faq-item">
                 <button class="faq-q" aria-expanded="false">What stage is this at?<span class="plus">+</span></button>
-                <div class="faq-a"><p>The research pipeline (The Still) is operating now — 85+ cards filed, each cross-checked by a second model and mapped to the Frontier Map. Hydra&rsquo;s core is in active development. Academy and Studio are in development; Foreman is in design and deliberately held until the core is proven. This is pre-revenue, early-stage work, and this page won&rsquo;t pretend otherwise.</p></div>
+                <div class="faq-a"><p>The research pipeline (The Still) is operating now — 220+ cards filed, each cross-checked by a second model and mapped to the Frontier Map. Hydra&rsquo;s core is in active development. Academy and Studio are in development; Foreman is in design and deliberately held until the core is proven. This is pre-revenue, early-stage work, and this page won&rsquo;t pretend otherwise.</p></div>
               </div>
               <div class="faq-item">
                 <button class="faq-q" aria-expanded="false">What do you need most?<span class="plus">+</span></button>
@@ -766,7 +766,7 @@
           name: "Hydra", status: "In development", cls: "dev",
           tags: ["Core system", "Multi-model", "Routing"],
           tagline: "Many heads. None of them grading their own work.",
-          desc: "The core engine: a multi-model system that drafts, cross-checks, and routes work across different AI models, with budget controls and a full record of how every output was produced. Hydra is the layer the other projects plug into — the reason a research card, a video script, or a quote can be trusted is that Hydra&rsquo;s checking produced it.",
+          desc: "The core engine: a multi-model system that drafts, cross-checks, and routes work across different AI models, with budget controls and a full record of how every output was produced. Hydra is the layer the other projects plug into — the reason a research card, a video script, or a quote can be trusted is that Hydra&rsquo;s checking produced it. In November 2026 its routing and grading machinery passed a five-lane audit — five independent frontier-model lanes reviewing the same evidence archive — and their consensus fixes were built.",
           does: ["Drafting by the best-suited model", "Independent cross-checking by a different model", "Boolean rule-based routing with hard budget stops", "Structured records for every substantial job"],
           unlocks: "<b>Funding unlocks:</b> the API credits to run multi-model checking at full strength instead of free-tier pace, and the development time to move Hydra from a working internal system to software other people can run."
         },
@@ -774,7 +774,7 @@
           name: "The Still", status: "Operating", cls: "live",
           tags: ["Research pipeline", "Two-round review"],
           tagline: "Where frontier research gets distilled — twice.",
-          desc: "The pipeline that turns the flood of AI papers and announcements into graded, trustworthy knowledge. Every item runs two rounds — written and reviewed by one model, then reviewed and sorted by a different one — and lands as a research card mapped to the Frontier Map. 85+ cards filed so far, including corrections where a viral post overstated its own paper.",
+          desc: "The pipeline that turns the flood of AI papers and announcements into graded, trustworthy knowledge. Every item runs two rounds — written and reviewed by one model, then reviewed and sorted by a different one — and lands as a research card mapped to the Frontier Map. 220+ cards filed so far, including corrections where a viral post overstated its own paper.",
           does: ["Full-source reading: paper, tables, code, licence", "Two-round review by different models", "Claims graded: moves / sharpens / confirms / claim only", "Themes and walls tracked across the whole corpus"],
           unlocks: "<b>Funding unlocks:</b> throughput. More credits mean more of the frontier covered each week, full appendices and code read instead of sampled, and the heat-maps and takeaways across the corpus kept current."
         },
@@ -782,8 +782,8 @@
           name: "Academy", status: "In development", cls: "dev",
           tags: ["Research index", "Frontier science"],
           tagline: "An index of frontier science that shows its working.",
-          desc: "A research index spanning AI and the wider frontier — biology, physics, dynamical systems, mathematics — organised as a research graph rather than a pile of links. Academy is where The Still&rsquo;s graded cards become a navigable map of what is known, what is claimed, and what is still open.",
-          does: ["Cross-discipline research index", "ResearchGraph linking papers, walls, and themes", "Open problems tracked alongside results", "Built entirely from source-checked cards"],
+          desc: "A research index spanning AI and the wider frontier — biology, physics, dynamical systems, mathematics — organised as a research graph rather than a pile of links. Academy is where The Still&rsquo;s graded cards become a navigable map of what is known, what is claimed, and what is still open. Its design was completed in November 2026: field-first, so each new field grows its own map instead of being forced onto an existing one — and a school as well as an index, tutoring from kindergarten to frontier research.",
+          does: ["Cross-discipline research index", "ResearchGraph linking papers, walls, and themes", "Open problems tracked alongside results", "Built entirely from source-checked cards", "Field-first: new fields form their own maps", "Tutoring from kindergarten to frontier research"],
           unlocks: "<b>Funding unlocks:</b> the build-out of the research graph and index — turning a working card corpus into a public, searchable reference that other researchers can actually use."
         },
         {
@@ -806,7 +806,7 @@
           name: "Night Shift & Cora", status: "Operating", cls: "live",
           tags: ["Supporting lanes", "Overnight · Local"],
           tagline: "The work that runs while Calgary sleeps.",
-          desc: "Two supporting lanes. Night Shift runs Hydra workloads overnight on free tiers only, with a scout that hunts for outliers worth a second look by morning. Cora is the private, local lane — work that stays on KetchupPancake&rsquo;s own machines, on his own hardware. Together they stretch a near-zero budget into round-the-clock coverage.",
+          desc: "Two supporting lanes. Night Shift runs Hydra workloads overnight on free tiers only; its pilot completed 8 of 8 tests, and it is now working through the research corpus&rsquo;s 525 open questions. Cora is the private, local lane — work that stays on KetchupPancake&rsquo;s own machines, on his own hardware. Together they stretch a near-zero budget into round-the-clock coverage.",
           does: ["Overnight runs on free tiers only", "Outlier scouting for morning review", "Private work kept fully local", "Local models via an on-device agent body"],
           unlocks: "<b>Funding unlocks:</b> local hardware. A 128&nbsp;GB workstation (about CA$5,000 new in Canada) turns the overnight lane from a free-tier trickle into a real second shift, and cuts metered API spend permanently."
         }
@@ -835,7 +835,7 @@
           '<div class="proj-cols"><div><h4>What it does</h4><ul>' + lis + "</ul></div>" +
           '<div><h4>Why it matters</h4><p style="font-size:15px;color:var(--ink-soft)">' +
           (p.name === "Hydra" ? "Every other project inherits its trust from this layer. If the checking is real, the outputs are worth paying for; if it isn&rsquo;t, nothing built on top matters." :
-           p.name === "The Still" ? "It is the operating proof that the method works — a running pipeline with 85+ graded outputs a funder can inspect, not a promise." :
+           p.name === "The Still" ? "It is the operating proof that the method works — a running pipeline with 220+ graded outputs a funder can inspect, not a promise." :
            p.name === "Academy" ? "Frontier science is publishing faster than anyone can read. A graded, graphed index is infrastructure other people will build on." :
            p.name === "Studio" ? "Creative AI spend is where budgets go to die. A studio with checking and cost discipline built in is a product, not a toy." :
            p.name === "Foreman" ? "Trades software is mostly built by people who have never held the tools. This one isn&rsquo;t — and its market is every small contractor in Alberta." :
@@ -934,7 +934,7 @@
       });
 
       /* ---------------- Copy pitch ---------------- */
-      var pitch = "Hydra is a multi-model AI system built independently in Calgary by KetchupPancake: one model drafts, a different model cross-checks, routing keeps costs under hard budget limits, and every claim keeps its provenance. Around it, The Still research pipeline has already filed 85+ source-checked, peer-reviewed-by-a-second-model research cards, mapped to a 12-problem Frontier Map. Funding and credits go directly to compute, GPU hours, and local hardware — the named bottlenecks. Contact: github.com/KetchupPancake";
+      var pitch = "Hydra is a multi-model AI system built independently in Calgary by KetchupPancake: one model drafts, a different model cross-checks, routing keeps costs under hard budget limits, and every claim keeps its provenance. Around it, The Still research pipeline has already filed 220+ source-checked, peer-reviewed-by-a-second-model research cards, mapped to a 12-problem Frontier Map. Funding and credits go directly to compute, GPU hours, and local hardware — the named bottlenecks. Contact: github.com/KetchupPancake";
       document.getElementById("copyPitch").addEventListener("click", function () {
         var note = document.getElementById("copyNote");
         function done() { note.textContent = "Copied — paste it anywhere."; }
